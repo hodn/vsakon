@@ -1,11 +1,11 @@
-module.exports = function parseRawData(rawArray){
+module.exports.parseFlexiData = function parseRawData(rawArray){
 
     const slicedArrays = sliceArray(rawArray);
     
     const basicData = parseBasicData(slicedArrays.rawBasicData);
     const deadMan = slicedArrays.deadMan % 2 ? 0 : 1;
     const locationData = slicedArrays.rawLocationData === undefined ? null : parseLocationData(slicedArrays.rawLocationData);
-    const nodeData = slicedArrays.rawNodeData === undefined ? null : parseNodeData(slicedArrays.rawLocationData);
+    const nodeData = slicedArrays.rawNodeData === undefined ? null : parseNodeData(slicedArrays.rawNodeData);
     
     const parsedData = {
         basicData,
@@ -17,7 +17,7 @@ module.exports = function parseRawData(rawArray){
     return parsedData;
     
 }
-
+// Slices raw data into data categories
 function sliceArray(rawArray){
     
     const rawDataString = rawArray.toString().split(",");
@@ -55,11 +55,13 @@ function sliceArray(rawArray){
     return slicedData;
 }
 
+// -- Data Parsers
 function parseBasicData(rawBasicArray){
     
     const basicJSON = {
         devId: rawBasicArray[0],
         heartRate: rawBasicArray[1],
+        measuringHR: isMeasuringHR(rawBasicArray[1]),
         tempSkin: convertTemprature(rawBasicArray[2],rawBasicArray[3]),
         tempCloth: convertTemprature(rawBasicArray[4],rawBasicArray[5]),        
         humidity: convertHumidity(rawBasicArray[6]),
@@ -78,14 +80,22 @@ function parseBasicData(rawBasicArray){
 
 function parseLocationData(rawLocationArray){
     
+    const rawLatMins = rawLocationArray[0];
+    const latSecs = parseEZ24(rawLocationArray[1], rawLocationArray[2], rawLocationArray[3], rawLocationArray[4]);
+    const rawLongMins = rawLocationArray[5];
+    const longSecs = parseEZ24(rawLocationArray[6], rawLocationArray[7], rawLocationArray[8], rawLocationArray[9]);
+    const fixSat = rawLocationArray[10];
+    const alt = parseEZ24(rawLocationArray[12], rawLocationArray[13], rawLocationArray[14], rawLocationArray[15]);
+    
     const locationJSON = {
-        latDeg: convertDegree(rawLocationArray[0]),
-        latMins: parseEZ24(rawLocationArray[1], rawLocationArray[2], rawLocationArray[3], rawLocationArray[4]),
-        longDeg: convertDegree(rawLocationArray[5]),
-        longMins: parseEZ24(rawLocationArray[6], rawLocationArray[7], rawLocationArray[8], rawLocationArray[9]),
-        fixSat: rawLocationArray[10],
-        dilution: rawLocationArray[11],
-        alt: parseEZ24(rawLocationArray[12], rawLocationArray[13], rawLocationArray[14], rawLocationArray[15])
+        
+        latMins: convertLocationMins(rawLatMins, latSecs),
+        longMins: convertLocationMins(rawLongMins, longSecs),
+        fix: convertFixSat(fixSat).fix,
+        sat: convertFixSat(fixSat).sat,
+        dilution: convertLocationMetric(rawLocationArray[11]),
+        alt: convertLocationMetric(alt),
+        detected: isLocationDetected(convertLocationMins(rawLatMins, latSecs), convertLocationMins(rawLongMins, longSecs))
     }
 
     return locationJSON;
@@ -95,35 +105,32 @@ function parseNodeData(rawNodeArray){
     
     let nodeJSON = {};
 
-    for(i = 0; i < 9; i++){
+    for(i = 0; i < 8; i++){
         
-        const nameSkin = `tempSkin_${i + 1}`;
         const tempSkin = convertTemprature(rawNodeArray[0 + i*2], rawNodeArray[1 + i*2]);
-        nodeJSON[nameSkin] = tempSkin;
-
-        const nameCloth = `tempCloth_${i + 1}`;
         const tempCloth = convertTemprature(rawNodeArray[18 + i*2], rawNodeArray[19 + i*2]);
-        nodeJSON[nameCloth] = tempCloth;
-
-        const nameHum = `humidity_${i + 1}`;
         const hum = convertHumidity(rawNodeArray[36 + i]);
-        nodeJSON[nameHum] = hum;
-
-        const nameX = `motionX_${i + 1}`;
         const moX = rawNodeArray[45 + i];
-        nodeJSON[nameX] = moX;
-
-        const nameY = `motionY_${i + 1}`;
         const moY = rawNodeArray[54 + i];
-        nodeJSON[nameY] = moY;
-
-        const nameZ = `motionZ_${i + 1}`;
         const moZ = rawNodeArray[63 + i];
-        nodeJSON[nameZ] = moZ;
+
+        nodeJSON[i] = { 
+        
+            tempSkin,
+            tempCloth, 
+            humidity: hum,
+            motionX: moX,
+            motionY: moY,
+            motionZ: moZ, 
+            connected: isNodeConnected(tempSkin, tempCloth, hum, moX, moY, moZ)
+        }
+
     }
 
     return nodeJSON;
 }
+
+// -- EZ Parsers 
 
 function parseEZ24(a, b, c, d){
     
@@ -141,6 +148,8 @@ function parseEZ14(c, d){
 
     return (b<<8) | a;
 }
+
+// -- Converters
 
 function convertTemprature(rawOne, rawTwo){
     const parsedValue = parseEZ14(rawOne, rawTwo);
@@ -163,9 +172,67 @@ function convertHumidity(rawValue){
     return convertedValue;
 }
 
-function convertDegree(rawValue){
+function convertLocationMins(rawMins, secs){
     
-    const convertedValue = rawValue - 1;
+    const convertedMins = rawMins - 1;
+    const secsToMins = secs/600000
 
-    return convertedValue;
+    const minutes = convertedMins + secsToMins
+
+    return minutes;
 }
+
+function convertFixSat(raw){
+    
+    const sat = raw & 63; // 0011 1111
+    const fix = (raw & 64) >> 6 ;
+
+    const fixSatJSON = {
+        sat, 
+        fix
+    }
+
+    return fixSatJSON;
+}
+
+function convertLocationMetric(raw){
+    
+    const converted = raw/10;
+
+    return converted;
+}
+
+// -- Checkers
+
+function isLocationDetected(lat, long){
+    
+    const detectionLimit = 260;
+
+    if(lat >= detectionLimit && long >= detectionLimit)
+    {
+        return false;
+    }
+    else return true;
+}
+
+function isNodeConnected(skin, cloth, hum, x, y, z){
+    
+    const disconnectedTemp = - 45;
+    const disconnectedMotion = 255;
+
+    if(skin == disconnectedTemp && cloth == disconnectedTemp && hum == disconnectedTemp && x == disconnectedMotion && y == disconnectedMotion && z == disconnectedMotion)
+    {
+        return false;
+    }
+    else return true;
+}
+
+function isMeasuringHR(hr){
+
+    if(hr == 2)
+    {
+        return false;
+    }
+    else return true;
+}
+

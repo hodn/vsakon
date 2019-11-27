@@ -8,7 +8,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import CardActions from '@material-ui/core/CardActions';
-const { ipcRenderer } = require('electron');
+const { ipcRenderer } = window.require('electron');
 
 export class SettingsView extends React.Component{
     constructor(props){
