@@ -4,9 +4,10 @@ const fs = require('fs');
 module.exports = class SettingsHandler {
     constructor(file) {
         this.file = file;
-        this.settingsJSON = {
+        this.settings = {
             defaultDir: "",
-            defaultCOM: ""
+            defaultCOM1: "", 
+            defaultCOM2: ""
         }
     }
 
@@ -20,11 +21,12 @@ module.exports = class SettingsHandler {
                 const load = fs.readFileSync(this.file, { encoding: 'utf-8' }); 
                 const set = load.split(",");
                 const loadedSettings = {
-                        defaultDir: set[1],
-                        defaultCOM: set[0]
+                        defaultDir: set[2],
+                        defaultCOM2: set[1],
+                        defaultCOM1: set[0]
                 };
                 
-                this.settingsJSON = loadedSettings;
+                this.settings = loadedSettings;
 
             }catch(err){
 
@@ -35,25 +37,19 @@ module.exports = class SettingsHandler {
         }
         else {
 
-            this.settingsJSON.defaultDir = app.getPath('documents');
+            this.settings.defaultDir = app.getPath('documents');
         }
     }
 
     saveSettings() {
 
-        const settings = this.settingsJSON.defaultCOM + "," + this.settingsJSON.defaultDir
-        fs.writeFile(this.file, settings, function (err) {
+        const fileContent = this.settings.defaultCOM1 + "," + this.settings.defaultCOM2 + "," + this.settings.defaultDir
+        fs.writeFile(this.file, fileContent, function (err) {
 
             if (err) throw err;
 
         })
     }
 
-    changeDir(dir) {
-        this.settingsJSON.defaultDir = dir;
-    }
-
-    changeCOM(com) {
-        this.settingsJSON.defaultCOM = com;
-    }
+    
 }

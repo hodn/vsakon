@@ -59,6 +59,7 @@ function sliceArray(rawArray){
 function parseBasicData(rawBasicArray){
     
     const basicJSON = {
+        timestamp: Date.now(),
         devId: rawBasicArray[0],
         heartRate: rawBasicArray[1],
         measuringHR: isMeasuringHR(rawBasicArray[1]),

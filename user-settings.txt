@@ -1,1 +1,1 @@
-COM7,C:\Users\Hoang\Documents
+COM7,COM10,C:\Users\Hoang\Documents

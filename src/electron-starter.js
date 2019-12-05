@@ -84,9 +84,9 @@ const ipcMain = electron.ipcMain;
 // SerialPort init
 const SerialPort = require('serialport');
 // Delimiter init for data packets
-const Delimiter = require('@serialport/parser-delimiter');
-const FlexParser = require('./helpers/flexParser');
 const SettingsHandler = require('./helpers/settingsHandler');
+const PortHandler = require('./helpers/portHandler');
+const FlexParser = require('./helpers/flexParser');
 
 const settingsHandler = new SettingsHandler("user-settings.txt");
 settingsHandler.loadSettings();
@@ -113,7 +113,7 @@ ipcMain.on('change-com', (event, arg) => {
 })
 
 ipcMain.on('settings-info', (event, arg) => {
-    event.sender.send('settings-loaded', { dir: settingsHandler.settingsJSON.defaultDir, com: settingsHandler.settingsJSON.defaultCOM })
+    event.sender.send('settings-loaded', { dir: settingsHandler.settings.defaultDir, com: settingsHandler.settings.defaultCOM })
 })
 
 // List available ports on event from Renderer
@@ -123,40 +123,48 @@ ipcMain.on('list-ports', (event, arg) => {
             event.sender.send('ports-listed', port.comName)
         }),
         err => console.error(err),
-    )
+    ) // musi se vyresit identifikace nasich prijimacu - jinak treba mys bude svitit jako pripojeny vysilac
 })
 
 ipcMain.on('clear-to-send', (event, arg) => {
 
+    let port_1 = new PortHandler(settingsHandler.settings.defaultCOM1);
+    port_1.connect().then( parser =>{
 
-    // Port init from user settings
-    let port = new SerialPort(settingsHandler.settingsJSON.defaultCOM, {
-        baudRate: 115200
-    })
+        // Switches the port into "flowing mode"
+        parser.on('data', function (data) {
 
-    port.on('open', function () {
-        console.log("Connected");
-    })
-
-    port.on('close', function () {
-        console.log("Disconnected");
-    })
-
-    // Pipe init and delimiter settings  
-    const parser = port.pipe(new Delimiter({ delimiter: [0] }));
-
-    // Switches the port into "flowing mode"
-    parser.on('data', function (data) {
-
-        //Converting hex to int array
-        const rawPacket = Uint8Array.from(data);
-
-        // Raw packets are parsed into JSON object
-        const parsedPacket = FlexParser.parseFlexiData(rawPacket);
-
-        console.log(parsedPacket.basicData.devId);
-
+            //Converting hex to int array
+            const rawPacket = Uint8Array.from(data);
+    
+            // Raw packets are parsed into JSON object
+            const parsedPacket = FlexParser.parseFlexiData(rawPacket);
+            console.log(parsedPacket);
+    
+        });
+    
 
     });
+    
+    let port_2 = new PortHandler(settingsHandler.settings.defaultCOM2);
+    port_2.connect().then( parser =>{
+
+        // Switches the port into "flowing mode"
+        parser.on('data', function (data) {
+
+            //Converting hex to int array
+            const rawPacket = Uint8Array.from(data);
+    
+            // Raw packets are parsed into JSON object
+            const parsedPacket = FlexParser.parseFlexiData(rawPacket);
+            console.log(parsedPacket);
+    
+        });
+    
+
+    });
+    
 })
+
+
 
