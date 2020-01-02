@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StylesProvider } from "@material-ui/styles";
 import "./App.css";
-import { SettingsView } from './components/SettingsView';
+import { DevContainer } from './components/DevContainer';
 
 
   class App extends Component {
@@ -10,7 +10,7 @@ import { SettingsView } from './components/SettingsView';
     return (
   
   <StylesProvider injectFirst>
-    <SettingsView />
+    <DevContainer />
   </StylesProvider>
     );
   }

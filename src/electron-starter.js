@@ -139,7 +139,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     
             // Raw packets are parsed into JSON object
             const parsedPacket = FlexParser.parseFlexiData(rawPacket);
-            console.log(parsedPacket);
+            event.sender.send('rt-data', parsedPacket);
     
         });
     
@@ -147,7 +147,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     });
     
     let port_2 = new PortHandler(settingsHandler.settings.defaultCOM2);
-    port_2.connect().then( parser =>{
+    port_2.connect().then( parser => {
 
         // Switches the port into "flowing mode"
         parser.on('data', function (data) {
@@ -157,7 +157,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     
             // Raw packets are parsed into JSON object
             const parsedPacket = FlexParser.parseFlexiData(rawPacket);
-            console.log(parsedPacket);
+            event.sender.send('rt-data', parsedPacket);
     
         });
     
