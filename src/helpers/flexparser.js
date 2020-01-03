@@ -49,7 +49,7 @@ function sliceArray(rawArray){
     
     }else{
         
-        throw "Invalid input format of data";
+        throw new Error("Invalid data format");
     }
 
     return slicedData;
@@ -60,7 +60,6 @@ function parseBasicData(rawBasicArray){
     
     const basicJSON = {
         timestamp: Date.now(),
-        connected: 1,
         devId: rawBasicArray[0],
         heartRate: rawBasicArray[1],
         measuringHR: isMeasuringHR(rawBasicArray[1]),

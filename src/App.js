@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StylesProvider } from "@material-ui/styles";
-import "./App.css";
+import './App.css';
+import '../node_modules/react-vis/dist/style.css';
 import { DevContainer } from './components/DevContainer';
 
 

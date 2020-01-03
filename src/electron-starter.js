@@ -129,9 +129,8 @@ ipcMain.on('list-ports', (event, arg) => {
 ipcMain.on('clear-to-send', (event, arg) => {
 
     let port_1 = new PortHandler(settingsHandler.settings.defaultCOM1);
-    port_1.connect().then( parser =>{
+    port_1.connect().then( parser => {
 
-        // Switches the port into "flowing mode"
         parser.on('data', function (data) {
 
             //Converting hex to int array
@@ -139,28 +138,16 @@ ipcMain.on('clear-to-send', (event, arg) => {
     
             // Raw packets are parsed into JSON object
             const parsedPacket = FlexParser.parseFlexiData(rawPacket);
-            event.sender.send('rt-data', parsedPacket);
-    
+            event.reply(parsedPacket.basicData.devId.toString(), parsedPacket)
         });
-    
 
     });
+    
     
     let port_2 = new PortHandler(settingsHandler.settings.defaultCOM2);
     port_2.connect().then( parser => {
 
-        // Switches the port into "flowing mode"
-        parser.on('data', function (data) {
-
-            //Converting hex to int array
-            const rawPacket = Uint8Array.from(data);
-    
-            // Raw packets are parsed into JSON object
-            const parsedPacket = FlexParser.parseFlexiData(rawPacket);
-            event.sender.send('rt-data', parsedPacket);
-    
-        });
-    
+        
 
     });
     

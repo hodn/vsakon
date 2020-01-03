@@ -1,5 +1,5 @@
 import React from 'react';
-//import { TimeSeries } from 'react-smoothie';
+import { XYPlot, LineSeries } from 'react-vis';
 const { ipcRenderer } = window.require('electron');
 
 export class DevContainer extends React.Component {
@@ -8,11 +8,12 @@ export class DevContainer extends React.Component {
 
     this._isMounted = false;
     this.checkDeviceConnection = this.checkDeviceConnection.bind(this);
-    this.test = this.test.bind(this);
 
     this.state = {
-      realTimeData: [],
-      graphData: []
+      realTimeData: undefined,
+      graphData: [],
+      connected: false,
+      interval: undefined
     }
 
   }
@@ -21,30 +22,18 @@ export class DevContainer extends React.Component {
 
     this._isMounted = true;
 
-    setInterval(this.checkDeviceConnection, 5000, this.state.realTimeData);
-
     ipcRenderer.send("clear-to-send");
-    ipcRenderer.on('rt-data', (event, arg) => {
+    ipcRenderer.on('18', (event, arg) => {
 
-      const packet = arg;
-      const rtData = this.state.realTimeData;
-      rtData[packet.basicData.devId] = packet;
+      setTimeout(this.checkDeviceConnection, 3000);
 
-      const gData = this.state.graphData;
-      const graphUnit = { x: packet.basicData.timestamp, y: packet.basicData.motionX };
-
-      if (gData[packet.basicData.devId] === undefined) {
-        gData[packet.basicData.devId] = [graphUnit];
-      }
-      else {
-
-        gData[packet.basicData.devId].push(graphUnit);
-        if (gData[packet.basicData.devId].length > 10) gData[packet.basicData.devId].splice(0, 1);
-      }
+      const packet = arg
+      const graph = { x: packet.basicData.timestamp, y: packet.basicData.motionX }
 
       this._isMounted && this.setState((state, props) => ({
-        realTimeData: rtData,
-        graphData: gData
+        realTimeData: packet,
+        connected: true,
+        graphData: [...state.graphData, graph]
       }))
 
     })
@@ -55,24 +44,21 @@ export class DevContainer extends React.Component {
 
   }
 
-  checkDeviceConnection(data) {
+  checkDeviceConnection() {
 
-    if (data !== {}) {
-      Object.keys(data).forEach(key => {
 
-        const time = data[key].basicData.timestamp; // the value of the current key.
+    if (this.state.realTimeData !== undefined) {
 
-        if (Date.now() - time > 5000) {
+      const time = this.state.realTimeData.basicData.timestamp;
 
-          data[key].basicData.connected = 0;
+      if (Date.now() - time > 2800) {
+        
+        this._isMounted && this.setState((state, props) => ({
+          connected: false
 
-          this._isMounted && this.setState((state, props) => ({
-            realTimeData: data,
-          }))
+        }))
 
-        }
-
-      });
+      }
 
     }
     else {
@@ -83,28 +69,14 @@ export class DevContainer extends React.Component {
 
   }
 
-  test(data) {
-
-    Object.keys(data).forEach(key => {
-      console.log(data[key]); // the value of the current key.
-      return <p> {data[key].basicData.devId} </p >
-    });
-
-  }
 
   // What the actual component renders
   render() {
 
     return (
+
       <div>
-        <ul>
-          {this.state.realTimeData.map(item => (
-            <li key={item.basicData.devId}>
-              <div>{item.basicData.devId}</div>
-              <div>{item.basicData.motionX}</div>
-            </li>
-          ))}
-        </ul>
+        <p>{this.state.connected.toString()}</p>
       </div>
 
     );
