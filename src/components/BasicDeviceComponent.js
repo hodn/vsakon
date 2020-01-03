@@ -2,7 +2,7 @@ import React from 'react';
 import { XYPlot, LineSeries } from 'react-vis';
 const { ipcRenderer } = window.require('electron');
 
-export class DevContainer extends React.Component {
+export class BasicDeviceComponent extends React.Component {
   constructor(props) {
     super(props);
 
@@ -22,8 +22,7 @@ export class DevContainer extends React.Component {
 
     this._isMounted = true;
 
-    ipcRenderer.send("clear-to-send");
-    ipcRenderer.on('18', (event, arg) => {
+    ipcRenderer.on(this.props.devId.toString(), (event, arg) => {
 
       setTimeout(this.checkDeviceConnection, 3000);
 
@@ -52,7 +51,7 @@ export class DevContainer extends React.Component {
       const time = this.state.realTimeData.basicData.timestamp;
 
       if (Date.now() - time > 2800) {
-        
+
         this._isMounted && this.setState((state, props) => ({
           connected: false
 
@@ -77,6 +76,9 @@ export class DevContainer extends React.Component {
 
       <div>
         <p>{this.state.connected.toString()}</p>
+        <XYPlot height={100} width={300}>
+          <LineSeries data={this.state.graphData} />
+        </XYPlot>
       </div>
 
     );

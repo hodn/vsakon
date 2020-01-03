@@ -126,31 +126,45 @@ ipcMain.on('list-ports', (event, arg) => {
     ) // musi se vyresit identifikace nasich prijimacu - jinak treba mys bude svitit jako pripojeny vysilac
 })
 
+function tester(parsedPacket, event) {
+
+    for (let i = 0; i < 30; i++) {
+
+        const sender = () => {
+            event.reply(i.toString(), parsedPacket);
+        }
+
+        setTimeout(sender, 300);
+
+    }
+}
+
 ipcMain.on('clear-to-send', (event, arg) => {
 
     let port_1 = new PortHandler(settingsHandler.settings.defaultCOM1);
-    port_1.connect().then( parser => {
+    port_1.connect().then(parser => {
 
         parser.on('data', function (data) {
 
             //Converting hex to int array
             const rawPacket = Uint8Array.from(data);
-    
+
             // Raw packets are parsed into JSON object
             const parsedPacket = FlexParser.parseFlexiData(rawPacket);
-            event.reply(parsedPacket.basicData.devId.toString(), parsedPacket)
+            //event.reply(parsedPacket.basicData.devId.toString(), parsedPacket);
+            tester(parsedPacket, event)
         });
 
     });
-    
-    
-    let port_2 = new PortHandler(settingsHandler.settings.defaultCOM2);
-    port_2.connect().then( parser => {
 
-        
+
+    let port_2 = new PortHandler(settingsHandler.settings.defaultCOM2);
+    port_2.connect().then(parser => {
+
+
 
     });
-    
+
 })
 
 
