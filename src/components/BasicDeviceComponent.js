@@ -27,13 +27,21 @@ export class BasicDeviceComponent extends React.Component {
       setTimeout(this.checkDeviceConnection, 3000);
 
       const packet = arg
-      const graph = { x: packet.basicData.timestamp, y: packet.basicData.motionX }
 
-      this._isMounted && this.setState((state, props) => ({
-        realTimeData: packet,
-        connected: true,
-        graphData: [...state.graphData, graph]
-      }))
+      if (packet !== this.state.realTimeData) {
+        
+        const graph = { x: packet.basicData.timestamp, y: packet.basicData.motionX }
+
+        this._isMounted && this.setState((state, props) => ({
+          realTimeData: packet,
+          connected: true,
+          graphData: [...state.graphData, graph]
+        
+        }))
+
+      }
+
+
 
     })
 
@@ -50,7 +58,7 @@ export class BasicDeviceComponent extends React.Component {
 
       const time = this.state.realTimeData.basicData.timestamp;
 
-      if (Date.now() - time > 2800) {
+      if (Date.now() - time > 3000) {
 
         this._isMounted && this.setState((state, props) => ({
           connected: false

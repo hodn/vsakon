@@ -1,5 +1,5 @@
 import React from 'react';
-import { BasicDeviceComponent } from './BasicDeviceComponent';
+import { BasicDeviceComponent } from './BasicDeviceComponent.js';
 const { ipcRenderer } = window.require('electron');
 
 
@@ -14,13 +14,14 @@ export class MainView extends React.Component {
 
     }
 
+    this.cts = this.cts.bind(this);
   }
 
   componentDidMount() {
 
     this._isMounted = true;
-
-    ipcRenderer.send("clear-to-send");
+      ipcRenderer.send("clear-to-send");
+    
 
     for (let i = 0; i < 30; i++) {
 
@@ -34,16 +35,24 @@ export class MainView extends React.Component {
 
   }
 
+  cts(){
+    //ipcRenderer.send("clear-to-send");
+  }
+
   // What the actual component renders
   render() {
 
     return (
 
       <div>
+        
+        <button onClick={this.cts}>CTS</button>
+
         {this.state.devComponents.map((component) => {
           return component;
         })}
 
+        
       </div>
 
 
