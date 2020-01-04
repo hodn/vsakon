@@ -9,9 +9,9 @@ module.exports = class PortHandler {
         this.event = event;
         this.interval = null;
         this.port = undefined;
-
+        this.invalidDataCount = 0;
     }
-    
+
     async getParser() {
 
         this.port = new SerialPort(this.com, {
@@ -24,7 +24,7 @@ module.exports = class PortHandler {
         return await parser;
 
     }
-    
+
     connect(delay = 2000) {
 
         let com = this.com;
@@ -33,7 +33,7 @@ module.exports = class PortHandler {
         const open = () => this.port.open(function (err) {
             if (err) {
                 setTimeout(open, delay);
-                throw Error(com + " not open")
+                console.log(com + " not open")
             }
 
         })
@@ -41,11 +41,11 @@ module.exports = class PortHandler {
         open();
 
         this.port.on('open', function () {
-            console.log("Connected " + com);
+            console.log("Connected " + com); // should send to Renderer --- remove this line
         });
 
         this.port.on('close', function () {
-            console.log("Disconnected " + com);
+            console.log("Disconnected " + com); // should send to Renderer --- remove this line
             setTimeout(open, delay);
         });
 
@@ -53,7 +53,8 @@ module.exports = class PortHandler {
 
     getData() {
 
-        let event = this.event
+        let event = this.event;
+        const sync = () => this.sendSync();
 
         this.getParser().then(parser => {
 
@@ -74,11 +75,14 @@ module.exports = class PortHandler {
                 } catch (error) {
                     console.log(error.message)
 
-                    if (error.message === "Invalid data format") {
+                    if (error.message === "Invalid data format"){
 
-                        // send sync signal()-> (badData after X times - reconnect)
+                        try {
+                            sync();
+                        } catch (error) {
+                            console.log(error);
+                        }
                     }
-
 
                 }
             })
@@ -97,9 +101,66 @@ module.exports = class PortHandler {
             }
         })
 
+    }
 
+    sendSync() {
 
+        this.invalidDataCount += 1;
+        
+        let stopArray = new Uint8Array([255, 251, 255, 1, 1, 1, 255, 0]);
+        let syncArray = new Uint8Array([255, 251, 255, 2, 2, 2, 255, 0]);
+    
+        let port = this.port;
+
+        const sendSyncSignal = () => port.write(syncArray, function (err) {
+
+            if (err) {
+
+                throw Error(port + " not synced")
+
+            } else {
+                // Sync packet written
+                console.log("SYNCED")
+
+                const flush = () => port.flush(function (err) {
+                    if (err) {
+
+                        throw Error(port + " not flushed")
+                        
+                    }
+                })
+            }
+        })
+
+        const stopAndSync = () => port.write(stopArray, function (err) {
+
+            if (err) {
+
+                throw Error(port + " not stopped")
+
+            } else {
+                // Stop packet written
+
+                port.flush(function (err) {
+                    if (err) {
+
+                        throw Error(port + " not flushed")
+
+                    } else {
+                        sendSyncSignal(); //sends Sync signal
+                    }
+                })
+            }
+        })
+
+        if(this.invalidDataCount >= 3){
+
+            this.invalidDataCount = 0;
+            stopAndSync();
+
+        }
+        
+        
     }
 
 }
-

@@ -60,6 +60,8 @@ export class BasicDeviceComponent extends React.Component {
 
       if (Date.now() - time > 3000) {
 
+        //add aditional if for longer than 6 secs - not enough saturation - set default state
+
         this._isMounted && this.setState((state, props) => ({
           connected: false
 
