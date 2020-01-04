@@ -14,6 +14,7 @@ module.exports = class PortHandler {
 
     async getParser() {
 
+        // Configuring parser for reading from port
         this.port = new SerialPort(this.com, {
             baudRate: 115200,
             autoOpen: false
@@ -30,20 +31,23 @@ module.exports = class PortHandler {
         let com = this.com;
         this.interval = delay;
 
+        // Opening the port
         const open = () => this.port.open(function (err) {
             if (err) {
                 setTimeout(open, delay);
-                console.log(com + " not open")
+                //console.log(com + " not open")
             }
 
         })
 
         open();
 
+        // If open - inform Renderer
         this.port.on('open', function () {
             console.log("Connected " + com); // should send to Renderer --- remove this line
         });
 
+        // If closed - inform Renderer
         this.port.on('close', function () {
             console.log("Disconnected " + com); // should send to Renderer --- remove this line
             setTimeout(open, delay);
@@ -58,24 +62,34 @@ module.exports = class PortHandler {
 
         this.getParser().then(parser => {
 
+            // Connecting port after configuring the parser
             this.connect();
 
+            // No data for 10 seconds after connecting port -> restart connection
+            let dataFlowing = false;
+            const check = () => this.checkDataFlow(dataFlowing);
+            setTimeout(check, 10000)
+
+            // Listener for data on the port
             parser.on('data', function (data) {
 
+                dataFlowing = true;
+                
                 try {
                     //Converting hex to int array
-                    const rawPacket = Uint8Array.from(data & 0);
+                    const rawPacket = Uint8Array.from(data);
 
-                    // Raw packets are parsed into JSON object
+                    // Raw packets are parsed into JSON object via FlexParser lib
                     const parsedPacket = FlexParser.parseFlexiData(rawPacket);
 
                     // Packet is sent to the Renderer
                     event.reply(parsedPacket.basicData.devId.toString(), parsedPacket);
 
                 } catch (error) {
-                    console.log(error.message)
+                    //console.log(error.message)
 
-                    if (error.message === "Invalid data format"){
+                    // Devices out of sync - sending invalid data format
+                    if (error.message === "Invalid data format") {
 
                         try {
                             sync();
@@ -92,12 +106,16 @@ module.exports = class PortHandler {
     }
 
     restartPort() {
-
+       
+        let com = this.com
+        // Closing the port - connect method automatically attempts to reconnect afterwards
         this.port.close(function (err) {
             if (err) {
 
-                throw Error(com + " not closed")
+                console.log(com + " not closed");
 
+            } else {
+                console.log("Restarting connection " + com);
             }
         })
 
@@ -106,12 +124,13 @@ module.exports = class PortHandler {
     sendSync() {
 
         this.invalidDataCount += 1;
-        
+
         let stopArray = new Uint8Array([255, 251, 255, 1, 1, 1, 255, 0]);
         let syncArray = new Uint8Array([255, 251, 255, 2, 2, 2, 255, 0]);
-    
+
         let port = this.port;
 
+        // Send sync signal and flush port
         const sendSyncSignal = () => port.write(syncArray, function (err) {
 
             if (err) {
@@ -120,18 +139,18 @@ module.exports = class PortHandler {
 
             } else {
                 // Sync packet written
-                console.log("SYNCED")
-
-                const flush = () => port.flush(function (err) {
+                console.log("Syncing")
+                port.flush(function (err) {
                     if (err) {
 
                         throw Error(port + " not flushed")
-                        
+
                     }
                 })
             }
         })
 
+        // Stop and flush port -> call sendSyncSignal function
         const stopAndSync = () => port.write(stopArray, function (err) {
 
             if (err) {
@@ -153,14 +172,26 @@ module.exports = class PortHandler {
             }
         })
 
-        if(this.invalidDataCount >= 3){
+        // If there are 3 invalid packets in the row - sync devices & reconnect the port
+        if (this.invalidDataCount >= 3) {
 
             this.invalidDataCount = 0;
             stopAndSync();
 
         }
+
+
+    }
+
+    checkDataFlow(dataFlowing){
+
+        const restart = () => this.restartPort();
         
-        
+        if(dataFlowing === false){
+
+            restart()
+        }
+
     }
 
 }

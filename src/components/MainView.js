@@ -36,7 +36,7 @@ export class MainView extends React.Component {
   }
 
   cts(){
-    //ipcRenderer.send("clear-to-send");
+    ipcRenderer.send("list-ports");
   }
 
   // What the actual component renders

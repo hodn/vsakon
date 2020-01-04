@@ -86,7 +86,6 @@ const SerialPort = require('serialport');
 // Delimiter init for data packets
 const SettingsHandler = require('./helpers/settingsHandler');
 const PortHandler = require('./helpers/portHandler');
-const FlexParser = require('./helpers/flexParser');
 
 const settingsHandler = new SettingsHandler("user-settings.txt");
 settingsHandler.loadSettings();
@@ -121,6 +120,7 @@ ipcMain.on('list-ports', (event, arg) => {
     SerialPort.list().then(
         ports => ports.forEach(function (port) {
             event.sender.send('ports-listed', port.comName)
+            //console.log(port);
         }),
         err => console.error(err),
     ) // musi se vyresit identifikace nasich prijimacu - jinak treba mys bude svitit jako pripojeny vysilac
