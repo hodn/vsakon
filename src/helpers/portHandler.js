@@ -29,6 +29,8 @@ module.exports = class PortHandler {
     connect(delay = 2000) {
 
         let com = this.com;
+
+        // Not connected state - how often to attempt to connect
         this.interval = delay;
 
         // Opening the port
@@ -59,21 +61,20 @@ module.exports = class PortHandler {
 
         let event = this.event;
         const sync = () => this.sendSync();
+        
+        // No data for 10 seconds after connecting port -> restart connection
+        const restart = () => this.restartPort()
+        const initDataInterval = setInterval(restart, 10000);
 
         this.getParser().then(parser => {
 
             // Connecting port after configuring the parser
             this.connect();
 
-            // No data for 10 seconds after connecting port -> restart connection
-            let dataFlowing = false;
-            const check = () => this.checkDataFlow(dataFlowing);
-            setTimeout(check, 10000)
-
             // Listener for data on the port
             parser.on('data', function (data) {
 
-                dataFlowing = true;
+                if (initDataInterval !== undefined) clearInterval(initDataInterval);
                 
                 try {
                     //Converting hex to int array
@@ -83,7 +84,18 @@ module.exports = class PortHandler {
                     const parsedPacket = FlexParser.parseFlexiData(rawPacket);
 
                     // Packet is sent to the Renderer
-                    event.reply(parsedPacket.basicData.devId.toString(), parsedPacket);
+                    //event.reply(parsedPacket.basicData.devId.toString(), parsedPacket);
+
+                    // Test - 30 dummy devices from one
+                    for (let i = 0; i < 30; i++) {
+
+                        const sender = () => {
+                            event.reply(i.toString(), parsedPacket);
+                        }
+                
+                        setTimeout(sender, 30);
+                
+                    }
 
                 } catch (error) {
                     //console.log(error.message)
@@ -109,6 +121,7 @@ module.exports = class PortHandler {
        
         let com = this.com
         // Closing the port - connect method automatically attempts to reconnect afterwards
+        
         this.port.close(function (err) {
             if (err) {
 
@@ -125,7 +138,7 @@ module.exports = class PortHandler {
 
         this.invalidDataCount += 1;
 
-        let stopArray = new Uint8Array([255, 251, 255, 1, 1, 1, 255, 0]);
+        let stopArray = new Uint8Array([255, 251, 255, 1, 1, 1, 255, 0]); 
         let syncArray = new Uint8Array([255, 251, 255, 2, 2, 2, 255, 0]);
 
         let port = this.port;
@@ -183,15 +196,29 @@ module.exports = class PortHandler {
 
     }
 
-    checkDataFlow(dataFlowing){
+    removeAlarm(devId){
 
-        const restart = () => this.restartPort();
-        
-        if(dataFlowing === false){
+        let alarmArray = new Uint8Array ([255,251,devId,10,10,10,255,0]);
+        let port = this.port
 
-            restart()
-        }
+        port.write(alarmArray, function (err) {
 
+            if (err) {
+
+                throw Error(devId + " alarm not removed")
+
+            } else {
+                // Alarm off packet written
+                console.log("Removed alarm" + devId);
+                port.drain(function (err) {
+                    if (err) {
+
+                        throw Error(port + " not drained")
+
+                    }
+                })
+            }
+        })
     }
 
 }

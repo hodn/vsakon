@@ -145,7 +145,17 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     port_1.getData();
 
+    ipcMain.on("remove-alarm", (event, arg) => {
 
+        try {
+
+            port_1.removeAlarm(arg);
+            console.log("alarm: " + arg)
+
+        } catch (error) {
+            console.log(error);
+        }
+    })
 
 
 

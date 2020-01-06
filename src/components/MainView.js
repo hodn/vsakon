@@ -13,8 +13,6 @@ export class MainView extends React.Component {
       devComponents: []
 
     }
-
-    this.cts = this.cts.bind(this);
   }
 
   componentDidMount() {
@@ -35,18 +33,12 @@ export class MainView extends React.Component {
 
   }
 
-  cts(){
-    ipcRenderer.send("list-ports");
-  }
-
   // What the actual component renders
   render() {
 
     return (
 
       <div>
-        
-        <button onClick={this.cts}>CTS</button>
 
         {this.state.devComponents.map((component) => {
           return component;

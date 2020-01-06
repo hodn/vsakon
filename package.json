@@ -25,6 +25,7 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
     "react-smoothie": "^0.10.2",
+    "react-svg-gauge": "^1.0.10",
     "react-vis": "^1.11.7",
     "serialport": "^7.1.5"
   },

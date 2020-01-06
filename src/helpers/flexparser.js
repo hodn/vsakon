@@ -3,7 +3,7 @@ module.exports.parseFlexiData = function parseRawData(rawArray){
     const slicedArrays = sliceArray(rawArray);
     
     const basicData = parseBasicData(slicedArrays.rawBasicData);
-    const deadMan = slicedArrays.deadMan % 2 ? 0 : 1;
+    const deadMan = slicedArrays.deadMan % 2 ? false : true;
     const locationData = slicedArrays.rawLocationData === undefined ? null : parseLocationData(slicedArrays.rawLocationData);
     const nodeData = slicedArrays.rawNodeData === undefined ? null : parseNodeData(slicedArrays.rawNodeData);
     
