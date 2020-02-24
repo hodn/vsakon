@@ -129,10 +129,13 @@ ipcMain.on('list-ports', (event, arg) => {
 
 
 ipcMain.on('clear-to-send', (event, arg) => {
-    // Import of Flexparser lib
+    
+    // Import of Flexparser & DataManager lib
     const FlexParser = require('./helpers/flexParser');
+    const PacketHandler = require('./helpers/packetHandler')
 
     // Port init
+    let packetHandler = new PacketHandler();
     let port_1 = new PortHandler(settingsHandler.settings.defaultCOM1);
 
     // Get data from port - init parser, connect and data
@@ -156,9 +159,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
                 // Raw packets are parsed into JSON object via FlexParser lib
                 const parsedPacket = FlexParser.parseFlexiData(rawPacket);
-                console.log(parsedPacket);
                 // Packet is sent to the Renderer
-                event.reply(parsedPacket.basicData.devId.toString(), parsedPacket);
+                const displayData = packetHandler.getData(parsedPacket);
+                console.log(displayData.graphData);
 
 
             } catch (error) {

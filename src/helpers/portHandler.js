@@ -54,12 +54,12 @@ module.exports = class PortHandler {
         });
 
     }
-   
+
     restartPort() {
-       
+
         let com = this.com
         // Closing the port - connect method automatically attempts to reconnect afterwards
-        
+
         this.port.close(function (err) {
             if (err) {
 
@@ -76,7 +76,7 @@ module.exports = class PortHandler {
 
         this.invalidDataCount += 1;
 
-        let stopArray = new Uint8Array([255, 251, 255, 1, 1, 1, 255, 0]); 
+        let stopArray = new Uint8Array([255, 251, 255, 1, 1, 1, 255, 0]);
         let syncArray = new Uint8Array([255, 251, 255, 2, 2, 2, 255, 0]);
 
         let port = this.port;
@@ -134,9 +134,9 @@ module.exports = class PortHandler {
 
     }
 
-    removeAlarm(devId){
+    removeAlarm(devId) {
 
-        let alarmArray = new Uint8Array ([255,251,devId,10,10,10,255,0]);
+        let alarmArray = new Uint8Array([255, 251, devId, 10, 10, 10, 255, 0]);
         let port = this.port
 
         port.write(alarmArray, function (err) {
