@@ -1,0 +1,23 @@
+// Test - 30 dummy devices from one
+                /*for (let i = 0; i < 30; i++) {
+
+                    const sender = () => {
+                        event.reply(i.toString(), parsedPacket);
+                    }
+            
+                    setTimeout(sender, 30);
+            
+                } */
+
+/* function tester(parsedPacket, event) {
+
+    for (let i = 0; i < 30; i++) {
+
+        const sender = () => {
+            event.reply(i.toString(), parsedPacket);
+        }
+
+        setTimeout(sender, 30);
+
+    }
+} */ // Function to simulate 30 devices

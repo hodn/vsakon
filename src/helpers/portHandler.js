@@ -1,12 +1,10 @@
 // SerialPort init
 const SerialPort = require('serialport');
 const Delimiter = require('@serialport/parser-delimiter');
-const FlexParser = require('./flexParser');
 
 module.exports = class PortHandler {
     constructor(com, event) {
         this.com = com;
-        this.event = event;
         this.interval = null;
         this.port = undefined;
         this.invalidDataCount = 0;
@@ -33,7 +31,7 @@ module.exports = class PortHandler {
         // Not connected state - how often to attempt to connect
         this.interval = delay;
 
-        // Opening the port
+        // Opening the port - recursion if not opened
         const open = () => this.port.open(function (err) {
             if (err) {
                 setTimeout(open, delay);
@@ -56,67 +54,7 @@ module.exports = class PortHandler {
         });
 
     }
-
-    getData() {
-
-        let event = this.event;
-        const sync = () => this.sendSync();
-        
-        // No data for 10 seconds after connecting port -> restart connection
-        const restart = () => this.restartPort()
-        const initDataInterval = setInterval(restart, 10000);
-
-        this.getParser().then(parser => {
-
-            // Connecting port after configuring the parser
-            this.connect();
-
-            // Listener for data on the port
-            parser.on('data', function (data) {
-
-                if (initDataInterval !== undefined) clearInterval(initDataInterval);
-                
-                try {
-                    //Converting hex to int array
-                    const rawPacket = Uint8Array.from(data);
-
-                    // Raw packets are parsed into JSON object via FlexParser lib
-                    const parsedPacket = FlexParser.parseFlexiData(rawPacket);
-
-                    // Packet is sent to the Renderer
-                    //event.reply(parsedPacket.basicData.devId.toString(), parsedPacket);
-
-                    // Test - 30 dummy devices from one
-                    for (let i = 0; i < 30; i++) {
-
-                        const sender = () => {
-                            event.reply(i.toString(), parsedPacket);
-                        }
-                
-                        setTimeout(sender, 30);
-                
-                    }
-
-                } catch (error) {
-                    //console.log(error.message)
-
-                    // Devices out of sync - sending invalid data format
-                    if (error.message === "Invalid data format") {
-
-                        try {
-                            sync();
-                        } catch (error) {
-                            console.log(error);
-                        }
-                    }
-
-                }
-            })
-
-        })
-
-    }
-
+   
     restartPort() {
        
         let com = this.com
@@ -143,26 +81,6 @@ module.exports = class PortHandler {
 
         let port = this.port;
 
-        // Send sync signal and flush port
-        const sendSyncSignal = () => port.write(syncArray, function (err) {
-
-            if (err) {
-
-                throw Error(port + " not synced")
-
-            } else {
-                // Sync packet written
-                console.log("Syncing")
-                port.flush(function (err) {
-                    if (err) {
-
-                        throw Error(port + " not flushed")
-
-                    }
-                })
-            }
-        })
-
         // Stop and flush port -> call sendSyncSignal function
         const stopAndSync = () => port.write(stopArray, function (err) {
 
@@ -180,6 +98,26 @@ module.exports = class PortHandler {
 
                     } else {
                         sendSyncSignal(); //sends Sync signal
+                    }
+                })
+            }
+        })
+
+        // Send sync signal and flush port
+        const sendSyncSignal = () => port.write(syncArray, function (err) {
+
+            if (err) {
+
+                throw Error(port + " not synced")
+
+            } else {
+                // Sync packet written
+                console.log("Syncing")
+                port.flush(function (err) {
+                    if (err) {
+
+                        throw Error(port + " not flushed")
+
                     }
                 })
             }

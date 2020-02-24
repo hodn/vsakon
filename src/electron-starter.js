@@ -115,7 +115,7 @@ ipcMain.on('settings-info', (event, arg) => {
     event.sender.send('settings-loaded', { dir: settingsHandler.settings.defaultDir, com: settingsHandler.settings.defaultCOM })
 })
 
-// List available ports on event from Renderer
+// List available ports on event from Renderer (more detailed identification might be needed - i.e. mouse identified as receiver)
 ipcMain.on('list-ports', (event, arg) => {
     SerialPort.list().then(
         ports => ports.forEach(function (port) {
@@ -123,28 +123,65 @@ ipcMain.on('list-ports', (event, arg) => {
             //console.log(port);
         }),
         err => console.error(err),
-    ) // musi se vyresit identifikace nasich prijimacu - jinak treba mys bude svitit jako pripojeny vysilac
+    ) 
 })
 
-/* function tester(parsedPacket, event) {
 
-    for (let i = 0; i < 30; i++) {
-
-        const sender = () => {
-            event.reply(i.toString(), parsedPacket);
-        }
-
-        setTimeout(sender, 30);
-
-    }
-} */ // Function to simulate 30 devices
 
 ipcMain.on('clear-to-send', (event, arg) => {
+    // Import of Flexparser lib
+    const FlexParser = require('./helpers/flexParser');
 
-    let port_1 = new PortHandler(settingsHandler.settings.defaultCOM1, event);
+    // Port init
+    let port_1 = new PortHandler(settingsHandler.settings.defaultCOM1);
 
-    port_1.getData();
+    // Get data from port - init parser, connect and data
+    port_1.getParser().then(parser => {
+        
+        // No data for 10 seconds after connecting port -> restart connection
+        const initDataInterval = setInterval(port_1.restartPort, 10000);
+        
+        // Connecting port after the parser was configured
+        port_1.connect();
 
+        // Listener for data from port
+        parser.on('data', function (data) {
+
+            // Removing the initial restart interval after first data packet
+            if (initDataInterval !== undefined) clearInterval(initDataInterval);
+            
+            try {
+                //Converting hex to int array
+                const rawPacket = Uint8Array.from(data);
+
+                // Raw packets are parsed into JSON object via FlexParser lib
+                const parsedPacket = FlexParser.parseFlexiData(rawPacket);
+                console.log(parsedPacket);
+                // Packet is sent to the Renderer
+                event.reply(parsedPacket.basicData.devId.toString(), parsedPacket);
+
+
+            } catch (error) {
+                //console.log(error.message)
+
+                // Devices out of sync - sending invalid data format
+                if (error.message === "Invalid data format") {
+
+                    try {
+                        port_1.sendSync();
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+
+            }
+        })
+
+
+
+    });
+
+    // User turns off the alarm
     ipcMain.on("remove-alarm", (event, arg) => {
 
         try {
