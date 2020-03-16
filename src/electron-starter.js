@@ -159,9 +159,10 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
                 // Raw packets are parsed into JSON object via FlexParser lib
                 const parsedPacket = FlexParser.parseFlexiData(rawPacket);
-                // Packet is sent to the Renderer
+                // Timeseries data are processed
                 const displayData = packetHandler.getData(parsedPacket);
-                console.log(displayData.graphData);
+                // Packet is sent to the Renderer
+                event.reply(displayData.data.basicData.devId.toString(), displayData)
 
 
             } catch (error) {

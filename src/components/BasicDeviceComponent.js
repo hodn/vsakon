@@ -26,23 +26,22 @@ export class BasicDeviceComponent extends React.Component {
   componentDidMount() {
 
     this._isMounted = true;
-    
+
     ipcRenderer.on(this.props.devId.toString(), (event, arg) => {
 
       if (this.state.graphData.length === 0) setInterval(this.checkDeviceConnection, 3000);
-      
-      const packet = arg;
 
-      if (packet !== this.state.realTimeData) {
-        
-        const graph = { x: packet.basicData.timestamp, y: packet.basicData.motionX }
+      const data = arg.data;
+      const graphData = arg.graphData;
+
+      if (data !== this.state.realTimeData) {
 
         this._isMounted && this.setState((state, props) => ({
-          realTimeData: packet,
+          realTimeData: data,
           connected: true,
-          graphData: [...state.graphData, graph],
+          graphData: graphData,
           randomHR: Math.floor(Math.random() * 200)
-        
+
         }))
 
       }
@@ -83,14 +82,14 @@ export class BasicDeviceComponent extends React.Component {
 
 
   }
-  
-  alarmOff(){
+
+  alarmOff() {
     ipcRenderer.send("remove-alarm", this.props.devId);
   }
 
-  randomHR(){
+  randomHR() {
 
-    return Math.floor(Math.random() * (200 - 0) );
+    return Math.floor(Math.random() * (200 - 0));
   }
 
   // What the actual component renders
@@ -100,11 +99,12 @@ export class BasicDeviceComponent extends React.Component {
 
       <div>
         <h3>{this.props.devId.toString()} <button onClick={this.alarmOff}>Alarm OFF</button></h3>
+        <h3>{this.state.realTimeData === null ? "false" : this.state.realTimeData.basicData.accX.toString()}}</h3>
         <p>Connected: {this.state.connected.toString()} --- Alarm: {this.state.realTimeData === null ? "false" : this.state.realTimeData.deadMan.toString()}</p>
-        <GaugeComponent hr={this.state.randomHR} motionX={this.state.realTimeData === null ? 0 : this.state.realTimeData.basicData.motionX}/>
+        <GaugeComponent hr={this.state.randomHR} motionX={this.state.realTimeData === null ? 0 : this.state.realTimeData.basicData.motionX} />
 
         <XYPlot height={100} width={300}>
-          <LineSeries data={this.state.graphData}/>
+          <LineSeries data={this.state.graphData} />
         </XYPlot>
       </div>
 
