@@ -134,18 +134,19 @@ ipcMain.on('clear-to-send', (event, arg) => {
     const FlexParser = require('./helpers/flexParser');
     const PacketHandler = require('./helpers/packetHandler')
 
-    // Port init
-    let packetHandler = new PacketHandler();
-    let port_1 = new PortHandler(settingsHandler.settings.defaultCOM1);
+    // Port and state management init
+    let packetHandler = new PacketHandler(event);
+    let port1 = new PortHandler(settingsHandler.settings.defaultCOM1);
+    //let port2 = new PortHandler(settingsHandler.settings.defaultCOM2);
 
-    // Get data from port - init parser, connect and data
-    port_1.getParser().then(parser => {
+    // Get data from port 1 - init parser, connect and data
+    port1.getParser().then(parser => {
         
         // No data for 10 seconds after connecting port -> restart connection
-        const initDataInterval = setInterval(port_1.restartPort, 10000);
+        const initDataInterval = setInterval(port1.restartPort, 10000);
         
         // Connecting port after the parser was configured
-        port_1.connect();
+        port1.connect();
 
         // Listener for data from port
         parser.on('data', function (data) {
@@ -159,11 +160,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
                 // Raw packets are parsed into JSON object via FlexParser lib
                 const parsedPacket = FlexParser.parseFlexiData(rawPacket);
-                // Timeseries data are processed
-                const displayData = packetHandler.getData(parsedPacket);
-                // Packet is sent to the Renderer
-                event.reply(displayData.data.basicData.devId.toString(), displayData)
-
+                // Packet stored for timeseries and sent to Renderer
+                packetHandler.storeData(parsedPacket);
+            
 
             } catch (error) {
                 //console.log(error.message)
@@ -172,7 +171,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                 if (error.message === "Invalid data format") {
 
                     try {
-                        port_1.sendSync();
+                        port1.sendSync();
                     } catch (error) {
                         console.log(error);
                     }
@@ -185,12 +184,13 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     });
 
-    // User turns off the alarm
+    // User turns off the alarm (arg = deviceId)
     ipcMain.on("remove-alarm", (event, arg) => {
 
         try {
 
-            port_1.removeAlarm(arg);
+            port1.removeAlarm(arg);
+            // port2.removeAlarm(arg)
             console.log("alarm: " + arg)
 
         } catch (error) {

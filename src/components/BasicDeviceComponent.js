@@ -11,8 +11,8 @@ export class BasicDeviceComponent extends React.Component {
     this.checkDeviceConnection = this.checkDeviceConnection.bind(this);
 
     this.state = {
-      realTimeData: null,
-      graphData: [],
+      packet: null,
+      timeSeries: [],
       connected: false,
       randomHR: 0
     }
@@ -29,17 +29,17 @@ export class BasicDeviceComponent extends React.Component {
 
     ipcRenderer.on(this.props.devId.toString(), (event, arg) => {
 
-      if (this.state.graphData.length === 0) setInterval(this.checkDeviceConnection, 3000);
+      if (this.state.timeSeries.length === 0) setInterval(this.checkDeviceConnection, 2000);
 
-      const data = arg.data;
-      const graphData = arg.graphData;
+      const packet = arg.packet;
+      const timeSeries = arg.timeSeries;
 
-      if (data !== this.state.realTimeData) {
+      if (packet !== this.state.packet) {
 
         this._isMounted && this.setState((state, props) => ({
-          realTimeData: data,
+          packet: packet,
           connected: true,
-          graphData: graphData,
+          timeSeries: timeSeries,
           randomHR: Math.floor(Math.random() * 200)
 
         }))
@@ -57,28 +57,22 @@ export class BasicDeviceComponent extends React.Component {
   }
 
   checkDeviceConnection() {
+    
+    if (this.state.packet !== null) {
 
+      const time = this.state.packet.basicData.timestamp;
 
-    if (this.state.realTimeData !== null) {
-
-      const time = this.state.realTimeData.basicData.timestamp;
-
-      if (Date.now() - time > 5000) {
-
-        //add aditional if for longer than 6 secs - not enough saturation - set default state
+      if (Date.now() - time > 6000) {
 
         this._isMounted && this.setState((state, props) => ({
-          connected: false
-
+          connected: false,
+          packet: null,
+          timeSeries: []
         }))
 
       }
 
     }
-    else {
-      return;
-    }
-
 
 
   }
@@ -99,12 +93,12 @@ export class BasicDeviceComponent extends React.Component {
 
       <div>
         <h3>{this.props.devId.toString()} <button onClick={this.alarmOff}>Alarm OFF</button></h3>
-        <h3>{this.state.realTimeData === null ? "false" : this.state.realTimeData.basicData.accX.toString()}}</h3>
-        <p>Connected: {this.state.connected.toString()} --- Alarm: {this.state.realTimeData === null ? "false" : this.state.realTimeData.deadMan.toString()}</p>
-        <GaugeComponent hr={this.state.randomHR} motionX={this.state.realTimeData === null ? 0 : this.state.realTimeData.basicData.motionX} />
+        <h3>{this.state.packet === null ? "false" : this.state.packet.basicData.accX.toString()}}</h3>
+        <p>Connected: {this.state.connected.toString()} --- Alarm: {this.state.packet === null ? "false" : this.state.packet.deadMan.toString()}</p>
+        <GaugeComponent hr={this.state.randomHR} motionX={this.state.packet === null ? 0 : this.state.packet.basicData.motionX} />
 
         <XYPlot height={100} width={300}>
-          <LineSeries data={this.state.graphData} />
+          <LineSeries data={this.state.timeSeries} />
         </XYPlot>
       </div>
 

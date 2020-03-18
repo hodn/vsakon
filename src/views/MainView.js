@@ -1,5 +1,5 @@
 import React from 'react';
-import { BasicDeviceComponent } from './BasicDeviceComponent.js';
+import { BasicDeviceComponent } from '../components/BasicDeviceComponent.js';
 const { ipcRenderer } = window.require('electron');
 
 
