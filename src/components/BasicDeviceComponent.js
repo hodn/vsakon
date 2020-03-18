@@ -1,6 +1,6 @@
 import React from 'react';
 import { XYPlot, LineSeries } from 'react-vis';
-import GaugeComponent from "./GaugeComponent"
+import ReactiveGauge from "./ReactiveGauge"
 const { ipcRenderer } = window.require('electron');
 
 export class BasicDeviceComponent extends React.Component {
@@ -95,7 +95,7 @@ export class BasicDeviceComponent extends React.Component {
         <h3>{this.props.devId.toString()} <button onClick={this.alarmOff}>Alarm OFF</button></h3>
         <h3>{this.state.packet === null ? "false" : this.state.packet.basicData.accX.toString()}}</h3>
         <p>Connected: {this.state.connected.toString()} --- Alarm: {this.state.packet === null ? "false" : this.state.packet.deadMan.toString()}</p>
-        <GaugeComponent hr={this.state.randomHR} motionX={this.state.packet === null ? 0 : this.state.packet.basicData.motionX} />
+        <ReactiveGauge hr={this.state.randomHR} motionX={this.state.packet === null ? 0 : this.state.packet.basicData.motionX} />
 
         <XYPlot height={100} width={300}>
           <LineSeries data={this.state.timeSeries} />

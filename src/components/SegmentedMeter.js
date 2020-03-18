@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 
-let Meter = function (props) {
+let SegmentedMeter = function (props) {
     let {
         percent = 0,         // a number between 0 and 1, inclusive
-        width = 100,         // the overall width
-        height = 10,         // the overall height
+        width = 10,         // the overall width
+        height = 100,         // the overall height
         color = "#0078bc",   // the fill color
         animate = false,     // if true, animate when the percent changes
         label = null         // a label to describe the contents (for accessibility)
@@ -37,4 +37,4 @@ let Meter = function (props) {
     );
 };
 
-export default Meter;
+export default SegmentedMeter;

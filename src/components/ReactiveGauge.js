@@ -1,9 +1,9 @@
 import React from 'react';
 import Gauge from './Gauge';
-import Meter from './Meter';
+import SimpleMeter from './SimpleMeter';
 
 
-function GaugeComponent(props) {
+function ReactiveGauge(props) {
     
     const colorSwitch = (hr) => {
 
@@ -25,9 +25,9 @@ function GaugeComponent(props) {
 
         <div>
             <Gauge value={props.hr} max={220} width={200} height={200} color={colorSwitch(props.hr)} />
-            <Meter percent={props.motionX / 200} animate={true} width={200}/>
+            <SimpleMeter percent={props.motionX / 200} animate={true}/>
         </div>
 
     );
 }
-export default GaugeComponent;
+export default ReactiveGauge;
