@@ -1,9 +1,24 @@
 import React from 'react';
 import { XYPlot, LineSeries } from 'react-vis';
-import ReactiveGauge from "./ReactiveGauge"
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import ReactiveGauge from "./ReactiveGauge";
+import Button from '@material-ui/core/Button';
 const { ipcRenderer } = window.require('electron');
 
-export class BasicDeviceComponent extends React.Component {
+const styles = {
+  root: {
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    color: 'white',
+    height: 48,
+    padding: '0 30px',
+  },
+};
+
+class BasicDeviceComponent extends React.Component {
   constructor(props) {
     super(props);
 
@@ -89,11 +104,14 @@ export class BasicDeviceComponent extends React.Component {
   // What the actual component renders
   render() {
 
+    const { classes } = this.props;
+
     return (
 
+      
       <div>
-        <h3>{this.props.devId.toString()} <button onClick={this.alarmOff}>Alarm OFF</button></h3>
-        <h3>{this.state.packet === null ? "false" : this.state.packet.basicData.accX.toString()}}</h3>
+        <h3>{this.props.devId + 1} </h3>
+        <h3>{this.state.packet === null ? "false" : this.state.packet.basicData.accX.toString()}</h3>
         <p>Connected: {this.state.connected.toString()} --- Alarm: {this.state.packet === null ? "false" : this.state.packet.deadMan.toString()}</p>
         <ReactiveGauge hr={this.state.randomHR} motionX={this.state.packet === null ? 0 : this.state.packet.basicData.motionX} />
 
@@ -108,4 +126,10 @@ export class BasicDeviceComponent extends React.Component {
   }
 
 }
+
+BasicDeviceComponent.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(BasicDeviceComponent);
 
