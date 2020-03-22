@@ -19,7 +19,7 @@ module.exports = class PacketHandler {
         }
         else {
 
-            // Already available timeseries
+            // If timeseries already available 
             let timeSeries = this.graphData[packet.basicData.devId];
 
             // Removes the first item - timeseries window adjustment
@@ -28,7 +28,7 @@ module.exports = class PacketHandler {
                 this.graphData[packet.basicData.devId].shift();
             }
 
-            // If the data is newer then last data in the timeseries - also removes receiver collision
+            // If the data is newer then last data in the timeseries - removes USB receiver collision
             if (packet.basicData.timestamp > timeSeries[timeSeries.length - 1].x) {
 
                 // If the timeseries resolution is too low - data points too far away -> reset the timeseries

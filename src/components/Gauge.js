@@ -11,20 +11,9 @@ export default class Gauge extends React.Component {
     value: 40,
     width: 400,
     height: 320,
-    minMaxLabelsOffset: 25,
+    minMaxLabelsOffset: 16,
     color: '#fe0400',
     backgroundColor: "#edebeb",
-    topLabelStyle: {
-      textAnchor: "middle",
-      fill: "#999999",
-      stroke: "none",
-      fontStyle: "normal",
-      fontVariant: "normal",
-      fontWeight: 'bold',
-      fontStretch: 'normal',
-      lineHeight: 'normal',
-      fillOpacity: 1
-    },
     valueLabelStyle: {
       textAnchor: "middle",
       fill: "#010101",
@@ -44,7 +33,7 @@ export default class Gauge extends React.Component {
       fontVariant: "normal",
       fontWeight: 'normal',
       fontStretch: 'normal',
-      fontSize: 20,
+      fontSize: 12,
       lineHeight: 'normal',
       fillOpacity: 1
     },
@@ -104,7 +93,7 @@ export default class Gauge extends React.Component {
         overflow: 'hidden',
         position: 'relative',
         left: 0,
-        top: 0
+        top: 30
       }}>
         <defs>
           <filter id={this.uniqueFilterId}>

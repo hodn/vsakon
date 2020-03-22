@@ -24,8 +24,7 @@ function ReactiveGauge(props) {
 
 
         <div>
-            <Gauge value={props.hr} max={220} width={200} height={200} color={colorSwitch(props.hr)} />
-            <SimpleMeter percent={props.motionX / 200} animate={true}/>
+            <Gauge value={props.hr} max={220} width={160} height={130} color={colorSwitch(props.hr)} />
         </div>
 
     );
