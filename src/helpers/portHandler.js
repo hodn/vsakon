@@ -6,7 +6,7 @@ module.exports = class PortHandler {
     constructor(com, event) {
         this.com = com;
         this.interval = null;
-        this.port = undefined;
+        this.port = null;
         this.invalidDataCount = 0;
     }
 
@@ -56,10 +56,8 @@ module.exports = class PortHandler {
     }
 
     restartPort() {
-
-        let com = this.com
+        let com = this.com;
         // Closing the port - connect method automatically attempts to reconnect afterwards
-
         this.port.close(function (err) {
             if (err) {
 

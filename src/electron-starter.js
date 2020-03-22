@@ -123,80 +123,107 @@ ipcMain.on('list-ports', (event, arg) => {
             //console.log(port);
         }),
         err => console.error(err),
-    ) 
+    )
 })
 
 
 
 ipcMain.on('clear-to-send', (event, arg) => {
-    
+
     // Import of Flexparser & DataManager lib
     const FlexParser = require('./helpers/flexParser');
     const PacketHandler = require('./helpers/packetHandler')
 
     // Port and state management init
     let packetHandler = new PacketHandler(event);
-    let port1 = new PortHandler(settingsHandler.settings.defaultCOM1);
-    //let port2 = new PortHandler(settingsHandler.settings.defaultCOM2);
 
-    // Get data from port 1 - init parser, connect and data
-    port1.getParser().then(parser => {
-        
-        // No data for 10 seconds after connecting port -> restart connection
-        const initDataInterval = setInterval(port1.restartPort, 10000);
-        
-        // Connecting port after the parser was configured
-        port1.connect();
+    SerialPort.list().then(ports => {
 
-        // Listener for data from port
-        parser.on('data', function (data) {
+        const flexiGuardPorts = [];
 
-            // Removing the initial restart interval after first data packet
-            if (initDataInterval !== undefined) clearInterval(initDataInterval);
-            
-            try {
-                //Converting hex to int array
-                const rawPacket = Uint8Array.from(data);
-
-                // Raw packets are parsed into JSON object via FlexParser lib
-                const parsedPacket = FlexParser.parseFlexiData(rawPacket);
-                // Packet stored for timeseries and sent to Renderer
-                packetHandler.storeData(parsedPacket);
-            
-
-            } catch (error) {
-                //console.log(error.message)
-
-                // Devices out of sync - sending invalid data format
-                if (error.message === "Invalid data format") {
-
-                    try {
-                        port1.sendSync();
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }
-
+        ports.forEach(port => {
+            if (port.manufacturer === "FTDI") {
+                flexiGuardPorts.push(port.comName)
             }
         })
 
+        // returns all Flexiguard receivers
+        return flexiGuardPorts
+    },
+        err => console.error(err),
+    ).then(selectedPorts => {
+
+        selectedPorts.forEach(port => {
+            const ph = new PortHandler(port);
+            // Get data from port - init parser, connect and data
+            ph.getParser().then(parser => {
+
+                // Connecting (opening) port after the parser was configured
+                ph.connect();
+
+                // No data for 10 seconds after connecting port -> restart connection on receiver
+                const restart = () => ph.restartPort();
+                const initDataInterval = setInterval(restart, 10000);
+
+                // Listener for data from port
+                parser.on('data', function (data) {
+
+                    // Removing the initial restart interval after first data packet
+                    if (initDataInterval !== undefined) clearInterval(initDataInterval);
+
+                    try {
+                        //Converting hex to int array
+                        const rawPacket = Uint8Array.from(data);
+
+                        // Raw packets are parsed into JSON object via FlexParser lib
+                        const parsedPacket = FlexParser.parseFlexiData(rawPacket);
+                        // Packet stored for timeseries and sent to Renderer
+                        packetHandler.storeData(parsedPacket);
 
 
-    });
+                    } catch (error) {
+                        //console.log(error.message)
 
-    // User turns off the alarm (arg = deviceId)
-    ipcMain.on("remove-alarm", (event, arg) => {
+                        // Devices out of sync - sending invalid data format
+                        if (error.message === "Invalid data format") {
 
-        try {
+                            try {
+                                ph.sendSync();
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        }
 
-            port1.removeAlarm(arg);
-            // port2.removeAlarm(arg)
-            console.log("alarm: " + arg)
+                    }
+                })
 
-        } catch (error) {
-            console.log(error);
-        }
+
+            });
+
+            // User turns off the alarm (arg = deviceId)
+            ipcMain.on("remove-alarm", (event, arg) => {
+
+                try {
+
+                    ph.removeAlarm(arg);
+                    // port2.removeAlarm(arg)
+                    console.log("alarm: " + arg)
+
+                } catch (error) {
+                    console.log(error);
+                }
+            })
+
+
+        })
+
+
     })
+
+
+
+
+
 
 
 
