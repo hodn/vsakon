@@ -2,7 +2,7 @@ import React from 'react';
 import DeviceComponent from '../components/DeviceComponent.js';
 import Grid from '@material-ui/core/Grid';
 import TopBar from '../components/TopBar'
-const { ipcRenderer } = window.require('electron');
+//const { ipcRenderer } = window.require('electron');
 
 
 export class MainView extends React.Component {
@@ -22,7 +22,7 @@ export class MainView extends React.Component {
     this._isMounted = true;
     //ipcRenderer.send("clear-to-send");
 
-    for (let i = 0; i < 30; i++) {
+    for (let i = 1; i < 31; i++) {
 
       this._isMounted && this.setState((state, props) => ({
         devComponents: [...state.devComponents, <Grid item xs={2} key={"item" + i}><DeviceComponent devId={i} key={i} /> </Grid>]
@@ -39,7 +39,7 @@ export class MainView extends React.Component {
 
     return (
 
-      <div>
+      <div style={{margin:0}}>
         <TopBar/>
         <Grid container>
           {this.state.devComponents.map((component) => {

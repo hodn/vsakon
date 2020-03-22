@@ -1,7 +1,5 @@
 import React from 'react';
 import Gauge from './Gauge';
-import SimpleMeter from './SimpleMeter';
-
 
 function ReactiveGauge(props) {
     
@@ -19,12 +17,11 @@ function ReactiveGauge(props) {
 
     }
 
-
     return (
 
 
         <div>
-            <Gauge value={props.hr} max={220} width={160} height={130} color={colorSwitch(props.hr)} />
+            <Gauge value={props.hr} max={220} width={window.innerWidth * 0.078125} height={window.innerHeight * 0.12037} color={colorSwitch(props.hr)} />
         </div>
 
     );

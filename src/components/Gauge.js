@@ -92,8 +92,9 @@ export default class Gauge extends React.Component {
         height: this.props.height,
         overflow: 'hidden',
         position: 'relative',
+        margin: '-8px',
         left: 0,
-        top: 30
+        top: this.props.height/5
       }}>
         <defs>
           <filter id={this.uniqueFilterId}>
@@ -109,7 +110,7 @@ export default class Gauge extends React.Component {
               filter={"url(#" + this.uniqueFilterId + ")"}/>
         <path fill={this.props.color} stroke="none" d={this._getPath(this.props.value)}
               filter={"url(#" + this.uniqueFilterId + ")"} style={animation}/>
-        <text x={this.props.width / 2} y={this.props.height / 5 * 3} textAnchor="middle" style={valueLabelStyle}>
+        <text x={this.props.width / 2} y={this.props.height / 5 * 2.5} textAnchor="middle" style={valueLabelStyle}>
           { this.props.valueFormatter(this.props.value) }
         </text>
         <text x={((Cx - Ro) + (Cx - Ri)) / 2} y={Cy + minMaxLabelsOffset} textAnchor="middle" style={this.props.minMaxLabelStyle}>

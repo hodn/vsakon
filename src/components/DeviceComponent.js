@@ -4,14 +4,24 @@ import { withStyles } from '@material-ui/core/styles';
 import ReactiveGauge from "./ReactiveGauge";
 import { Paper } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
+import { Divider } from '@material-ui/core';
+import DeviceStatus from './DeviceStatus';
+
 const { ipcRenderer } = window.require('electron');
 
 const styles = {
 
   root: {
 
-    'border-style': 'solid',
-    margin: '10px'
+    'border-style': 'dotted',
+  },
+  icon:{
+    height: '25px',
+    width: '25px',
+    'font-size': '100%',
+    margin: '3px 0px 3px 3px',
+    padding: '3px',
+    float: 'left'
   }
 
 };
@@ -42,7 +52,7 @@ class BasicDeviceComponent extends React.Component {
 
     // Listener for data for the exact device
     ipcRenderer.on(this.props.devId.toString(), (event, arg) => {
-
+      console.log(arg.packet.basicData.devId)
       // Connection checker
       if (this.state.timeSeries.length === 0) setInterval(this.checkDeviceConnection, 2000);
 
@@ -116,8 +126,13 @@ class BasicDeviceComponent extends React.Component {
       <div>
         <Paper>
           <Grid container>
+            <Grid item xs={12}>
+              <DeviceStatus/>
+              <Divider/>
+            </Grid>
+            
             <Grid item xs={6}>
-              <ReactiveGauge hr={90} motionX={this.state.packet === null ? 0 : this.state.packet.basicData.motionX} />
+              <ReactiveGauge hr={this.state.randomHR} motionX={this.state.packet === null ? 0 : this.state.packet.basicData.motionX} />
             </Grid>
           </Grid>
         </Paper>
