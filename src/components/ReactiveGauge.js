@@ -1,5 +1,6 @@
 import React from 'react';
 import Gauge from './Gauge';
+import colors from '../colors';
 
 function ReactiveGauge(props) {
     
@@ -7,12 +8,12 @@ function ReactiveGauge(props) {
 
         if (hr >= 50 && hr <= 110) {
 
-            return "#7FFF00";
+            return colors.green;
         } else if (hr < 40 || hr > 160) {
 
-            return "#FF0000";
+            return colors.red;
         } else {
-            return "#FFFF00";
+            return colors.yellow;
         }
 
     }
@@ -21,7 +22,7 @@ function ReactiveGauge(props) {
 
 
         <div>
-            <Gauge value={props.hr} max={220} width={window.innerWidth * 0.078125} height={window.innerHeight * 0.12037} color={colorSwitch(props.hr)} />
+            <Gauge value={props.hr} max={220} width={150} height={140} color={colorSwitch(props.hr)} />
         </div>
 
     );

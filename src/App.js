@@ -8,16 +8,15 @@ const { ipcRenderer } = window.require('electron');
 class App extends Component {
 
   render() {
-    
+
     ipcRenderer.send("clear-to-send");
     ipcRenderer.send("connect-ports");
 
     return (
 
-      <StylesProvider injectFirst>
-        
-        <MainView />
-      </StylesProvider>
+        <StylesProvider injectFirst>
+          <MainView />
+        </StylesProvider>
     );
   }
 }

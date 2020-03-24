@@ -128,7 +128,7 @@ ipcMain.on('list-ports', (event, arg) => {
 })
 
 
-
+// Listens for app start
 ipcMain.on('clear-to-send', (event, arg) => {
 
     // Import of Flexparser & DataManager lib
@@ -138,6 +138,10 @@ ipcMain.on('clear-to-send', (event, arg) => {
     // Port and state management init
     let packetHandler = new PacketHandler(event);
 
+    // (Re)connect receivers
+    ipcMain.on('connect-ports', (event, arg) => {
+
+         // Returns all Flexiguard receivers - ports
     SerialPort.list().then(ports => {
 
         const flexiGuardPorts = [];
@@ -148,14 +152,15 @@ ipcMain.on('clear-to-send', (event, arg) => {
             }
         })
 
-        // returns all Flexiguard receivers
         return flexiGuardPorts
     },
         err => console.error(err),
     ).then(selectedPorts => {
 
+        // For every Flexiguard port
         selectedPorts.forEach(port => {
             const ph = new PortHandler(port);
+            
             // Get data from port - init parser, connect and data
             ph.getParser().then(parser => {
 
@@ -163,14 +168,14 @@ ipcMain.on('clear-to-send', (event, arg) => {
                 ph.connect();
 
                 // No data for 10 seconds after connecting port -> restart connection on receiver
-                const restart = () => ph.restartPort();
-                const initDataInterval = setInterval(restart, 10000);
+                // const restart = () => ph.restartPort();
+                // const initDataInterval = setInterval(restart, 10000);
 
                 // Listener for data from port
                 parser.on('data', function (data) {
 
                     // Removing the initial restart interval after first data packet
-                    if (initDataInterval !== undefined) clearInterval(initDataInterval);
+                    // if (initDataInterval !== undefined) clearInterval(initDataInterval);
 
                     try {
                         //Converting hex to int array
@@ -207,7 +212,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
                 try {
 
                     ph.removeAlarm(arg);
-                    // port2.removeAlarm(arg)
                     console.log("alarm: " + arg)
 
                 } catch (error) {
@@ -220,10 +224,8 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
 
     })
-
-
-
-
+    
+    })
 
 
 

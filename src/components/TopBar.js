@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import colors from '../colors';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,7 +21,7 @@ export default function TopBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar style={{ margin: 0 }} position="static">
+      <AppBar style={{ margin: 0, 'background-color': colors.main}} position="static">
         <Toolbar >
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />

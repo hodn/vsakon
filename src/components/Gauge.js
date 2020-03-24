@@ -13,10 +13,10 @@ export default class Gauge extends React.Component {
     height: 320,
     minMaxLabelsOffset: 16,
     color: '#fe0400',
-    backgroundColor: "#edebeb",
+    backgroundColor: "#eceff1",
     valueLabelStyle: {
       textAnchor: "middle",
-      fill: "#010101",
+      fill: "black",
       stroke: "none",
       fontStyle: "normal",
       fontVariant: "normal",
@@ -27,7 +27,7 @@ export default class Gauge extends React.Component {
     },
     minMaxLabelStyle: {
       textAnchor: "middle",
-      fill: "#999999",
+      fill: "black",
       stroke: "none",
       fontStyle: "normal",
       fontVariant: "normal",
@@ -94,7 +94,7 @@ export default class Gauge extends React.Component {
         position: 'relative',
         margin: '-8px',
         left: 0,
-        top: this.props.height/5
+        top: 40
       }}>
         <defs>
           <filter id={this.uniqueFilterId}>

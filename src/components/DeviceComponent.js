@@ -4,8 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import ReactiveGauge from "./ReactiveGauge";
 import { Paper } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
-import { Divider } from '@material-ui/core';
 import DeviceStatus from './DeviceStatus';
+import PerformanceMeter from './PerformanceMeter';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -15,7 +15,7 @@ const styles = {
 
     'border-style': 'dotted',
   },
-  icon:{
+  icon: {
     height: '25px',
     width: '25px',
     'font-size': '100%',
@@ -107,7 +107,9 @@ class BasicDeviceComponent extends React.Component {
 
   alarmOff() {
     // Sending the command to remove alarm
-    ipcRenderer.send("remove-alarm", this.props.devId);
+    //ipcRenderer.send("remove-alarm", this.props.devId);
+    ipcRenderer.send("connect-ports");
+    
   }
 
   randomHR() {
@@ -118,21 +120,26 @@ class BasicDeviceComponent extends React.Component {
   // What the actual component renders
   render() {
 
-    const { classes } = this.props;
+    //const { classes } = this.props;
 
     return (
 
 
       <div>
-        <Paper>
+        <Paper elevation={8}>
           <Grid container>
-            <Grid item xs={12}>
-              <DeviceStatus/>
-              <Divider/>
+            <Grid item xs={2}>
+              <DeviceStatus devId={this.props.devId} connection={this.state.connected} data={this.state.data} />
             </Grid>
-            
             <Grid item xs={6}>
-              <ReactiveGauge hr={this.state.randomHR} motionX={this.state.packet === null ? 0 : this.state.packet.basicData.motionX} />
+              <ReactiveGauge hr={120} motionX={this.state.packet === null ? 0 : this.state.packet.basicData.motionX} />
+              <button onClick={this.alarmOff}> Refresh connection </button>
+            </Grid>
+            <Grid item xs={2}>
+              <PerformanceMeter/>
+            </Grid>
+            <Grid item xs={2}>
+              <PerformanceMeter/>
             </Grid>
           </Grid>
         </Paper>
