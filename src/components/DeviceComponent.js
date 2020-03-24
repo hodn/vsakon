@@ -52,7 +52,6 @@ class BasicDeviceComponent extends React.Component {
 
     // Listener for data for the exact device
     ipcRenderer.on(this.props.devId.toString(), (event, arg) => {
-      console.log(arg.packet.basicData.devId)
       // Connection checker
       if (this.state.timeSeries.length === 0) setInterval(this.checkDeviceConnection, 2000);
 
@@ -109,7 +108,7 @@ class BasicDeviceComponent extends React.Component {
     // Sending the command to remove alarm
     //ipcRenderer.send("remove-alarm", this.props.devId);
     ipcRenderer.send("connect-ports");
-    
+  
   }
 
   randomHR() {
@@ -129,11 +128,10 @@ class BasicDeviceComponent extends React.Component {
         <Paper elevation={8}>
           <Grid container>
             <Grid item xs={2}>
-              <DeviceStatus devId={this.props.devId} connection={this.state.connected} data={this.state.data} />
+              <DeviceStatus devId={this.props.devId} connection={this.state.connected} data={this.state.packet} />
             </Grid>
             <Grid item xs={6}>
-              <ReactiveGauge hr={120} motionX={this.state.packet === null ? 0 : this.state.packet.basicData.motionX} />
-              <button onClick={this.alarmOff}> Refresh connection </button>
+              <ReactiveGauge hr={this.state.randomHR} motionX={this.state.packet === null ? 0 : this.state.packet.basicData.motionX} />
             </Grid>
             <Grid item xs={2}>
               <PerformanceMeter/>

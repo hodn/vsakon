@@ -10,6 +10,7 @@ module.exports = class PortHandler {
         this.invalidDataCount = 0;
     }
 
+    // Returns parser for selected port
     async getParser() {
 
         // Configuring parser for reading from port
@@ -24,6 +25,7 @@ module.exports = class PortHandler {
 
     }
 
+    // (Re)opening the port
     connect(delay = 2000) {
 
         let com = this.com;
@@ -55,6 +57,7 @@ module.exports = class PortHandler {
 
     }
 
+    // Consider re-implementation
     restartPort() {
         let com = this.com;
         // Closing the port - connect method automatically attempts to reconnect afterwards
@@ -70,6 +73,7 @@ module.exports = class PortHandler {
 
     }
 
+    // Sends syncing signal to all devices - all ports
     sendSync() {
 
         this.invalidDataCount += 1;
@@ -132,6 +136,7 @@ module.exports = class PortHandler {
 
     }
 
+    // Removes alarm for device
     removeAlarm(devId) {
 
         let alarmArray = new Uint8Array([255, 251, devId, 10, 10, 10, 255, 0]);

@@ -159,6 +159,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         // For every Flexiguard port
         selectedPorts.forEach(port => {
+            
             const ph = new PortHandler(port);
             
             // Get data from port - init parser, connect and data
@@ -167,15 +168,8 @@ ipcMain.on('clear-to-send', (event, arg) => {
                 // Connecting (opening) port after the parser was configured
                 ph.connect();
 
-                // No data for 10 seconds after connecting port -> restart connection on receiver
-                // const restart = () => ph.restartPort();
-                // const initDataInterval = setInterval(restart, 10000);
-
                 // Listener for data from port
                 parser.on('data', function (data) {
-
-                    // Removing the initial restart interval after first data packet
-                    // if (initDataInterval !== undefined) clearInterval(initDataInterval);
 
                     try {
                         //Converting hex to int array

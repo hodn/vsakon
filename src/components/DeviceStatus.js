@@ -44,11 +44,21 @@ function DeviceStatus(props) {
 
     const switchColor = (props) => {
 
-        if (props.connection === true) {
+        let connection = props.connection === true;
+        let alarmOn = props.data === null ? false : props.data.deadMan;
+
+        console.log(alarmOn);
+        
+        if (connection) {
             
-            return colors.green;
-        } else{
-            
+            if (alarmOn) {
+                return colors.red;
+            }else {
+                return colors.green;
+            }
+
+        } else {
+
             return colors.grey;
         }
 
@@ -59,7 +69,7 @@ function DeviceStatus(props) {
     const classes = useStyles();
     return (
 
-        <div style={ {'background-color': switchColor(props)}}>
+        <div style={ {backgroundColor: switchColor(props)}}>
             <Grid direction="column" alignItems="center" container>
                 <Grid item>  <Avatar className={classes.avatar}>{props.devId}</Avatar> </Grid>
                 <Grid item>  <Battery20 className={classes.battery} /> </Grid>
