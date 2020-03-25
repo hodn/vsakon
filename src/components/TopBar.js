@@ -34,15 +34,13 @@ class TopBar extends React.Component {
     this._isMounted = false;
 
     this.state = {
-      packet: null,
-      timeSeries: [],
-      connected: false,
-      randomHR: 0
+      ports: {},
+      recordingState: []
     }
 
     this.alarmOff = this.alarmOff.bind(this);
     this.checkDeviceConnection = this.checkDeviceConnection.bind(this);
-    this.randomHR = this.randomHR.bind(this);
+    this.getPortIcon = this.getPortIcon.bind(this);
 
   }
 
@@ -50,9 +48,33 @@ class TopBar extends React.Component {
 
     this._isMounted = true;
 
-    // Listener for data for the exact device
-    //ipcRenderer.on(this.props.devId.toString(), (event, arg) => {
-    // Connection checker
+    // Listener for identified ports
+    ipcRenderer.on('ports-found', (event, arg) => {
+
+      let foundPorts = {};
+
+      arg.forEach(port => {
+
+        foundPorts[port] = "set";
+
+      });
+
+      this.setState(prevState => ({
+        ports: foundPorts
+      }))
+
+    })
+
+    ipcRenderer.on('port-state', (event, arg) => {
+
+      this.setState(prevState => {
+        let ports = prevState.ports;
+        ports[arg.port] = arg.state;
+        return { ports };
+      })
+
+      console.log(this.state.ports);
+    })
 
 
   }
@@ -62,24 +84,6 @@ class TopBar extends React.Component {
   }
 
   checkDeviceConnection() {
-
-    // Already connected
-    if (this.state.packet !== null) {
-
-      const time = this.state.packet.basicData.timestamp;
-
-      // No data for 6 seconds - disconnected state
-      if (Date.now() - time > 6000) {
-
-        this._isMounted && this.setState((state, props) => ({
-          connected: false,
-          packet: null,
-          timeSeries: []
-        }))
-
-      }
-
-    }
 
 
   }
@@ -91,9 +95,19 @@ class TopBar extends React.Component {
 
   }
 
-  randomHR() {
+  getPortIcon() {
+    
+    let ports = Object.assign({}, this.state.ports); 
+    let icons = [];
+    
+    {Object.keys(ports).map(function(key, index) {
+      if (ports[key] === "opened") icons.push(<PowerIcon style={{color: colors.green}}/>);
+      if (ports[key] === "set") icons.push(<PowerIcon style={{color: colors.grey}}/>);
+      if (ports[key] === "closed") icons.push(<PowerIcon style={{color: colors.red}}/>);
+   })}
 
-    return Math.floor(Math.random() * (200 - 0));
+   return icons;
+
   }
 
   // What the actual component renders
@@ -114,8 +128,9 @@ class TopBar extends React.Component {
               <Typography className={classes.title} variant="h6" color="inherit">
                 FLEXIGUARD
              </Typography>
-              <PowerIcon />
-              <PowerIcon />
+             {this.getPortIcon().map((component) => {
+            return component;
+          })}
               <SaveIcon />
             </Toolbar>
           </AppBar>

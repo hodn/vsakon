@@ -105,9 +105,7 @@ class BasicDeviceComponent extends React.Component {
 
   alarmOff() {
     // Sending the command to remove alarm
-    //ipcRenderer.send("remove-alarm", this.props.devId);
-    ipcRenderer.send("connect-ports");
-  
+    ipcRenderer.send("remove-alarm", this.props.devId);
   }
 
   randomHR() {

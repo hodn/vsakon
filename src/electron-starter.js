@@ -137,11 +137,12 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         ports.forEach(port => {
             if (port.manufacturer === "FTDI") {
-                flexiGuardPorts.push(port.comName)
+                flexiGuardPorts.push(port.comName);
             }
         })
-
-        return flexiGuardPorts
+        
+        event.reply('ports-found', flexiGuardPorts);
+        return flexiGuardPorts;
     },
         err => console.error(err),
     ).then(selectedPorts => {
@@ -149,7 +150,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
         // For every Flexiguard port
         selectedPorts.forEach(port => {
             
-            const ph = new PortHandler(port);
+            const ph = new PortHandler(port, event);
             
             // Get data from port - init parser, connect and data
             ph.getParser().then(parser => {
@@ -167,7 +168,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                         // Raw packets are parsed into JSON object via FlexParser lib
                         const parsedPacket = FlexParser.parseFlexiData(rawPacket);
                         // Packet stored for timeseries and sent to Renderer
-                        packetHandler.storeData(parsedPacket);
+                        packetHandler.storeAndSendData(parsedPacket);
 
 
                     } catch (error) {

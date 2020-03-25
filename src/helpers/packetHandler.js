@@ -5,7 +5,7 @@ module.exports = class PacketHandler {
         this.graphData = []
     }
 
-    storeData(packet) {
+    storeAndSendData(packet) {
 
         // Data formatted for the React-vis graph library
         const dataPoint = { x: packet.basicData.timestamp, y: packet.basicData.motionX };

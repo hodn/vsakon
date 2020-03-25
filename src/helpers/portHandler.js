@@ -8,6 +8,7 @@ module.exports = class PortHandler {
         this.interval = null;
         this.port = null;
         this.invalidDataCount = 0;
+        this.event = event;
     }
 
     // Returns parser for selected port
@@ -29,6 +30,7 @@ module.exports = class PortHandler {
     connect(delay = 2000) {
 
         let com = this.com;
+        let event = this.event;
 
         // Not connected state - how often to attempt to connect
         this.interval = delay;
@@ -46,12 +48,16 @@ module.exports = class PortHandler {
 
         // If open - inform Renderer
         this.port.on('open', function () {
-            console.log("Connected " + com); // should send to Renderer --- remove this line
+            console.log("Connected " + com); 
+            let portState = {port: com, state: "opened"};
+            event.reply('port-state', portState); // Send the state to Renderer
         });
 
         // If closed - inform Renderer
         this.port.on('close', function () {
-            console.log("Disconnected " + com); // should send to Renderer --- remove this line
+            console.log("Disconnected " + com); 
+            let portState = {port: com, state: "closed"};
+            event.reply('port-state', portState); // Send the state to Renderer
             setTimeout(open, delay);
         });
 

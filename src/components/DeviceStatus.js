@@ -46,9 +46,7 @@ function DeviceStatus(props) {
 
         let connection = props.connection === true;
         let alarmOn = props.data === null ? false : props.data.deadMan;
-
-        console.log(alarmOn);
-        
+                
         if (connection) {
             
             if (alarmOn) {
