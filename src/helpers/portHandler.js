@@ -99,7 +99,7 @@ module.exports = class PortHandler {
                         throw Error(port + " not flushed")
 
                     } else {
-                        sendSyncSignal(); //sends Sync signal
+                        setTimeout(sendSyncSignal, 1500); //sends Sync signal
                     }
                 })
             }

@@ -1,7 +1,6 @@
 import React from 'react';
 import DeviceComponent from '../components/DeviceComponent.js';
 import Grid from '@material-ui/core/Grid';
-import TopBar from '../components/TopBar'
 //const { ipcRenderer } = window.require('electron');
 
 
@@ -39,8 +38,7 @@ export class MainView extends React.Component {
 
     return (
 
-      <div style={{margin:0}}>
-        <TopBar/>
+      <div>
         <Grid container>
           {this.state.devComponents.map((component) => {
             return component;

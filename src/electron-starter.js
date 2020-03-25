@@ -116,17 +116,6 @@ ipcMain.on('settings-info', (event, arg) => {
     event.sender.send('settings-loaded', { dir: settingsHandler.settings.defaultDir, com: settingsHandler.settings.defaultCOM })
 })
 
-// List available ports on event from Renderer (more detailed identification might be needed - i.e. mouse identified as receiver)
-ipcMain.on('list-ports', (event, arg) => {
-    SerialPort.list().then(
-        ports => ports.forEach(function (port) {
-            event.sender.send('ports-listed', port.comName)
-            //console.log(port);
-        }),
-        err => console.error(err),
-    )
-})
-
 
 // Listens for app start
 ipcMain.on('clear-to-send', (event, arg) => {

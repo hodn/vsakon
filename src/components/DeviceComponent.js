@@ -31,7 +31,6 @@ class BasicDeviceComponent extends React.Component {
     super(props);
 
     this._isMounted = false;
-    this.checkDeviceConnection = this.checkDeviceConnection.bind(this);
 
     this.state = {
       packet: null,
