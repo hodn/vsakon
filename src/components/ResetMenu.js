@@ -25,7 +25,7 @@ export default function ResetMenu() {
                 <AutorenewIcon />
             </Fab>
             <Menu
-                id="simple-menu"
+                id="reset-menu"
                 anchorEl={anchorEl}
                 keepMounted
                 open={Boolean(anchorEl)}

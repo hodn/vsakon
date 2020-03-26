@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MainView } from './views/MainView';
+
 import { StylesProvider } from "@material-ui/styles";
 import './App.css';
 import TopBar from './components/TopBar';
@@ -17,7 +17,6 @@ class App extends Component {
 
         <StylesProvider injectFirst>
           <TopBar/>
-          <MainView />
         </StylesProvider>
     );
   }

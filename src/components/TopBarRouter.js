@@ -2,6 +2,11 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
+import {
+  Route,
+  Link,
+  HashRouter
+} from "react-router-dom";
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
@@ -11,6 +16,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import colors from '../colors';
 import ResetMenu from './ResetMenu';
 import { MainView } from '../views/MainView';
+import { StatCard } from './StatCard';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -39,7 +45,7 @@ const styles = {
   }
 };
 
-class TopBar extends React.Component {
+class TopBarRouter extends React.Component {
   constructor(props) {
     super(props);
 
@@ -137,13 +143,14 @@ class TopBar extends React.Component {
     return (
 
       <div className={classes.root}>
+        <HashRouter>
         <AppBar style={{ backgroundColor: colors.main, margin: 0 }} position="static">
           <Toolbar>
          
             <Tabs TabIndicatorProps={{ style: { background: colors.secondary } }} aria-label="tab" value={this.state.tabValue} onChange={this.changeTab}>
-              <Tab label="Overview"/>
-              <Tab label="Map" />
-              <Tab label="History" />
+              <Tab label="Overview" component={Link} to="/" />
+              <Tab label="Map" component={Link} to="/history"/>
+              <Tab label="History" component={Link} to="/settings"/>
               <Tab label="Settings" />
             </Tabs>
 
@@ -161,10 +168,13 @@ class TopBar extends React.Component {
           </Toolbar>
         </AppBar>
 
-        {this.state.tabValue === 0 && <this.TabContainer> <MainView/> </this.TabContainer>}
-        {this.state.tabValue === 1 && <this.TabContainer> Item Two </this.TabContainer>}
-        {this.state.tabValue === 2 && <this.TabContainer> Item Three </this.TabContainer>}
-
+        
+        <div className="content">
+          <Route exact path="/" component={MainView} />
+          <Route path="/history" component={StatCard} />
+          <Route path="/settings" component={StatCard} />
+        </div>
+         </HashRouter>
       </div>
      
 
@@ -175,9 +185,9 @@ class TopBar extends React.Component {
 
 }
 
-TopBar.propTypes = {
+TopBarRouter.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(TopBar);
+export default withStyles(styles)(TopBarRouter);
 
