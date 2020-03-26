@@ -6,11 +6,17 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
+import Fab from '@material-ui/core/Fab';
 import PowerIcon from '@material-ui/icons/Power';
 import SaveIcon from '@material-ui/icons/Save';
+import SettingsIcon from '@material-ui/icons/Settings';
+import ViewComfyIcon from '@material-ui/icons/ViewComfy';
+import MapIcon from '@material-ui/icons/Map';
+import TimelineIcon from '@material-ui/icons/Timeline';
 import colors from '../colors';
 import ResetMenu from './ResetMenu';
 import { MainView } from '../views/MainView';
+
 
 const { ipcRenderer } = window.require('electron');
 
@@ -47,13 +53,14 @@ class TopBar extends React.Component {
 
     this.state = {
       ports: {},
-      recordingState: null,
+      recording: false,
       tabValue: 0
     }
 
     this.getPortIndication = this.getPortIndication.bind(this);
     this.changeTab = this.changeTab.bind(this);
     this.TabContainer = this.TabContainer.bind(this);
+    this.setRecording = this.setRecording.bind(this);
 
   }
 
@@ -78,15 +85,14 @@ class TopBar extends React.Component {
 
     })
 
+    // Listener for changes on port - disconnect/connect
     ipcRenderer.on('port-state', (event, arg) => {
 
       this.setState(prevState => {
         let ports = prevState.ports;
-        ports[arg.port] = arg.state;
+        ports[arg.port] = arg.state; // Saves the port state
         return { ports };
       })
-
-      console.log(this.state.ports);
     })
 
 
@@ -96,7 +102,7 @@ class TopBar extends React.Component {
 
   }
 
-
+// Changes the color of ports icon upon connect/disconnect
   getPortIndication() {
 
     let ports = Object.assign({}, this.state.ports);
@@ -115,7 +121,13 @@ class TopBar extends React.Component {
     return indicationColors;
 
   }
+// Turn recording on/off
+  setRecording(){
+    this.setState({ recording: !this.state.recording });
+    ipcRenderer.send("set-recording");
+  }
 
+// Helper functions for tab - navigation
   changeTab(event, tabValue) {
 
     this.setState({ tabValue });
@@ -129,6 +141,7 @@ class TopBar extends React.Component {
     );
   }
 
+
   // What the actual component renders
   render() {
 
@@ -139,34 +152,40 @@ class TopBar extends React.Component {
       <div className={classes.root}>
         <AppBar style={{ backgroundColor: colors.main, margin: 0 }} position="static">
           <Toolbar>
-         
+
             <Tabs TabIndicatorProps={{ style: { background: colors.secondary } }} aria-label="tab" value={this.state.tabValue} onChange={this.changeTab}>
-              <Tab label="Overview"/>
-              <Tab label="Map" />
-              <Tab label="History" />
-              <Tab label="Settings" />
+              <Tab icon={<ViewComfyIcon />} />
+              <Tab icon={<MapIcon />} />
+              <Tab icon={<TimelineIcon />} />
+              <Tab icon={<SettingsIcon />} />
             </Tabs>
 
             <div className={classes.iconSet} >
 
+              {this.state.recording && <SaveIcon className={classes.icon} style={{ color: colors.green }} />} 
+              
               {this.getPortIndication().map((indicationColor) => {
                 return <PowerIcon className={classes.icon} style={{ color: indicationColor }} />
               })}
 
-              <SaveIcon className={classes.icon} />
             </div>
 
-            <ResetMenu />
+            <Fab onClick={this.setRecording} size="small" aria-label="reset" >
+              <SaveIcon />
+            </Fab>
             
+            <div className={classes.icon}> <ResetMenu /> </div>
+
           </Toolbar>
         </AppBar>
 
-        {this.state.tabValue === 0 && <this.TabContainer> <MainView/> </this.TabContainer>}
-        {this.state.tabValue === 1 && <this.TabContainer> Item Two </this.TabContainer>}
-        {this.state.tabValue === 2 && <this.TabContainer> Item Three </this.TabContainer>}
+        {this.state.tabValue === 0 && <this.TabContainer> <MainView /> </this.TabContainer>}
+        {this.state.tabValue === 1 && <this.TabContainer> Map </this.TabContainer>}
+        {this.state.tabValue === 2 && <this.TabContainer> History </this.TabContainer>}
+        {this.state.tabValue === 3 && <this.TabContainer> Settings </this.TabContainer>}
 
       </div>
-     
+
 
     );
 

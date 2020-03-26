@@ -1,9 +1,9 @@
 module.exports = class PacketHandler {
-    constructor(event) {
+    constructor(event, recording) {
         this.event = event,
         this.packets = [],
         this.graphData = [],
-        this.recording = false
+        this.recording = recording
     }
 
     storeAndSendData(packet) {

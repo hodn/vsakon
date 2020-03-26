@@ -126,6 +126,8 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     // Port and state management init
     let packetHandler = new PacketHandler(event);
+    // Recording into CSV
+    let recording = false;
 
     // Listener for (re)connect receivers - on start and on demand from user
     ipcMain.on('connect-ports', (event, arg) => {
@@ -168,7 +170,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             // Raw packets are parsed into JSON object via FlexParser lib
                             const parsedPacket = FlexParser.parseFlexiData(rawPacket);
                             // Packet stored for timeseries and sent to Renderer
-                            packetHandler.storeAndSendData(parsedPacket);
+                            packetHandler.storeAndSendData(parsedPacket, recording);
 
 
                         } catch (error) {
@@ -211,6 +213,11 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
+    ipcMain.on("set-recording", (event, arg) => {
+
+        recording = !recording;
+
+    })
 
 
 
