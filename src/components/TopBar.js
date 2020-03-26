@@ -2,13 +2,13 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import PowerIcon from '@material-ui/icons/Power';
 import SaveIcon from '@material-ui/icons/Save';
 import colors from '../colors';
+import ResetMenu from './ResetMenu';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -19,13 +19,24 @@ const styles = {
     backgroundColor: colors.main,
     marginBottom: 10
   },
+
   menuButton: {
     marginRight: 10,
   },
-  title: {
-    flexGrow: 1,
-    textAlign: 'left'
+
+  iconSet: {
+    marginLeft: 'auto',
+    marginRight: 10
   },
+
+  icon: {
+    marginLeft: 10,
+    verticalAlign: 'middle'
+  },
+
+  fab: {
+    marginLeft: 15,
+  }
 };
 
 class TopBar extends React.Component {
@@ -39,7 +50,7 @@ class TopBar extends React.Component {
       recordingState: null
     }
 
-    this.getPortIcons = this.getPortIcons.bind(this);
+    this.getPortIndication = this.getPortIndication.bind(this);
 
   }
 
@@ -83,11 +94,11 @@ class TopBar extends React.Component {
   }
 
 
-  getPortIcons() {
+  getPortIndication() {
 
     let ports = Object.assign({}, this.state.ports);
 
-    let icons = Object.keys(ports).map(function (key, index) {
+    let indicationColors = Object.keys(ports).map(function (key, index) {
 
       let indicationColor = null;
 
@@ -95,10 +106,10 @@ class TopBar extends React.Component {
       if (ports[key] === "set") indicationColor = colors.grey;
       if (ports[key] === "closed") indicationColor = colors.red;
 
-      return <PowerIcon style={{ color: indicationColor }} />;
+      return indicationColor;
     })
 
-    return icons;
+    return indicationColors;
 
   }
 
@@ -112,16 +123,25 @@ class TopBar extends React.Component {
       <div className={classes.root}>
         <AppBar className={classes.root} style={{ margin: 0 }} position="static">
           <Toolbar>
-            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-              <MenuIcon />
-            </IconButton>
-            <Typography className={classes.title} variant="h6" color="inherit">
-              FLEXIGUARD
-             </Typography>
-            {this.getPortIcons().map((component) => {
-              return component;
-            })}
-            <SaveIcon />
+
+            <Tabs aria-label="Tab">
+              <Tab label="Overview" />
+              <Tab label="Map" />
+              <Tab label="History" />
+              <Tab label="Settings" />
+            </Tabs>
+
+            <div className={classes.iconSet} >
+
+              {this.getPortIndication().map((indicationColor) => {
+                return <PowerIcon className={classes.icon} style={{ color: indicationColor }} />
+              })}
+
+              <SaveIcon className={classes.icon}/>
+            </div>
+
+            <ResetMenu/>
+
           </Toolbar>
         </AppBar>
       </div>
