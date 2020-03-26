@@ -127,88 +127,88 @@ ipcMain.on('clear-to-send', (event, arg) => {
     // Port and state management init
     let packetHandler = new PacketHandler(event);
 
-    // (Re)connect receivers
+    // Listener for (re)connect receivers - on start and on demand from user
     ipcMain.on('connect-ports', (event, arg) => {
 
-         // Returns all Flexiguard receivers - ports
-    SerialPort.list().then(ports => {
+        // Returns all Flexiguard receivers - ports
+        SerialPort.list().then(ports => {
 
-        const flexiGuardPorts = [];
+            const flexiGuardPorts = [];
 
-        ports.forEach(port => {
-            if (port.manufacturer === "FTDI") {
-                flexiGuardPorts.push(port.comName);
-            }
-        })
-        
-        event.reply('ports-found', flexiGuardPorts);
-        return flexiGuardPorts;
-    },
-        err => console.error(err),
-    ).then(selectedPorts => {
+            ports.forEach(port => {
+                if (port.manufacturer === "FTDI") {
+                    flexiGuardPorts.push(port.comName);
+                }
+            })
 
-        // For every Flexiguard port
-        selectedPorts.forEach(port => {
-            
-            const ph = new PortHandler(port, event);
-            
-            // Get data from port - init parser, connect and data
-            ph.getParser().then(parser => {
+            event.reply('ports-found', flexiGuardPorts);
+            return flexiGuardPorts;
+        },
+            err => console.error(err),
+        ).then(selectedPorts => {
 
-                // Connecting (opening) port after the parser was configured
-                ph.connect();
+            // For every Flexiguard port
+            selectedPorts.forEach(port => {
 
-                // Listener for data from port
-                parser.on('data', function (data) {
+                const ph = new PortHandler(port, event);
+
+                // Get data from port - init parser, connect and data
+                ph.getParser().then(parser => {
+
+                    // Connecting (opening) port after the parser was configured
+                    ph.connect();
+
+                    // Listener for data from port
+                    parser.on('data', function (data) {
+
+                        try {
+                            //Converting hex to int array
+                            const rawPacket = Uint8Array.from(data);
+
+                            // Raw packets are parsed into JSON object via FlexParser lib
+                            const parsedPacket = FlexParser.parseFlexiData(rawPacket);
+                            // Packet stored for timeseries and sent to Renderer
+                            packetHandler.storeAndSendData(parsedPacket);
+
+
+                        } catch (error) {
+                            //console.log(error.message)
+
+                            // Devices out of sync - sending invalid data format
+                            if (error.message === "Invalid data format") {
+
+                                try {
+                                    ph.sendSync();
+                                } catch (error) {
+                                    console.log(error);
+                                }
+                            }
+
+                        }
+                    })
+
+
+                });
+
+                // User turns off the alarm (arg = deviceId)
+                ipcMain.on("remove-alarm", (event, arg) => {
 
                     try {
-                        //Converting hex to int array
-                        const rawPacket = Uint8Array.from(data);
 
-                        // Raw packets are parsed into JSON object via FlexParser lib
-                        const parsedPacket = FlexParser.parseFlexiData(rawPacket);
-                        // Packet stored for timeseries and sent to Renderer
-                        packetHandler.storeAndSendData(parsedPacket);
-
+                        ph.removeAlarm(arg);
+                        console.log("alarm: " + arg)
 
                     } catch (error) {
-                        //console.log(error.message)
-
-                        // Devices out of sync - sending invalid data format
-                        if (error.message === "Invalid data format") {
-
-                            try {
-                                ph.sendSync();
-                            } catch (error) {
-                                console.log(error);
-                            }
-                        }
-
+                        console.log(error);
                     }
                 })
 
 
-            });
-
-            // User turns off the alarm (arg = deviceId)
-            ipcMain.on("remove-alarm", (event, arg) => {
-
-                try {
-
-                    ph.removeAlarm(arg);
-                    console.log("alarm: " + arg)
-
-                } catch (error) {
-                    console.log(error);
-                }
             })
 
 
         })
 
-
-    })
-    
     })
 
 

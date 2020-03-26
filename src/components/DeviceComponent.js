@@ -6,6 +6,7 @@ import { Paper } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
 import DeviceStatus from './DeviceStatus';
 import PerformanceMeter from './PerformanceMeter';
+import Thermometer from './Thermometer';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -134,7 +135,7 @@ class BasicDeviceComponent extends React.Component {
               <PerformanceMeter/>
             </Grid>
             <Grid item xs={2}>
-              <PerformanceMeter/>
+              <Thermometer/>
             </Grid>
           </Grid>
         </Paper>

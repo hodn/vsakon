@@ -17,6 +17,7 @@ const styles = {
   root: {
     flexGrow: 1,
     backgroundColor: colors.main,
+    marginBottom: 10
   },
   menuButton: {
     marginRight: 10,
@@ -35,12 +36,10 @@ class TopBar extends React.Component {
 
     this.state = {
       ports: {},
-      recordingState: []
+      recordingState: null
     }
 
-    this.alarmOff = this.alarmOff.bind(this);
-    this.checkDeviceConnection = this.checkDeviceConnection.bind(this);
-    this.getPortIcon = this.getPortIcon.bind(this);
+    this.getPortIcons = this.getPortIcons.bind(this);
 
   }
 
@@ -83,30 +82,23 @@ class TopBar extends React.Component {
 
   }
 
-  checkDeviceConnection() {
 
+  getPortIcons() {
 
-  }
+    let ports = Object.assign({}, this.state.ports);
 
-  alarmOff() {
-    // Sending the command to remove alarm
-    //ipcRenderer.send("remove-alarm", this.props.devId);
-    ipcRenderer.send("connect-ports");
+    let icons = Object.keys(ports).map(function (key, index) {
 
-  }
+      let indicationColor = null;
 
-  getPortIcon() {
-    
-    let ports = Object.assign({}, this.state.ports); 
-    let icons = [];
-    
-    {Object.keys(ports).map(function(key, index) {
-      if (ports[key] === "opened") icons.push(<PowerIcon style={{color: colors.green}}/>);
-      if (ports[key] === "set") icons.push(<PowerIcon style={{color: colors.grey}}/>);
-      if (ports[key] === "closed") icons.push(<PowerIcon style={{color: colors.red}}/>);
-   })}
+      if (ports[key] === "opened") indicationColor = colors.green;
+      if (ports[key] === "set") indicationColor = colors.grey;
+      if (ports[key] === "closed") indicationColor = colors.red;
 
-   return icons;
+      return <PowerIcon style={{ color: indicationColor }} />;
+    })
+
+    return icons;
 
   }
 
@@ -117,25 +109,23 @@ class TopBar extends React.Component {
 
     return (
 
-
-      <div>
-        <div>
-          <AppBar className={classes.root} style={{ margin: 0 }} position="static">
-            <Toolbar>
-              <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                <MenuIcon />
-              </IconButton>
-              <Typography className={classes.title} variant="h6" color="inherit">
-                FLEXIGUARD
+      <div className={classes.root}>
+        <AppBar className={classes.root} style={{ margin: 0 }} position="static">
+          <Toolbar>
+            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+              <MenuIcon />
+            </IconButton>
+            <Typography className={classes.title} variant="h6" color="inherit">
+              FLEXIGUARD
              </Typography>
-             {this.getPortIcon().map((component) => {
-            return component;
-          })}
-              <SaveIcon />
-            </Toolbar>
-          </AppBar>
-        </div>
+            {this.getPortIcons().map((component) => {
+              return component;
+            })}
+            <SaveIcon />
+          </Toolbar>
+        </AppBar>
       </div>
+
 
     );
 

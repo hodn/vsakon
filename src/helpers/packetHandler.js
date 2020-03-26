@@ -2,7 +2,8 @@ module.exports = class PacketHandler {
     constructor(event) {
         this.event = event,
         this.packets = [],
-        this.graphData = []
+        this.graphData = [],
+        this.recording = false
     }
 
     storeAndSendData(packet) {
@@ -44,7 +45,7 @@ module.exports = class PacketHandler {
                 
                 this.packets[packet.basicData.devId] = packet;
 
-                this.sendData(packet.basicData.devId);
+                this.sendData(packet.basicData.devId); // send to Renderer
 
             }
 
