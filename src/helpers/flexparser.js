@@ -71,7 +71,7 @@ function parseBasicData(rawBasicArray){
         accY: convertAcceleration(rawBasicArray[14]),
         accZ: convertAcceleration(rawBasicArray[15]),
         breathRate: [rawBasicArray[16],rawBasicArray[17]],
-        batteryVoltage: parseEZ14(rawBasicArray[18],rawBasicArray[19]),
+        batteryVoltage: parseEZ14(rawBasicArray[18],rawBasicArray[19])
     }
     
     return basicJSON;
@@ -144,8 +144,8 @@ function parseEZ24(a, b, c, d){
 
 function parseEZ14(c, d){
     
-    a = c>>1 | (( d & 2 ) << 6);
-    b = d>>2;
+    let a = c>>1 | (( d & 2 ) << 6);
+    let b = d>>2;
 
     return (b<<8) | a;
 }

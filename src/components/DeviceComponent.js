@@ -115,12 +115,10 @@ class BasicDeviceComponent extends React.Component {
 
   openDetail() {
     this._isMounted && this.setState({ detailOpen: true });
-    console.log("ioen");
   }
 
   closeDetail() {
     this.setState({ detailOpen: false });
-    console.log("asa");
   }
 
   randomHR() {
@@ -153,7 +151,8 @@ class BasicDeviceComponent extends React.Component {
             </Grid>
           </Grid>
         </Paper>
-        <DeviceDetail open={this.state.detailOpen} close={this.closeDetail}/>
+        <DeviceDetail devId={this.props.devId} packet={this.state.packet} timeSeries={this.state.timeSeries} connected={this.state.connected} 
+        alarm={this.alarmOff} open={this.state.detailOpen} close={this.closeDetail}/>
       </div>
 
     );

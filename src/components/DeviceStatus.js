@@ -70,7 +70,7 @@ function DeviceStatus(props) {
         <div style={ {backgroundColor: switchColor(props)}}>
             <Grid direction="column" alignItems="center" container>
                 <Grid item>  <Avatar className={classes.avatar}>{props.devId}</Avatar> </Grid>
-                <Grid item>  <BatteryIndicator className={classes.battery} batteryPercentage={props.data === null ? null : props.data.basicData.batteryPercentage} /> </Grid>
+                <Grid item>  <BatteryIndicator className={classes.battery} batteryPercentage={20} /> </Grid>
                 <Grid item>  <GpsNotFixedIcon className={classes.icon} /> </Grid>
                 <Grid item>  <SettingsInputComponentIcon className={classes.icon}  /> </Grid>
             </Grid>

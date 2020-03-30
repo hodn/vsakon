@@ -40,9 +40,9 @@ export default function DeviceDetail(props) {
               <CloseIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              13
+              {props.devId}
             </Typography>
-            <Button autoFocus color="inherit">
+            <Button autoFocus onClick={props.alarm} color="inherit">
               Turn off alarm
             </Button>
           </Toolbar>
