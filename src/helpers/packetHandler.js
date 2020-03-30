@@ -3,7 +3,7 @@ module.exports = class PacketHandler {
         this.event = event,
         this.packets = [],
         this.graphData = [],
-        this.recording = recording
+        this.recording = false
     }
 
     storeAndSendData(packet) {
@@ -66,5 +66,8 @@ module.exports = class PacketHandler {
         this.event.reply(id.toString(), data);
     }
 
+    setRecording(){
 
+        this.recording = !this.recording;
+    }
 }

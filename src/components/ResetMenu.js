@@ -32,7 +32,7 @@ export default function ResetMenu() {
                 onClose={handleClose}
             >
                 <MenuItem onClick={() => handleClose('devices')}>Sync devices</MenuItem>
-                <MenuItem onClick={() => handleClose('receivers')}>Reset receivers</MenuItem>
+                <MenuItem onClick={() => handleClose('receivers')}>Find receivers</MenuItem>
             </Menu>
         </div>
     );

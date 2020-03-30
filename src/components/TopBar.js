@@ -7,6 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import Fab from '@material-ui/core/Fab';
+import Tooltip from '@material-ui/core/Tooltip';
 import PowerIcon from '@material-ui/icons/Power';
 import SaveIcon from '@material-ui/icons/Save';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -68,14 +69,19 @@ class TopBar extends React.Component {
 
     this._isMounted = true;
 
-    // Listener for identified ports
+    // Listener for identified ports 
     ipcRenderer.on('ports-found', (event, arg) => {
 
       let foundPorts = {};
 
       arg.forEach(port => {
 
-        foundPorts[port] = "set";
+        // If the port is already opened, keep the OPEN indication, else set the port as identified (set)
+        if (this.state.ports[port] === "opened") {
+          foundPorts[port] = "opened"; 
+        } else {
+          foundPorts[port] = "set";
+        }
 
       });
 
@@ -85,7 +91,7 @@ class TopBar extends React.Component {
 
     })
 
-    // Listener for changes on port - disconnect/connect
+    // Listener for changes on port - disconnect/connect - changes the indication
     ipcRenderer.on('port-state', (event, arg) => {
 
       this.setState(prevState => {
@@ -102,12 +108,12 @@ class TopBar extends React.Component {
 
   }
 
-// Changes the color of ports icon upon connect/disconnect
+  // Returns the indication icons for the receivers
   getPortIndication() {
 
     let ports = Object.assign({}, this.state.ports);
 
-    let indicationColors = Object.keys(ports).map(function (key, index) {
+    let indicationIcons = Object.keys(ports).map(function (key, index) {
 
       let indicationColor = null;
 
@@ -115,19 +121,19 @@ class TopBar extends React.Component {
       if (ports[key] === "set") indicationColor = colors.grey;
       if (ports[key] === "closed") indicationColor = colors.red;
 
-      return indicationColor;
+      return { color: indicationColor, port: key };
     })
 
-    return indicationColors;
+    return indicationIcons;
 
   }
-// Turn recording on/off
-  setRecording(){
+  // Turn recording on/off
+  setRecording() {
     this.setState({ recording: !this.state.recording });
     ipcRenderer.send("set-recording");
   }
 
-// Helper functions for tab - navigation
+  // Helper functions for tab - navigation
   changeTab(event, tabValue) {
 
     this.setState({ tabValue });
@@ -162,10 +168,12 @@ class TopBar extends React.Component {
 
             <div className={classes.iconSet} >
 
-              {this.state.recording && <SaveIcon className={classes.icon} style={{ color: colors.green }} />} 
-              
-              {this.getPortIndication().map((indicationColor) => {
-                return <PowerIcon className={classes.icon} style={{ color: indicationColor }} />
+              {this.state.recording && <SaveIcon className={classes.icon} style={{ color: colors.green }} />}
+
+              {this.getPortIndication().map((indication) => {
+                return (<Tooltip title={indication.port}>
+                  <PowerIcon className={classes.icon} style={{ color: indication.color }} />
+                </Tooltip>)
               })}
 
             </div>
@@ -173,7 +181,7 @@ class TopBar extends React.Component {
             <Fab onClick={this.setRecording} size="small" aria-label="reset" >
               <SaveIcon />
             </Fab>
-            
+
             <div className={classes.icon}> <ResetMenu /> </div>
 
           </Toolbar>

@@ -126,8 +126,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     // Port and state management init
     let packetHandler = new PacketHandler(event);
-    // Recording into CSV
-    let recording = false;
 
     // Listener for (re)connect receivers - on start and on demand from user
     ipcMain.on('connect-ports', (event, arg) => {
@@ -152,13 +150,13 @@ ipcMain.on('clear-to-send', (event, arg) => {
             // For every Flexiguard port
             selectedPorts.forEach(port => {
 
-                const ph = new PortHandler(port, event);
+                const portHandler = new PortHandler(port, event);
 
                 // Get data from port - init parser, connect and data
-                ph.getParser().then(parser => {
+                portHandler.getParser().then(parser => {
 
                     // Connecting (opening) port after the parser was configured
-                    ph.connect();
+                    portHandler.connect();
 
                     // Listener for data from port
                     parser.on('data', function (data) {
@@ -180,7 +178,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             if (error.message === "Invalid data format") {
 
                                 try {
-                                    ph.sendSync();
+                                    portHandler.sendSync();
                                 } catch (error) {
                                     console.log(error);
                                 }
@@ -197,7 +195,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
                     try {
 
-                        ph.removeAlarm(arg);
+                        portHandler.removeAlarm(arg);
                         console.log("alarm: " + arg)
 
                     } catch (error) {
@@ -215,7 +213,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     ipcMain.on("set-recording", (event, arg) => {
 
-        recording = !recording;
+        packetHandler.setRecording();
 
     })
 
