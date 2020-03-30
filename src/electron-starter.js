@@ -122,10 +122,10 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     // Import of Flexparser & DataManager lib
     const FlexParser = require('./helpers/flexParser');
-    const PacketHandler = require('./helpers/packetHandler')
+    const PacketHandler = require('./helpers/packetHandler');
 
     // Port and state management init
-    let packetHandler = new PacketHandler(event);
+    let packetHandler = new PacketHandler(event, app);
 
     // Listener for (re)connect receivers - on start and on demand from user
     ipcMain.on('connect-ports', (event, arg) => {
@@ -168,9 +168,8 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             // Raw packets are parsed into JSON object via FlexParser lib
                             const parsedPacket = FlexParser.parseFlexiData(rawPacket);
                             // Packet stored for timeseries and sent to Renderer
-                            packetHandler.storeAndSendData(parsedPacket, recording);
-
-
+                            packetHandler.storeAndSendData(parsedPacket);
+                        
                         } catch (error) {
                             //console.log(error.message)
 

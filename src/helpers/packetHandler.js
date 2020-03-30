@@ -1,5 +1,5 @@
 module.exports = class PacketHandler {
-    constructor(event, recording) {
+    constructor(event) {
         this.event = event,
         this.packets = [],
         this.graphData = [],
@@ -54,7 +54,7 @@ module.exports = class PacketHandler {
     }
 
     sendData(id) {
-
+        // Sending the packet to the renderer
         const packet = this.packets[id];
         const timeSeries = this.graphData[id];
 

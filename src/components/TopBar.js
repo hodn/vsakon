@@ -14,6 +14,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import ViewComfyIcon from '@material-ui/icons/ViewComfy';
 import MapIcon from '@material-ui/icons/Map';
 import TimelineIcon from '@material-ui/icons/Timeline';
+import GroupIcon from '@material-ui/icons/Group';
 import colors from '../colors';
 import ResetMenu from './ResetMenu';
 import { MainView } from '../views/MainView';
@@ -163,6 +164,7 @@ class TopBar extends React.Component {
               <Tab icon={<ViewComfyIcon />} />
               <Tab icon={<MapIcon />} />
               <Tab icon={<TimelineIcon />} />
+              <Tab icon={<GroupIcon/>} />
               <Tab icon={<SettingsIcon />} />
             </Tabs>
 
@@ -190,7 +192,8 @@ class TopBar extends React.Component {
         {this.state.tabValue === 0 && <this.TabContainer> <MainView /> </this.TabContainer>}
         {this.state.tabValue === 1 && <this.TabContainer> Map </this.TabContainer>}
         {this.state.tabValue === 2 && <this.TabContainer> History </this.TabContainer>}
-        {this.state.tabValue === 3 && <this.TabContainer> Settings </this.TabContainer>}
+        {this.state.tabValue === 3 && <this.TabContainer> Teams </this.TabContainer>}
+        {this.state.tabValue === 4 && <this.TabContainer> Settings </this.TabContainer>}
 
       </div>
 

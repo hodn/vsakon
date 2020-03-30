@@ -66,14 +66,13 @@ function parseBasicData(rawBasicArray){
         tempSkin: convertTemprature(rawBasicArray[2],rawBasicArray[3]),
         tempCloth: convertTemprature(rawBasicArray[4],rawBasicArray[5]),        
         humidity: convertHumidity(rawBasicArray[6]),
-        motionX: parseEZ14(rawBasicArray[7],rawBasicArray[8]),
-        motionY: parseEZ14(rawBasicArray[9],rawBasicArray[10]),
-        motionZ: parseEZ14(rawBasicArray[11],rawBasicArray[12]),
+        activity: convertActivity(parseEZ14(rawBasicArray[7],rawBasicArray[8]), parseEZ14(rawBasicArray[9],rawBasicArray[10]), parseEZ14(rawBasicArray[11],rawBasicArray[12])),
         accX: convertAcceleration(rawBasicArray[13]),
         accY: convertAcceleration(rawBasicArray[14]),
         accZ: convertAcceleration(rawBasicArray[15]),
         breathRate: [rawBasicArray[16],rawBasicArray[17]],
-        batteryVoltage: parseEZ14(rawBasicArray[18],rawBasicArray[19])
+        batteryPercentage: parseEZ14(rawBasicArray[18],rawBasicArray[19]),
+        batteryVoltage: convertBatteryVoltage(parseEZ14(rawBasicArray[18],rawBasicArray[19]))
     }
     
     return basicJSON;
@@ -114,6 +113,7 @@ function parseNodeData(rawNodeArray){
         const moX = rawNodeArray[45 + i];
         const moY = rawNodeArray[54 + i];
         const moZ = rawNodeArray[63 + i];
+        const activity = convertActivity(moX, moY, moZ);
 
         nodeJSON[i] = { 
         
@@ -123,6 +123,7 @@ function parseNodeData(rawNodeArray){
             motionX: moX,
             motionY: moY,
             motionZ: moZ, 
+            activity,
             connected: isNodeConnected(tempSkin, tempCloth, hum, moX, moY, moZ)
         }
 
@@ -201,6 +202,22 @@ function convertLocationMetric(raw){
     const converted = raw/10;
 
     return converted;
+}
+
+function convertBatteryVoltage(percentage){
+
+    let volts = (percentage / 100 + 3.2).toFixed(2);
+
+    return parseFloat(volts);
+    
+}
+
+function convertActivity(x, y, z){
+
+    let activity = Math.sqrt(x*x + y*y + z*z).toFixed(0);
+
+    return parseFloat(activity);
+    
 }
 
 // -- Checkers
