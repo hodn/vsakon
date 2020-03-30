@@ -5,6 +5,7 @@ import ReactiveGauge from "./ReactiveGauge";
 import { Paper } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
 import DeviceStatus from './DeviceStatus';
+import DeviceDetail from './DeviceDetail';
 import PerformanceMeter from './PerformanceMeter';
 import Thermometer from './Thermometer';
 
@@ -37,11 +38,14 @@ class BasicDeviceComponent extends React.Component {
       packet: null,
       timeSeries: [],
       connected: false,
+      detailOpen: false,
       randomHR: 0
     }
 
     this.alarmOff = this.alarmOff.bind(this);
     this.checkDeviceConnection = this.checkDeviceConnection.bind(this);
+    this.openDetail = this.openDetail.bind(this);
+    this.closeDetail = this.closeDetail.bind(this);
     this.randomHR = this.randomHR.bind(this);
 
   }
@@ -109,6 +113,16 @@ class BasicDeviceComponent extends React.Component {
     ipcRenderer.send("remove-alarm", this.props.devId);
   }
 
+  openDetail() {
+    this._isMounted && this.setState({ detailOpen: true });
+    console.log("ioen");
+  }
+
+  closeDetail() {
+    this.setState({ detailOpen: false });
+    console.log("asa");
+  }
+
   randomHR() {
 
     return Math.floor(Math.random() * (200 - 0));
@@ -123,7 +137,7 @@ class BasicDeviceComponent extends React.Component {
 
 
       <div>
-        <Paper elevation={8}>
+        <Paper onClick={this.openDetail} elevation={8}>
           <Grid container>
             <Grid item xs={2}>
               <DeviceStatus devId={this.props.devId} connection={this.state.connected} data={this.state.packet} />
@@ -139,6 +153,7 @@ class BasicDeviceComponent extends React.Component {
             </Grid>
           </Grid>
         </Paper>
+        <DeviceDetail open={this.state.detailOpen} close={this.closeDetail}/>
       </div>
 
     );

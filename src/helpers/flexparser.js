@@ -71,8 +71,7 @@ function parseBasicData(rawBasicArray){
         accY: convertAcceleration(rawBasicArray[14]),
         accZ: convertAcceleration(rawBasicArray[15]),
         breathRate: [rawBasicArray[16],rawBasicArray[17]],
-        batteryPercentage: parseEZ14(rawBasicArray[18],rawBasicArray[19]),
-        batteryVoltage: convertBatteryVoltage(parseEZ14(rawBasicArray[18],rawBasicArray[19]))
+        batteryVoltage: parseEZ14(rawBasicArray[18],rawBasicArray[19]),
     }
     
     return basicJSON;
