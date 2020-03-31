@@ -26,25 +26,25 @@ function sliceArray(rawArray){
     if(rawDataString.length == 21){
 
         slicedData = {
-            rawBasicData: rawDataString.slice(0, 19),
+            rawBasicData: rawDataString.slice(0, 20),
             deadMan: rawDataString[20]
         };
     
     }else if(rawDataString.length == 37){
 
         slicedData = {
-            rawBasicData: rawDataString.slice(0, 19),
-            rawLocationData: rawDataString.slice(20, 35),
+            rawBasicData: rawDataString.slice(0, 20),
+            rawLocationData: rawDataString.slice(20, 36),
             deadMan: rawDataString[36]
         };
 
     }else if(rawDataString.length == 109){
         
         slicedData = {
-            rawBasicData: rawDataString.slice(0, 19),
-            rawLocationData: rawDataString.slice(20, 35),
+            rawBasicData: rawDataString.slice(0, 20),
+            rawLocationData: rawDataString.slice(20, 36),
             deadMan: rawDataString[36],
-            rawNodeData: rawDataString.slice(37, 108)
+            rawNodeData: rawDataString.slice(37, 109)
         };
     
     }else{
