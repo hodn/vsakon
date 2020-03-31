@@ -12,23 +12,23 @@ const useStyles = makeStyles({
 
     root: {
 
-        'border-style': 'solid',
+        borderStyle: 'solid',
     },
     avatar: {
         height: 30,
         width: 30,
-        'font-size': 15,
-        'font-weight': 'bold',
+        fontSize: 15,
+        fontWeight: 'bold',
         margin: 8,
-        'background-color': 'transparent',
-        'color': 'black',
-        'border-color': 'black',
-        'border-style': 'solid'
+        backgroundColor: 'transparent',
+        color: 'black',
+        borderColor: 'black',
+        borderStyle: 'solid'
     },
     icon: {
-        height: '20px',
-        width: '20px',
-        'margin': '5px',
+        height: 20,
+        width: 20,
+        margin: 5,
     },
 
     battery: {
@@ -64,15 +64,33 @@ function DeviceStatus(props) {
 
     }
 
+    const getBatteryPercentage = (props) => {
+        if(props.data !== null){
+            return props.data.basicData.batteryPercentage;
+        }else return null;
+    }
+
+    const checkGps = (props) => {
+        if(props.data !== null && props.data.locationData !== null){
+            return "visible";
+        }else return "hidden";
+    }
+
+    const checkNodes = (props) => {
+        if(props.data !== null && props.data.nodeData !== null){
+            return "visible";
+        }else return "hidden";
+    }
+
     const classes = useStyles();
     return (
 
         <div style={ {backgroundColor: switchColor(props)}}>
             <Grid direction="column" alignItems="center" container>
                 <Grid item>  <Avatar className={classes.avatar}>{props.devId}</Avatar> </Grid>
-                <Grid item>  <BatteryIndicator className={classes.battery} batteryPercentage={20} /> </Grid>
-                <Grid item>  <GpsNotFixedIcon className={classes.icon} /> </Grid>
-                <Grid item>  <SettingsInputComponentIcon className={classes.icon}  /> </Grid>
+                <Grid item>  <BatteryIndicator className={classes.battery} batteryPercentage={getBatteryPercentage(props)} /> </Grid>
+                <Grid item>  <GpsNotFixedIcon className={classes.icon} style={ {visibility: checkGps(props)}} /> </Grid>
+                <Grid item>  <SettingsInputComponentIcon className={classes.icon} style={ {visibility: checkNodes(props)}}/> </Grid>
             </Grid>
         </div>
 

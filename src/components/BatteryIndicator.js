@@ -19,7 +19,7 @@ function BatteryIndicator(props) {
         if (battery > 20 && battery <= 30) return <Battery30 className={props.className}/> ;
         if (battery > 13 && battery <= 20) return <Battery20 className={props.className}/> ;
         if (battery <= 13) return <BatteryAlert className={props.className}/> ;
-    }else return <BatteryFull className={props.className}/>;
+    }else return <BatteryAlert className={props.className} style={ {visibility: 'hidden'}}/>;
    
 }
 export default BatteryIndicator;

@@ -141,7 +141,7 @@ class BasicDeviceComponent extends React.Component {
               <DeviceStatus devId={this.props.devId} connection={this.state.connected} data={this.state.packet} />
             </Grid>
             <Grid item xs={6}>
-              <ReactiveGauge hr={this.state.randomHR} motionX={this.state.packet === null ? 0 : this.state.packet.basicData.motionX} />
+              <ReactiveGauge hr={this.state.packet === null ? null : this.state.packet.basicData.heartRate} />
             </Grid>
             <Grid item xs={2}>
               <PerformanceMeter/>

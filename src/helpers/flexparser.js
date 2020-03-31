@@ -62,7 +62,6 @@ function parseBasicData(rawBasicArray){
         timestamp: Date.now(),
         devId: rawBasicArray[0],
         heartRate: rawBasicArray[1],
-        measuringHR: isMeasuringHR(rawBasicArray[1]),
         tempSkin: convertTemprature(rawBasicArray[2],rawBasicArray[3]),
         tempCloth: convertTemprature(rawBasicArray[4],rawBasicArray[5]),        
         humidity: convertHumidity(rawBasicArray[6]),
@@ -71,7 +70,8 @@ function parseBasicData(rawBasicArray){
         accY: convertAcceleration(rawBasicArray[14]),
         accZ: convertAcceleration(rawBasicArray[15]),
         breathRate: [rawBasicArray[16],rawBasicArray[17]],
-        batteryVoltage: parseEZ14(rawBasicArray[18],rawBasicArray[19])
+        batteryVoltage: parseEZ14(rawBasicArray[18],rawBasicArray[19]),
+        batteryPercentage: convertBatteryVoltage(parseEZ14(rawBasicArray[18],rawBasicArray[19]))
     }
     
     return basicJSON;
@@ -203,11 +203,12 @@ function convertLocationMetric(raw){
     return converted;
 }
 
-function convertBatteryVoltage(percentage){
+function convertBatteryVoltage(voltage){
 
-    let volts = (percentage / 100 + 3.2).toFixed(2);
+    let volts = parseFloat((voltage / 1000).toFixed(2));
+    let percentage = ((volts - 3.2) * 100).toFixed(0);
 
-    return parseFloat(volts);
+    return parseInt(percentage);
     
 }
 
@@ -244,12 +245,4 @@ function isNodeConnected(skin, cloth, hum, x, y, z){
     else return true;
 }
 
-function isMeasuringHR(hr){
-
-    if(hr == 2)
-    {
-        return false;
-    }
-    else return true;
-}
 
