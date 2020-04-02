@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import 'typeface-roboto';
 import { StylesProvider } from "@material-ui/styles";
 import './App.css';
 import TopBar from './components/TopBar';

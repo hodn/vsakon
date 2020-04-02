@@ -28,32 +28,7 @@ export class SettingsView extends React.Component{
   
     componentDidMount() {
       this._isMounted = true;
-      ipcRenderer.send("list-ports");
-      ipcRenderer.send("settings-info");
-      ipcRenderer.send("clear-to-send");
-      ipcRenderer.on('ports-listed', (event, arg) => {
-
-      this._isMounted && this.setState((state, props) => ({
-        portList: [...state.portList, arg]
-      }))
-     })
-
-     ipcRenderer.on('dir-changed', (event, arg) => {
-
-      this._isMounted && this.setState((state, props) => ({
-        dir: arg
-      }))
-     })
-
-     ipcRenderer.on('settings-loaded', (event, arg) => {
-
-      this._isMounted && this.setState((state, props) => ({
-        dir: arg.dir,
-        com: arg.com
-      }))
       
-     })
-    
     
     }
   

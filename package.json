@@ -27,7 +27,8 @@
     "react-smoothie": "^0.10.2",
     "react-svg-gauge": "^1.0.10",
     "react-vis": "^1.11.7",
-    "serialport": "^7.1.5"
+    "serialport": "^7.1.5",
+    "typeface-roboto": "0.0.75"
   },
   "main": "src/electron-starter.js",
   "scripts": {

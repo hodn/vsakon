@@ -5,9 +5,9 @@ import ReactiveGauge from "./ReactiveGauge";
 import { Paper } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
 import DeviceStatus from './DeviceStatus';
-import DeviceView from '../views/DeviceView';
 import PerformanceMeter from './PerformanceMeter';
 import Thermometer from './Thermometer';
+import DeviceDetail from './DeviceDetail';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -28,7 +28,7 @@ const styles = {
 
 };
 
-class BasicDeviceComponent extends React.Component {
+class DeviceComponent extends React.Component {
   constructor(props) {
     super(props);
 
@@ -134,7 +134,7 @@ class BasicDeviceComponent extends React.Component {
               <DeviceStatus direction={"column"} devId={this.props.devId} connected={this.state.connected} packet={this.state.packet} />
             </Grid>
             <Grid item xs={6}>
-              <ReactiveGauge hr={this.state.packet === null ? null : this.state.packet.basicData.heartRate} />
+              <ReactiveGauge hr={this.state.packet === null ? null : this.state.packet.basicData.heartRate} height={150} width={160} />
             </Grid>
             <Grid item xs={2}>
               <PerformanceMeter activity={this.state.packet === null ? null : this.state.packet.basicData.activity}/>
@@ -144,7 +144,7 @@ class BasicDeviceComponent extends React.Component {
             </Grid>
           </Grid>
         </Paper>
-        <DeviceView devId={this.props.devId} packet={this.state.packet} timeSeries={this.state.timeSeries} connected={this.state.connected} 
+        <DeviceDetail devId={this.props.devId} packet={this.state.packet} timeSeries={this.state.timeSeries} connected={this.state.connected} 
         alarm={this.alarmOff} open={this.state.detailOpen} close={this.closeDetail}/>
       </div>
 
@@ -155,9 +155,9 @@ class BasicDeviceComponent extends React.Component {
 
 }
 
-BasicDeviceComponent.propTypes = {
+DeviceComponent.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(BasicDeviceComponent);
+export default withStyles(styles)(DeviceComponent);
 

@@ -13,9 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import PowerIcon from '@material-ui/icons/Power';
 import SaveIcon from '@material-ui/icons/Save';
-import colors from '../colors';
-import ResetMenu from './ResetMenu';
-import { MainView } from '../views/MainView';
+import colors from '../../colors';
+import ResetMenu from '../ResetMenu';
+import { MainView } from '../../views/MainView';
 import { StatCard } from './StatCard';
 
 const { ipcRenderer } = window.require('electron');

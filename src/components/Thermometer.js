@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import SimpleMeter from './basics/SimpleMeter';
 import colors from '../colors';;
@@ -55,7 +56,7 @@ function Thermometer(props) {
         <div>
           <Grid direction="column" alignItems="center" container>
                 <Grid item className={classes.bar}>  <SimpleMeter  percent={getTempDisplay(props.tempSkin)} color={colorSwitch(props.tempSkin)}/> </Grid>
-                <Grid item> {props.tempSkin} </Grid>
+                <Grid item> <Typography> {props.tempSkin} </Typography></Grid>
             </Grid>
         </div>
 
