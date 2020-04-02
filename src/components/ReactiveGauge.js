@@ -1,5 +1,5 @@
 import React from 'react';
-import Gauge from './Gauge';
+import Gauge from './basics/Gauge';
 import colors from '../colors';
 
 function ReactiveGauge(props) {

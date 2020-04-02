@@ -1,9 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+//import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
+//import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -41,7 +41,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function DeviceView(props) {
   const classes = useStyles();
 
-  const alarmButton = () => {
+ /* const alarmButton = () => {
 
     if (props.packet !== null) {
       if (props.packet.deadMan) return (
@@ -51,7 +51,7 @@ export default function DeviceView(props) {
     } else return null;
 
 
-  }
+  } */
 
   const switchColor = (props) => {
 
@@ -81,7 +81,6 @@ export default function DeviceView(props) {
         <AppBar style={{ backgroundColor: switchColor(props), margin: 0 }} className={classes.appBar}>
           <Toolbar>
           <DeviceStatus direction={"row"} devId={props.devId} connected={props.connected} packet={props.packet} />
-            {alarmButton()}
             <IconButton color="inherit" onClick={props.close} style={{ marginLeft: "auto" }} aria-label="close">
               <CloseIcon />
             </IconButton>

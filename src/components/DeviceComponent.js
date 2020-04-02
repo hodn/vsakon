@@ -39,14 +39,12 @@ class BasicDeviceComponent extends React.Component {
       timeSeries: [],
       connected: false,
       detailOpen: false,
-      randomHR: 0
     }
 
     this.alarmOff = this.alarmOff.bind(this);
     this.checkDeviceConnection = this.checkDeviceConnection.bind(this);
     this.openDetail = this.openDetail.bind(this);
     this.closeDetail = this.closeDetail.bind(this);
-    this.randomHR = this.randomHR.bind(this);
 
   }
 
@@ -119,11 +117,6 @@ class BasicDeviceComponent extends React.Component {
 
   closeDetail() {
     this.setState({ detailOpen: false });
-  }
-
-  randomHR() {
-
-    return Math.floor(Math.random() * (200 - 0));
   }
 
   // What the actual component renders

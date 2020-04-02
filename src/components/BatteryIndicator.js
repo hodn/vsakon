@@ -12,7 +12,6 @@ function BatteryIndicator(props) {
     if(props.batteryPercentage !== null){
         let battery = props.batteryPercentage;
         
-    
         if (battery > 90) return <BatteryFull className={props.className}/> ;
         if (battery > 50 && battery <= 90) return <Battery80 className={props.className}/> ;
         if (battery > 30 && battery <= 50) return <Battery50 className={props.className}/> ;

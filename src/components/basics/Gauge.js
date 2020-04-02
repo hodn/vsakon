@@ -93,7 +93,7 @@ export default class Gauge extends React.Component {
         overflow: 'hidden',
         position: 'relative',
         margin: '-8px',
-        left: 6,
+        left: 15,
         top: 40
       }}>
         <defs>
