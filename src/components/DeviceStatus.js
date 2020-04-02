@@ -4,6 +4,7 @@ import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BatteryIndicator from './BatteryIndicator';
 import GpsNotFixedIcon from '@material-ui/icons/GpsNotFixed';
+import Typography from '@material-ui/core/Typography';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 import colors from '../colors';;
 
@@ -92,6 +93,7 @@ function DeviceStatus(props) {
                 <Grid item>  <BatteryIndicator className={classes.battery} batteryPercentage={getBatteryPercentage(props)} /> </Grid>
                 <Grid item>  <GpsNotFixedIcon className={classes.icon} style={ {visibility: checkGps(props)}} /> </Grid>
                 <Grid item>  <SettingsInputComponentIcon className={classes.icon} style={ {visibility: checkNodes(props)}}/> </Grid>
+                <Grid item>  <Typography variant="h6" >{props.name}</Typography> </Grid>
             </Grid>
         </div>
 

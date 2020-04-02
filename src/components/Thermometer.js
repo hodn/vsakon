@@ -56,7 +56,7 @@ function Thermometer(props) {
         <div>
           <Grid direction="column" alignItems="center" container>
                 <Grid item className={classes.bar}>  <SimpleMeter  percent={getTempDisplay(props.tempSkin)} color={colorSwitch(props.tempSkin)}/> </Grid>
-                {props.tempSkin && <Grid item> <Typography variant="subtitle1"> {props.tempSkin} </Typography></Grid>}
+                <Grid item> <Typography variant="subtitle1"> {props.tempSkin} </Typography></Grid>
             </Grid>
         </div>
 

@@ -30,7 +30,7 @@ function PerformanceMeter(props) {
 
     const getActivityDisplay = (activity) => {
         
-        const maxScale = 50;
+        const maxScale = 100;
 
         if (activity !== null) {
             if (activity >= maxScale) return 1; // maximum scale 

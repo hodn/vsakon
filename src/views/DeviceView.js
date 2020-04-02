@@ -14,10 +14,7 @@ export default function DeviceView(passedProps) {
         <div>
             <Paper>
             <Typography variant="h6">Miroslav Novotný</Typography>
-            <Chip label="24 let" variant="outlined" />
-            <Chip label="80 kg" variant="outlined" />
-            <Chip label="31 ml/min/kg" variant="outlined" />
-            <ReactiveGauge hr={props.packet === null ? null : props.packet.basicData.heartRate} height={200} width={200} />
+            <ReactiveGauge hr={props.packet === null ? null : props.packet.basicData.heartRate} height={200} width={200} left={10} top={40} margin={-8} />
             <AccelerationMeter axis="X" leftLabel="back" rightLabel="front" data={props.packet === null ? 0 : props.packet.basicData.accX}/>
             <AccelerationMeter axis="Y" leftLabel="left" rightLabel="right" data={props.packet === null ? 0 : props.packet.basicData.accY}/>
             <AccelerationMeter axis="Z" leftLabel="foot" rightLabel="head" data={props.packet === null ? 0 : props.packet.basicData.accZ}/>

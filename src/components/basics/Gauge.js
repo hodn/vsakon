@@ -95,9 +95,9 @@ export default class Gauge extends React.Component {
         height: this.props.height,
         overflow: 'hidden',
         position: 'relative',
-        margin: '-8px',
-        left: 10,
-        top: 40
+        margin: this.props.margin,
+        left: this.props.left,
+        top: this.props.top,
       }}>
         <defs>
           <filter id={this.uniqueFilterId}>
