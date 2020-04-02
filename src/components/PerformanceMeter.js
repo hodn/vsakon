@@ -30,9 +30,11 @@ function PerformanceMeter(props) {
 
     const getActivityDisplay = (activity) => {
         
+        const maxScale = 50;
+
         if (activity !== null) {
-            if (activity >= 50) return 1; // max
-            if (activity < 50) return activity / 50; // into percent
+            if (activity >= maxScale) return 1; // maximum scale 
+            if (activity < maxScale) return activity / maxScale; // into percent
         }else return 0;
     }
 
@@ -40,8 +42,8 @@ function PerformanceMeter(props) {
 
         <div>
           <Grid direction="column" alignItems="center" container>
-                <Grid item className={classes.bar}>  <SimpleMeter percent={getActivityDisplay(props.activity)} color={colors.green}/> </Grid>
-                <Grid item> <FlashOnIcon className={classes.icon}/> </Grid>
+                <Grid item className={classes.bar}>  <SimpleMeter percent={getActivityDisplay(props.activity)} color={colors.secondary}/> </Grid>
+                {props.icon && <Grid item> <FlashOnIcon className={classes.icon}/> </Grid>}
             </Grid>
         </div>
 

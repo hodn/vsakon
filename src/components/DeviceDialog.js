@@ -39,7 +39,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DeviceDetail(props) {
+export default function DeviceDialog(props) {
   const classes = useStyles();
 
  /* const alarmButton = () => {
@@ -78,7 +78,7 @@ export default function DeviceDetail(props) {
 
   return (
     <div>
-      <Dialog style={{padding: 0}} fullScreen open={props.open} TransitionComponent={Transition}>
+      <Dialog style={{padding: 0}} fullScreen open={props.devId === 27} TransitionComponent={Transition}>
         <AppBar style={{ backgroundColor: switchColor(props), margin: 0 }} className={classes.appBar}>
           <Toolbar>
           <DeviceStatus direction={"row"} devId={props.devId} connected={props.connected} packet={props.packet} />

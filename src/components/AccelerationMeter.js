@@ -8,6 +8,10 @@ import colors from '../colors';;
 
 const useStyles = makeStyles({
 
+    root: {
+        marginTop: 10
+    },
+    
     bar: {
         marginLeft: 5,
         marginRight: 5
@@ -18,23 +22,40 @@ const useStyles = makeStyles({
 function AccelerationMeter(props) {
 
     const classes = useStyles();
+    
+    
+    const getNegativeDisplay = (acceleration) => {
 
-    const getActivityDisplay = (activity) => {
+        const maxScale = -10;
+        
+        if(acceleration < 0){
+            if (acceleration <= maxScale) return 1; // maximum scale 
+            if (acceleration > maxScale) return acceleration / maxScale; // into percent
+        }else return 0;
 
-        if (activity !== null) {
-            if (activity >= 50) return 1; // maximum of the meter is 50 
-            if (activity < 50) return activity / 50; // into percent
-        } else return 0;
     }
+
+    const getPositiveDisplay = (acceleration) => {
+
+        const maxScale = 10;
+        
+        if(acceleration >= 0){
+            if (acceleration >= maxScale) return 1; // maximum scale 
+            if (acceleration < maxScale) return acceleration / maxScale; // into percent
+        }else return 0;
+    }
+
+    
 
     return (
 
-        <div>
-            <Typography variant="subtitle2" style={{ textAlign: "center" }}> back | front </Typography>
-            <Grid justify="center" direction="row" alignItems="center" container>
-                <Grid item className={classes.bar}>  <SegmentedMeter percent={getActivityDisplay(props.activity)} color={colors.green} rotation={180}/> </Grid>
-                <Grid item className={classes.bar}>  <SegmentedMeter percent={getActivityDisplay(props.activity)} color={colors.green}/> </Grid>
+        <div classes={classes.root}>
+            <Typography border={1} variant="h6" style={{ textAlign: "center"}}> {props.axis}: {props.data} G </Typography>
+            <Grid border={1} justify="center" direction="row" alignItems="center" container>
+                <Grid item className={classes.bar}>  <SegmentedMeter percent={getNegativeDisplay(props.data)} color={colors.secondary} rotation={180} /> </Grid>
+                <Grid item className={classes.bar}>  <SegmentedMeter percent={getPositiveDisplay(props.data)} color={colors.secondary} /> </Grid>
             </Grid>
+            <Typography variant="subtitle2" style={{ textAlign: "center", color: colors.secondary }}>{props.leftLabel}  |  {props.rightLabel} </Typography>
         </div>
 
     );

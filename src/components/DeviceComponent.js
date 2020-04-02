@@ -7,7 +7,7 @@ import { Grid } from '@material-ui/core';
 import DeviceStatus from './DeviceStatus';
 import PerformanceMeter from './PerformanceMeter';
 import Thermometer from './Thermometer';
-import DeviceDetail from './DeviceDetail';
+import DeviceDialog from './DeviceDialog';
 
 const { ipcRenderer } = window.require('electron');
 
@@ -137,14 +137,14 @@ class DeviceComponent extends React.Component {
               <ReactiveGauge hr={this.state.packet === null ? null : this.state.packet.basicData.heartRate} height={150} width={160} />
             </Grid>
             <Grid item xs={2}>
-              <PerformanceMeter activity={this.state.packet === null ? null : this.state.packet.basicData.activity}/>
+              <PerformanceMeter icon activity={this.state.packet === null ? null : this.state.packet.basicData.activity}/>
             </Grid>
             <Grid item xs={2}>
               <Thermometer tempSkin={this.state.packet === null ? null : this.state.packet.basicData.tempSkin}/>
             </Grid>
           </Grid>
         </Paper>
-        <DeviceDetail devId={this.props.devId} packet={this.state.packet} timeSeries={this.state.timeSeries} connected={this.state.connected} 
+        <DeviceDialog devId={this.props.devId} packet={this.state.packet} timeSeries={this.state.timeSeries} connected={this.state.connected} 
         alarm={this.alarmOff} open={this.state.detailOpen} close={this.closeDetail}/>
       </div>
 
