@@ -27,11 +27,20 @@ const useStyles = makeStyles({
 function PerformanceMeter(props) {
 
     const classes = useStyles();
+
+    const getActivityDisplay = (activity) => {
+        
+        if (activity !== null) {
+            if (activity >= 50) return 1; // max
+            if (activity < 50) return activity / 50; // into percent
+        }else return 0;
+    }
+
     return (
 
         <div>
           <Grid direction="column" alignItems="center" container>
-                <Grid item className={classes.bar}>  <SimpleMeter  color='#a5d6a7'/> </Grid>
+                <Grid item className={classes.bar}>  <SimpleMeter percent={getActivityDisplay(props.activity)} color={colors.green}/> </Grid>
                 <Grid item> <FlashOnIcon className={classes.icon}/> </Grid>
             </Grid>
         </div>

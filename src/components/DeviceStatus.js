@@ -29,13 +29,14 @@ const useStyles = makeStyles({
         height: 20,
         width: 20,
         margin: 5,
+        color: "black"
     },
 
     battery: {
         height: 30,
         width: 30,
         margin: 5,
-    
+        color: "black"
     },
 });
 
@@ -44,8 +45,8 @@ function DeviceStatus(props) {
 
     const switchColor = (props) => {
 
-        let connection = props.connection === true;
-        let alarmOn = props.data === null ? false : props.data.deadMan;
+        let connection = props.connected === true;
+        let alarmOn = props.packet === null ? false : props.packet.deadMan;
                 
         if (connection) {
             
@@ -65,19 +66,19 @@ function DeviceStatus(props) {
     }
 
     const getBatteryPercentage = (props) => {
-        if(props.data !== null){
-            return props.data.basicData.batteryPercentage;
+        if(props.packet !== null){
+            return props.packet.basicData.batteryPercentage;
         }else return null;
     }
 
     const checkGps = (props) => {
-        if(props.data !== null && props.data.locationData !== null){
+        if(props.packet !== null && props.packet.locationData !== null){
             return "visible";
         }else return "hidden";
     }
 
     const checkNodes = (props) => {
-        if(props.data !== null && props.data.nodeData !== null){
+        if(props.packet !== null && props.packet.nodeData !== null){
             return "visible";
         }else return "hidden";
     }
@@ -86,7 +87,7 @@ function DeviceStatus(props) {
     return (
 
         <div style={ {backgroundColor: switchColor(props)}}>
-            <Grid direction="column" alignItems="center" container>
+            <Grid direction={props.direction} alignItems="center" container>
                 <Grid item>  <Avatar className={classes.avatar}>{props.devId}</Avatar> </Grid>
                 <Grid item>  <BatteryIndicator className={classes.battery} batteryPercentage={getBatteryPercentage(props)} /> </Grid>
                 <Grid item>  <GpsNotFixedIcon className={classes.icon} style={ {visibility: checkGps(props)}} /> </Grid>

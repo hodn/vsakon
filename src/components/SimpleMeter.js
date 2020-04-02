@@ -3,7 +3,7 @@ import React from 'react';
 var SimpleMeter = function (props) {
   var {
     rotation = 180,        // degrees to rotate the element
-    percent = 0.8,         // a number between 0 and 1, inclusive
+    percent = 0,         // a number between 0 and 1, inclusive
     width = 12,         // the overall width
     height = 100,         // the overall height
     rounded = true,      // if true, use rounded corners

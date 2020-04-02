@@ -5,7 +5,7 @@ import ReactiveGauge from "./ReactiveGauge";
 import { Paper } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
 import DeviceStatus from './DeviceStatus';
-import DeviceDetail from './DeviceDetail';
+import DeviceView from '../views/DeviceView';
 import PerformanceMeter from './PerformanceMeter';
 import Thermometer from './Thermometer';
 
@@ -15,7 +15,7 @@ const styles = {
 
   root: {
 
-    'border-style': 'dotted',
+    margin: 6,
   },
   icon: {
     height: '25px',
@@ -129,29 +129,29 @@ class BasicDeviceComponent extends React.Component {
   // What the actual component renders
   render() {
 
-    //const { classes } = this.props;
+    const { classes } = this.props;
 
     return (
 
 
-      <div>
-        <Paper onClick={this.openDetail} elevation={8}>
+      <div className={classes.root}>
+        <Paper onClick={this.openDetail} elevation={5} square>
           <Grid container>
             <Grid item xs={2}>
-              <DeviceStatus devId={this.props.devId} connection={this.state.connected} data={this.state.packet} />
+              <DeviceStatus direction={"column"} devId={this.props.devId} connected={this.state.connected} packet={this.state.packet} />
             </Grid>
             <Grid item xs={6}>
               <ReactiveGauge hr={this.state.packet === null ? null : this.state.packet.basicData.heartRate} />
             </Grid>
             <Grid item xs={2}>
-              <PerformanceMeter/>
+              <PerformanceMeter activity={this.state.packet === null ? null : this.state.packet.basicData.activity}/>
             </Grid>
             <Grid item xs={2}>
-              <Thermometer/>
+              <Thermometer tempSkin={this.state.packet === null ? null : this.state.packet.basicData.tempSkin}/>
             </Grid>
           </Grid>
         </Paper>
-        <DeviceDetail devId={this.props.devId} packet={this.state.packet} timeSeries={this.state.timeSeries} connected={this.state.connected} 
+        <DeviceView devId={this.props.devId} packet={this.state.packet} timeSeries={this.state.timeSeries} connected={this.state.connected} 
         alarm={this.alarmOff} open={this.state.detailOpen} close={this.closeDetail}/>
       </div>
 

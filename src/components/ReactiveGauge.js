@@ -21,8 +21,8 @@ function ReactiveGauge(props) {
     const parseHeartRate = (hr) => {
 
         if (hr !== null) {
-            if (hr <= 2) return "-";
-            if (hr == 3) return "+";
+            if (hr <= 2) return "-"; // Lead off
+            if (hr === 3) return "+"; // Lead on
             if (hr > 3) return hr;
         }else return " ";
     }

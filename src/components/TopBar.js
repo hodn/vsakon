@@ -25,7 +25,7 @@ const { ipcRenderer } = window.require('electron');
 const styles = {
 
   root: {
-    flexGrow: 1
+    flexGrow: 2
   },
 
   menuButton: {
@@ -44,7 +44,8 @@ const styles = {
 
   fab: {
     marginLeft: 15,
-  }
+  },
+
 };
 
 class TopBar extends React.Component {
@@ -161,11 +162,11 @@ class TopBar extends React.Component {
           <Toolbar>
 
             <Tabs TabIndicatorProps={{ style: { background: colors.secondary } }} aria-label="tab" value={this.state.tabValue} onChange={this.changeTab}>
-              <Tab icon={<ViewComfyIcon />} />
-              <Tab icon={<MapIcon />} />
-              <Tab icon={<TimelineIcon />} />
-              <Tab icon={<GroupIcon/>} />
-              <Tab icon={<SettingsIcon />} />
+              <Tab style={{ minWidth: 100 }}icon={<ViewComfyIcon/>} />
+              <Tab style={{ minWidth: 100 }} icon={<MapIcon />} />
+              <Tab style={{ minWidth: 100 }} icon={<TimelineIcon />} />
+              <Tab style={{ minWidth: 100 }} icon={<GroupIcon/>} />
+              <Tab style={{ minWidth: 100 }} icon={<SettingsIcon />} />
             </Tabs>
 
             <div className={classes.iconSet} >

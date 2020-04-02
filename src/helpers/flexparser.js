@@ -61,7 +61,7 @@ function parseBasicData(rawBasicArray){
     const basicJSON = {
         timestamp: Date.now(),
         devId: rawBasicArray[0],
-        heartRate: rawBasicArray[1],
+        heartRate: parseInt(rawBasicArray[1]),
         tempSkin: convertTemprature(rawBasicArray[2],rawBasicArray[3]),
         tempCloth: convertTemprature(rawBasicArray[4],rawBasicArray[5]),        
         humidity: convertHumidity(rawBasicArray[6]),
