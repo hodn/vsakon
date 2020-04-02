@@ -6,6 +6,15 @@ module.exports.parseFlexiData = function parseRawData(rawArray){
     const deadMan = slicedArrays.deadMan % 2 ? false : true;
     const locationData = slicedArrays.rawLocationData === undefined ? null : parseLocationData(slicedArrays.rawLocationData);
     const nodeData = slicedArrays.rawNodeData === undefined ? null : parseNodeData(slicedArrays.rawNodeData);
+
+    // Acceleration factor for modules with GPS 
+    if (locationData !== null){
+
+        basicData.accX *= 4.0; 
+        basicData.accY *= 4.0; 
+        basicData.accZ *= 4.0; 
+        basicData.activity *= 4.0;
+    }
     
     const parsedData = {
         basicData,
@@ -161,9 +170,10 @@ function convertTemprature(rawOne, rawTwo){
 
 function convertAcceleration(rawValue){
     
-    const convertedValue = (rawValue - 127) * 10;
+    const convertedValue = ((rawValue - 127) * 20) / 1000;
+    convertedValue.toFixed(1);
 
-    return convertedValue;
+    return parseFloat(convertedValue);
 }
 
 function convertHumidity(rawValue){
