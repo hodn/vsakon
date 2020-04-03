@@ -11,7 +11,7 @@ export default function PerformanceDetail(passedProps) {
     let props = passedProps.initProps;
 
     return (
-        <div style={{borderStyle: "solid"}}>
+        <div>
             <Grid
                 container
                 direction="row"
