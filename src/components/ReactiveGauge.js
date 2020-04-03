@@ -31,7 +31,8 @@ function ReactiveGauge(props) {
 
 
         <div>
-            <Gauge value={parseHeartRate(props.hr)} max={220} width={props.width} height={props.height} color={colorSwitch(props.hr)} left={10} top={40} margin={-8} />
+            <Gauge value={parseHeartRate(props.hr)} max={220} width={props.width} height={props.height} color={colorSwitch(props.hr)} 
+            left={props.left} top={props.top} margin={props.margin} />
         </div>
 
     );

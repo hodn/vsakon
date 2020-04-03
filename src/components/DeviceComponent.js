@@ -20,7 +20,7 @@ const styles = {
   icon: {
     height: '25px',
     width: '25px',
-    'font-size': '100%',
+    fontSize: '100%',
     margin: '3px 0px 3px 3px',
     padding: '3px',
     float: 'left'
@@ -134,13 +134,13 @@ class DeviceComponent extends React.Component {
               <DeviceStatus direction={"column"} devId={this.props.devId} connected={this.state.connected} packet={this.state.packet} />
             </Grid>
             <Grid item xs={6}>
-              <ReactiveGauge hr={this.state.packet === null ? null : this.state.packet.basicData.heartRate} height={150} width={160} />
+              <ReactiveGauge hr={this.state.packet === null ? null : this.state.packet.basicData.heartRate} height={150} width={160} top={40} left={10} margin={-8} />
             </Grid>
             <Grid item xs={2}>
               <PerformanceMeter icon activity={this.state.packet === null ? null : this.state.packet.basicData.activity}/>
             </Grid>
             <Grid item xs={2}>
-              <Thermometer tempSkin={this.state.packet === null ? null : this.state.packet.basicData.tempSkin}/>
+              <Thermometer showTemp tempSkin={this.state.packet === null ? null : this.state.packet.basicData.tempSkin}/>
             </Grid>
           </Grid>
         </Paper>

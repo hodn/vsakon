@@ -18,10 +18,6 @@ const useStyles = makeStyles(theme => ({
   appBar: {
     position: 'relative',
   },
-  title: {
-    marginLeft: theme.spacing(1),
-    flex: 1,
-  },
 
   avatar: {
     height: 30,
@@ -82,7 +78,7 @@ export default function DeviceDialog(props) {
         <AppBar style={{ backgroundColor: switchColor(props), margin: 0 }} className={classes.appBar}>
           <Toolbar>
           <DeviceStatus direction={"row"} devId={props.devId} connected={props.connected} packet={props.packet} name={"Miroslav Novotný"}/>
-            <IconButton color="inherit" onClick={props.close} style={{ marginLeft: "auto" }} aria-label="close">
+            <IconButton color="inherit" onClick={props.close} style={{ marginLeft: "auto", color:"black" }} aria-label="close">
               <CloseIcon />
             </IconButton>
           </Toolbar>

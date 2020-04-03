@@ -42,7 +42,7 @@ function PerformanceMeter(props) {
 
         <div>
           <Grid direction="column" alignItems="center" container>
-                <Grid item className={classes.bar}>  <SimpleMeter percent={getActivityDisplay(props.activity)} color={colors.secondary}/> </Grid>
+                <Grid item className={classes.bar}>  <SimpleMeter percent={getActivityDisplay(props.activity)} height={props.height} width={props.width} color={colors.secondary}/> </Grid>
                 {props.icon && <Grid item> <FlashOnIcon className={classes.icon}/> </Grid>}
             </Grid>
         </div>
