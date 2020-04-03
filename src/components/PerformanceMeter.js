@@ -13,12 +13,12 @@ const useStyles = makeStyles({
         
     },
     bar: {
-        'margin-top': 20
+        marginTop: 20
     },
 
     icon: {
-        height: '20px',
-        width: '20px',
+        height: 20,
+        width: 20,
         color: colors.grey,
     },
 });

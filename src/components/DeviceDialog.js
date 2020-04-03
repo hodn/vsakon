@@ -38,18 +38,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function DeviceDialog(props) {
   const classes = useStyles();
 
- /* const alarmButton = () => {
-
-    if (props.packet !== null) {
-      if (props.packet.deadMan) return (
-        <Button autoFocus variant="contained" startIcon={<NotificationsOffIcon />} onClick={props.alarm} style={{ marginLeft: "auto", backgroundColor: colors.primary }}>
-          Turn off alarm
-        </Button>)
-    } else return null;
-
-
-  } */
-
   const switchColor = (props) => {
 
     let connection = props.connected === true;

@@ -51,7 +51,7 @@ function AccelerationMeter(props) {
     return (
 
         <div classes={classes.root}>
-            <NumericIndicator parameter={props.axis} value={props.data} unit="G"/>
+            <NumericIndicator align={"center"} parameter={props.axis} value={props.data} unit="G"/>
             <Typography variant="body2" style={{color: colors.secondary, textAlign: "center"}}>{props.leftLabel}  |  {props.rightLabel} </Typography>
             <Grid justify="center" direction="row" alignItems="center" container>
                 <Grid item className={classes.bar}>  <SegmentedMeter percent={getNegativeDisplay(props.data)} color={colors.secondary} rotation={180} /> </Grid>

@@ -3,6 +3,7 @@ import { Grid } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import SimpleMeter from './basics/SimpleMeter';
+import WhatshotIcon from '@material-ui/icons/Whatshot';
 import colors from '../colors';;
 
 
@@ -13,12 +14,12 @@ const useStyles = makeStyles({
         
     },
     bar: {
-        'margin-top': 20
+        marginTop: 20
     },
 
     icon: {
-        height: '20px',
-        width: '20px',
+        height: 20,
+        width: 20,
         color: colors.grey,
     },
 });
@@ -44,9 +45,10 @@ function Thermometer(props) {
 
     const getTempDisplay = (temp) => {
         let percent = 0; // thermometer tops at 50 celsius
+        const maxScale = 50;
 
-        if (temp !== null && temp >= 50) percent = 1;
-        if (temp !== null && temp < 50 && temp > 0) percent = temp / 50;
+        if (temp !== null && temp >= maxScale) percent = 1;
+        if (temp !== null && temp < maxScale && temp > 0) percent = temp / maxScale;
 
         return percent;
     }
@@ -55,8 +57,9 @@ function Thermometer(props) {
 
         <div>
           <Grid direction="column" alignItems="center" container>
-                <Grid item className={classes.bar}>  <SimpleMeter  percent={getTempDisplay(props.tempSkin)} color={colorSwitch(props.tempSkin)}/> </Grid>
-                {props.showTemp && <Grid item> <Typography variant="subtitle1"> {props.tempSkin} </Typography></Grid>}
+                <Grid item className={classes.bar}>  <SimpleMeter  percent={getTempDisplay(props.temp)} color={colorSwitch(props.temp)} height={props.height} width={props.width}/> </Grid>
+                {props.showTemp && <Grid item> <Typography variant="subtitle1"> {props.temp} </Typography></Grid>}
+                {props.icon && <Grid item> <WhatshotIcon className={classes.icon}/> </Grid>}
             </Grid>
         </div>
 

@@ -140,7 +140,7 @@ class DeviceComponent extends React.Component {
               <PerformanceMeter icon activity={this.state.packet === null ? null : this.state.packet.basicData.activity}/>
             </Grid>
             <Grid item xs={2}>
-              <Thermometer showTemp tempSkin={this.state.packet === null ? null : this.state.packet.basicData.tempSkin}/>
+              <Thermometer showTemp temp={this.state.packet === null ? null : this.state.packet.basicData.tempSkin}/>
             </Grid>
           </Grid>
         </Paper>

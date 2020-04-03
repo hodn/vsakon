@@ -7,7 +7,7 @@ export default function NumericIndicator(props) {
 
     return (
         <div>
-            <Grid justify="center" direction="row" alignItems="center" container>
+            <Grid justify={props.align} direction="row" alignItems="center" container>
                 <Grid item > <Typography variant="h6" style={{ color: colors.secondary, marginRight: 5 }}>{props.parameter}:  </Typography> </Grid>
                 <Grid item > <Typography variant="h6"> {props.value + " " + props.unit}  </Typography> </Grid>
             </Grid>
