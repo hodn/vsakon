@@ -36,9 +36,10 @@ class DeviceComponent extends React.Component {
 
     this.state = {
       packet: null,
-      timeSeries: [],
+      activityGraph: [],
+      heartRateGraph: [],
       connected: false,
-      detailOpen: false,
+      detailOpen: false
     }
 
     this.alarmOff = this.alarmOff.bind(this);
@@ -54,21 +55,23 @@ class DeviceComponent extends React.Component {
 
     // Listener for data for the exact device
     ipcRenderer.on(this.props.devId.toString(), (event, arg) => {
+      
       // Connection checker
-      if (this.state.timeSeries.length === 0) setInterval(this.checkDeviceConnection, 2000);
+      setTimeout(this.checkDeviceConnection, 6000);
 
       const packet = arg.packet;
-      const timeSeries = arg.timeSeries;
+      const activityGraph = arg.activityGraph;
+      const heartRateGraph = arg.heartRateGraph;
+      const connected = true;
 
       // Avoiding collision of same packets
       if (packet !== this.state.packet) {
 
         this._isMounted && this.setState((state, props) => ({
-          packet: packet,
-          connected: true,
-          timeSeries: timeSeries,
-          randomHR: Math.floor(Math.random() * 200)
-
+          packet,
+          activityGraph,
+          heartRateGraph,
+          connected
         }))
 
       }
@@ -91,12 +94,13 @@ class DeviceComponent extends React.Component {
       const time = this.state.packet.basicData.timestamp;
 
       // No data for 6 seconds - disconnected state
-      if (Date.now() - time > 6000) {
+      if (Date.now() - time > 5000) {
 
         this._isMounted && this.setState((state, props) => ({
           connected: false,
           packet: null,
-          timeSeries: []
+          activityGraph: [],
+          heartRateGraph: []
         }))
 
       }
@@ -144,8 +148,15 @@ class DeviceComponent extends React.Component {
             </Grid>
           </Grid>
         </Paper>
-        <DeviceDialog devId={this.props.devId} packet={this.state.packet} timeSeries={this.state.timeSeries} connected={this.state.connected} 
-        alarm={this.alarmOff} open={this.state.detailOpen} close={this.closeDetail}/>
+        <DeviceDialog 
+        devId={this.props.devId} 
+        packet={this.state.packet} 
+        heartRateGraph={this.state.heartRateGraph} 
+        activityGraph={this.state.activityGraph} 
+        connected={this.state.connected} 
+        alarm={this.alarmOff} 
+        open={this.state.detailOpen} 
+        close={this.closeDetail}/>
       </div>
 
     );

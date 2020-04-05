@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import NodeDetail from '../components/NodeDetail';
+import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries } from 'react-vis';
 
 export default function DeviceView(passedProps) {
     let props = passedProps.initProps;
@@ -55,12 +56,23 @@ export default function DeviceView(passedProps) {
                 </Grid>
 
                 <Grid item>
-                   <Paper><DeviceControl initProps={props} /> </Paper>
+                    <Paper><DeviceControl initProps={props} /> </Paper>
                 </Grid>
 
                 <Grid item>
                     <Paper className={classes.nodes} elevation={5}><NodeDetail initProps={props} /></Paper>
                 </Grid>
+
+                <XYPlot
+                    width={300}
+                    height={300}>
+                    <HorizontalGridLines />
+                    <LineSeries
+                        color="red"
+                        data={props.activityGraph} />
+                    <XAxis />
+                    <YAxis title="nat" />
+                </XYPlot>
 
             </Grid>
         </div>

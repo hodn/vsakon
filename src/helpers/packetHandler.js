@@ -14,31 +14,32 @@ module.exports = class PacketHandler {
             this.packets[packet.basicData.devId] = packet;
         
         } // If the packet is newer than the stored one - avoiding collision of receivers 
-        else if (this.packets[packet.basicData.devId].timestamp < packet.basicData.timestamp){
+        else if (this.packets[packet.basicData.devId].basicData.timestamp < packet.basicData.timestamp){
             this.packets[packet.basicData.devId] = packet;
 
         }
 
+        // Because 2 and 3 are special values for measuring state of the sensor
         let specialHeartRatePacket = packet;
         if (specialHeartRatePacket.basicData.heartRate < 4) specialHeartRatePacket.basicData.heartRate = 0;
 
         this.appendToGraph(packet, this.activityGraphs, 'activity');
         this.appendToGraph(specialHeartRatePacket, this.heartRateGraphs, 'heartRate');
 
-        //this.sendData(packet.basicData.devId); // send to Renderer
-
-        console.log(this.heartRateGraphs[1]);
+        this.sendData(packet.basicData.devId); // send to Renderer
 
     }
 
     sendData(id) {
         // Sending the packet to the renderer
         const packet = this.packets[id];
-        const timeSeries = this.graphData[id];
+        const activityGraph = this.activityGraphs[id];
+        const heartRateGraph = this.heartRateGraphs[id];
 
         const data = {
             packet,
-            timeSeries
+            activityGraph,
+            heartRateGraph
         };
 
         this.event.reply(id.toString(), data);
