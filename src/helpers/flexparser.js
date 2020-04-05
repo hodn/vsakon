@@ -113,7 +113,7 @@ function parseNodeData(rawNodeArray){
     
     let nodeJSON = {};
 
-    for(i = 0; i < 8; i++){
+    for(i = 0; i < 9; i++){
         
         const tempSkin = convertTemprature(rawNodeArray[0 + i*2], rawNodeArray[1 + i*2]);
         const tempCloth = convertTemprature(rawNodeArray[18 + i*2], rawNodeArray[19 + i*2]);

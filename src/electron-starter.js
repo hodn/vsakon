@@ -169,7 +169,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             const parsedPacket = FlexParser.parseFlexiData(rawPacket);
                             // Packet stored for timeseries and sent to Renderer
                             packetHandler.storeAndSendData(parsedPacket);
-                            console.log(parsedPacket)
+                            console.log(parsedPacket.basicData.heartRate)
                         
                         } catch (error) {
                             //console.log(error.message)

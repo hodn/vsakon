@@ -39,6 +39,10 @@ const useStyles = makeStyles({
         margin: 5,
         color: "black"
     },
+    name: {
+        color: "black",
+        marginLeft: 5
+    }
 });
 
 
@@ -93,7 +97,7 @@ function DeviceStatus(props) {
                 <Grid item>  <BatteryIndicator className={classes.battery} batteryPercentage={getBatteryPercentage(props)} /> </Grid>
                 <Grid item>  <GpsNotFixedIcon className={classes.icon} style={ {visibility: checkGps(props)}} /> </Grid>
                 <Grid item>  <SettingsInputComponentIcon className={classes.icon} style={ {visibility: checkNodes(props)}}/> </Grid>
-                <Grid item>  <Typography style={{ color: "black"}} variant="h6" >{props.name}</Typography> </Grid>
+                <Grid item>  <Typography className={classes.name} variant="h6" >{props.name}</Typography> </Grid>
             </Grid>
         </div>
 

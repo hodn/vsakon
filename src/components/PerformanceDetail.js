@@ -24,7 +24,7 @@ export default function PerformanceDetail(passedProps) {
                 <Grid item>
                     <NumericIndicator justify={"flex-start"} parameter={"SP"} value={80} unit="%" />
                     <NumericIndicator justify={"flex-start"} parameter={"EE"} value={4.5} unit="W/kg" />
-                    <NumericIndicator justify={"flex-start"} parameter={"ACT"} value={props.packet === null ? 0 : props.packet.basicData.activity} unit="nat" />
+                    <NumericIndicator justify={"flex-start"} parameter={"Activity"} value={props.packet === null ? 0 : props.packet.basicData.activity} unit="nat" />
                     <Chip label="80 kg" variant="outlined" size="small"/>
                     <Chip label="24 y.o." variant="outlined" size="small"/>
                     <Chip label="31 ml/min/kg" variant="outlined" size="small"/>

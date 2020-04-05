@@ -6,6 +6,7 @@ import ReactiveGauge from "../components/ReactiveGauge";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import NodeDetail from '../components/NodeDetail';
 
 export default function DeviceView(passedProps) {
     let props = passedProps.initProps;
@@ -21,8 +22,7 @@ export default function DeviceView(passedProps) {
         },
 
         paper: {
-            padding: 20,
-            height: 220
+            padding: 20
         },
     });
     const classes = useStyles();
@@ -56,6 +56,9 @@ export default function DeviceView(passedProps) {
                     <Paper className={classes.paper} elevation={5}><DeviceControl initProps={props} /></Paper>
                 </Grid>
 
+                <Grid item>
+                    <Paper className={classes.paper} elevation={5}><NodeDetail initProps={props} /></Paper>
+                </Grid>
 
             </Grid>
         </div>

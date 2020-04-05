@@ -24,7 +24,7 @@ export class MainView extends React.Component {
     for (let i = 1; i < 31; i++) {
 
       this._isMounted && this.setState((state, props) => ({
-        devComponents: [...state.devComponents, <Grid item xs={2} key={"item" + i}><DeviceComponent devId={i} key={i} /> </Grid>]
+        devComponents: [...state.devComponents, <Grid item xs={2} key={i}><DeviceComponent devId={i} key={i} /> </Grid>]
       }))
     }
   }

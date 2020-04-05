@@ -175,7 +175,7 @@ class TopBar extends React.Component {
               {this.state.recording && <SaveIcon className={classes.icon} style={{ color: colors.green }} />}
 
               {this.getPortIndication().map((indication) => {
-                return (<Tooltip title={indication.port}>
+                return (<Tooltip key={indication.port} title={indication.port}>
                   <PowerIcon className={classes.icon} style={{ color: indication.color }} />
                 </Tooltip>)
               })}
