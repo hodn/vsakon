@@ -13,17 +13,19 @@ export default function DeviceView(passedProps) {
 
     const useStyles = makeStyles({
 
-        root: {
+        control: {
 
 
         },
-        bar: {
-            marginTop: props.top
+        topRow: {
+            height: 220,
+            padding: 30
         },
 
-        paper: {
+        nodes: {
             padding: 20
         },
+
     });
     const classes = useStyles();
 
@@ -33,31 +35,31 @@ export default function DeviceView(passedProps) {
             <Grid
                 container
                 direction="row"
-                justify="flex-start"
+                justify="center"
                 alignItems="flex-start"
-                spacing={3}
+                spacing={2}
             >
 
                 <Grid item>
-                    <Paper className={classes.paper} elevation={5}>
+                    <Paper className={classes.topRow} elevation={5}>
                         <ReactiveGauge hr={props.packet === null ? null : props.packet.basicData.heartRate} height={250} width={250} left={0} top={40} margin={-20} />
                     </Paper>
                 </Grid>
 
                 <Grid item>
-                    <Paper className={classes.paper} elevation={5}><PerformanceDetail initProps={props} /></Paper>
+                    <Paper className={classes.topRow} elevation={5}><PerformanceDetail initProps={props} /></Paper>
                 </Grid>
 
                 <Grid item>
-                    <Paper className={classes.paper} elevation={5}><TemperatureDetail initProps={props} /></Paper>
+                    <Paper className={classes.topRow} elevation={5}><TemperatureDetail initProps={props} /></Paper>
                 </Grid>
 
                 <Grid item>
-                    <Paper className={classes.paper} elevation={5}><DeviceControl initProps={props} /></Paper>
+                   <Paper><DeviceControl initProps={props} /> </Paper>
                 </Grid>
 
                 <Grid item>
-                    <Paper className={classes.paper} elevation={5}><NodeDetail initProps={props} /></Paper>
+                    <Paper className={classes.nodes} elevation={5}><NodeDetail initProps={props} /></Paper>
                 </Grid>
 
             </Grid>

@@ -16,7 +16,7 @@ export default function PerformanceDetail(passedProps) {
                 direction="row"
                 justify="center"
                 alignItems="center"
-                spacing={2}
+                spacing={4}
             >
 
                 <Grid item> <PerformanceMeter icon activity={props.packet === null ? null : props.packet.basicData.activity} height={130} width={18} top={10}/> </Grid>
@@ -24,7 +24,7 @@ export default function PerformanceDetail(passedProps) {
                 <Grid item>
                     <NumericIndicator justify={"flex-start"} parameter={"SP"} value={80} unit="%" />
                     <NumericIndicator justify={"flex-start"} parameter={"EE"} value={4.5} unit="W/kg" />
-                    <NumericIndicator justify={"flex-start"} parameter={"Activity"} value={props.packet === null ? 0 : props.packet.basicData.activity} unit="nat" />
+                    <NumericIndicator justify={"flex-start"} parameter={"Activity"} value={props.packet === null ? "--" : props.packet.basicData.activity} unit="nat" />
                     <Chip label="80 kg" variant="outlined" size="small"/>
                     <Chip label="24 y.o." variant="outlined" size="small"/>
                     <Chip label="31 ml/min/kg" variant="outlined" size="small"/>
