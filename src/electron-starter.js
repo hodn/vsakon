@@ -157,7 +157,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
                     // Connecting (opening) port after the parser was configured
                     portHandler.connect();
-
                     // Listener for data from port
                     parser.on('data', function (data) {
 
@@ -169,10 +168,10 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             const parsedPacket = FlexParser.parseFlexiData(rawPacket);
                             // Packet stored for timeseries and sent to Renderer
                             packetHandler.storeAndSendData(parsedPacket);
-                            console.log(parsedPacket.basicData.heartRate)
+                            console.log(parsedPacket.basicData.activity);
                         
                         } catch (error) {
-                            //console.log(error.message)
+                            console.log(error.message)
 
                             // Devices out of sync - sending invalid data format
                             if (error.message === "Invalid data format") {
