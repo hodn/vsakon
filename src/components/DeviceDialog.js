@@ -62,7 +62,7 @@ export default function DeviceDialog(props) {
 
   return (
     <div>
-      <Dialog style={{padding: 0}} fullScreen open={props.open} TransitionComponent={Transition}>
+      <Dialog style={{padding: 10}} fullScreen open={props.open} TransitionComponent={Transition}>
         <AppBar style={{ backgroundColor: switchColor(props), margin: 0 }} className={classes.appBar}>
           <Toolbar>
           <DeviceStatus direction={"row"} devId={props.devId} connected={props.connected} packet={props.packet} name={"Miroslav Novotný"}/>

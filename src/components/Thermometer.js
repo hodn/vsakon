@@ -6,27 +6,24 @@ import SimpleMeter from './basics/SimpleMeter';
 import WhatshotIcon from '@material-ui/icons/Whatshot';
 import colors from '../colors';;
 
-
-const useStyles = makeStyles({
-
-    root: {
-
-        
-    },
-    bar: {
-        marginTop: 20
-    },
-
-    icon: {
-        height: 20,
-        width: 20,
-        color: colors.grey,
-    },
-});
-
-
 function Thermometer(props) {
 
+    const useStyles = makeStyles({
+
+        root: {
+    
+            
+        },
+        bar: {
+            marginTop: props.top
+        },
+    
+        icon: {
+            height: 20,
+            width: 20,
+            color: colors.grey,
+        },
+    });
     const classes = useStyles();
 
     const colorSwitch = (temp) => {

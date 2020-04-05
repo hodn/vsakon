@@ -7,21 +7,20 @@ import NumericIndicator from './basics/NumericIndicator';
 import colors from '../colors';
 
 
-const useStyles = makeStyles({
-
-    root: {
-        marginTop: 10
-    },
-    
-    bar: {
-        marginLeft: 5,
-        marginRight: 5
-    },
-});
-
-
 function AccelerationMeter(props) {
 
+    const useStyles = makeStyles({
+
+        root: {
+            
+        },
+        
+        bar: {
+            marginLeft: 5,
+            marginRight: 5
+        },
+    });
+    
     const classes = useStyles();
     
     
@@ -50,7 +49,7 @@ function AccelerationMeter(props) {
 
     return (
 
-        <div classes={classes.root}>
+        <div className={classes.root}>
             <NumericIndicator align={"center"} parameter={props.axis} value={props.data} unit="G"/>
             <Typography variant="body2" style={{color: colors.secondary, textAlign: "center"}}>{props.leftLabel}  |  {props.rightLabel} </Typography>
             <Grid justify="center" direction="row" alignItems="center" container>

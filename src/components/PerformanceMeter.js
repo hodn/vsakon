@@ -3,29 +3,26 @@ import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SimpleMeter from './basics/SimpleMeter';
 import FlashOnIcon from '@material-ui/icons/FlashOn';
-import colors from '../colors';;
-
-
-const useStyles = makeStyles({
-
-    root: {
-
-        
-    },
-    bar: {
-        marginTop: 20
-    },
-
-    icon: {
-        height: 20,
-        width: 20,
-        color: colors.grey,
-    },
-});
-
+import colors from '../colors';
 
 function PerformanceMeter(props) {
 
+    const useStyles = makeStyles({
+
+        root: {
+    
+            
+        },
+        bar: {
+            marginTop: props.top
+        },
+    
+        icon: {
+            height: 20,
+            width: 20,
+            color: colors.grey,
+        },
+    });
     const classes = useStyles();
 
     const getActivityDisplay = (activity) => {

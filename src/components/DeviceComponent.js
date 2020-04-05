@@ -137,10 +137,10 @@ class DeviceComponent extends React.Component {
               <ReactiveGauge hr={this.state.packet === null ? null : this.state.packet.basicData.heartRate} height={150} width={160} top={40} left={10} margin={-8} />
             </Grid>
             <Grid item xs={2}>
-              <PerformanceMeter icon activity={this.state.packet === null ? null : this.state.packet.basicData.activity}/>
+              <PerformanceMeter icon activity={this.state.packet === null ? null : this.state.packet.basicData.activity} top={20}/>
             </Grid>
             <Grid item xs={2}>
-              <Thermometer showTemp temp={this.state.packet === null ? null : this.state.packet.basicData.tempSkin}/>
+              <Thermometer showTemp temp={this.state.packet === null ? null : this.state.packet.basicData.tempSkin} top={20}/>
             </Grid>
           </Grid>
         </Paper>

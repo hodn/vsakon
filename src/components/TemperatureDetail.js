@@ -13,15 +13,15 @@ export default function TemperatureDetail(passedProps) {
             <Grid
                 container
                 direction="row"
-                justify="start"
+                justify="flex-start"
                 alignItems="center"
                 spacing={4}
             >
-                <Grid item><Thermometer icon temp={props.packet === null ? null : props.packet.basicData.tempSkin} height={130} width={18} /></Grid>
+                <Grid item><Thermometer icon temp={props.packet === null ? null : props.packet.basicData.tempSkin} height={130} width={18} top={35}/></Grid>
                 
-                <Grid item><NumericIndicator align={"start"} parameter={"Skin"} value={props.packet === null ? "--" : props.packet.basicData.tempSkin} unit="°C" />
-                    <NumericIndicator align={"start"} parameter={"Environment"} value={props.packet === null ? "--" : props.packet.basicData.tempCloth} unit="°C" />
-                    <NumericIndicator align={"start"} parameter={"Humidity"} value={props.packet === null ? "--" : props.packet.basicData.humidity} unit="%" />
+                <Grid item><NumericIndicator parameter={"Skin"} value={props.packet === null ? "--" : props.packet.basicData.tempSkin} unit="°C" />
+                    <NumericIndicator parameter={"Environment"} value={props.packet === null ? "--" : props.packet.basicData.tempCloth} unit="°C" />
+                    <NumericIndicator parameter={"Humidity"} value={props.packet === null ? "--" : props.packet.basicData.humidity} unit="%" />
                 </Grid>
 
             </Grid>

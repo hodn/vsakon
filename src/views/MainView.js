@@ -38,7 +38,7 @@ export class MainView extends React.Component {
 
     return (
 
-      <div>
+      <div> 
         <Grid container>
           {this.state.devComponents.map((component) => {
             return component;

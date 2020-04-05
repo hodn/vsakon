@@ -1,6 +1,5 @@
 import React from 'react';
 import Chip from '@material-ui/core/Chip';
-import ReactiveGauge from "../components/ReactiveGauge";
 import PerformanceMeter from "../components/PerformanceMeter";
 import AccelerationMeter from "../components/AccelerationMeter";
 import NumericIndicator from '../components/basics/NumericIndicator';
@@ -15,23 +14,20 @@ export default function PerformanceDetail(passedProps) {
             <Grid
                 container
                 direction="row"
-                justify="start"
+                justify="center"
                 alignItems="center"
-                spacing={4}
+                spacing={2}
             >
-                <Grid item>
-                    <Chip label="80 kg" variant="outlined" />
-                    <Chip label="24 y.o." variant="outlined" />
-                    <Chip label="31 ml/min/kg" variant="outlined" />
-                    <ReactiveGauge hr={props.packet === null ? null : props.packet.basicData.heartRate} height={250} width={250} left={10} top={30} margin={-20} />
-                </Grid>
 
-                <Grid item> <PerformanceMeter icon activity={props.packet === null ? null : props.packet.basicData.activity} height={130} width={18} /> </Grid>
+                <Grid item> <PerformanceMeter icon activity={props.packet === null ? null : props.packet.basicData.activity} height={130} width={18} top={10}/> </Grid>
 
                 <Grid item>
-                    <NumericIndicator align={"start"} parameter={"SP"} value={80} unit="%" />
-                    <NumericIndicator align={"start"} parameter={"EE"} value={4.5} unit="W/kg" />
-                    <NumericIndicator align={"start"} parameter={"ACT"} value={props.packet === null ? 0 : props.packet.basicData.activity} unit="nat" />
+                    <NumericIndicator justify={"flex-start"} parameter={"SP"} value={80} unit="%" />
+                    <NumericIndicator justify={"flex-start"} parameter={"EE"} value={4.5} unit="W/kg" />
+                    <NumericIndicator justify={"flex-start"} parameter={"ACT"} value={props.packet === null ? 0 : props.packet.basicData.activity} unit="nat" />
+                    <Chip label="80 kg" variant="outlined" size="small"/>
+                    <Chip label="24 y.o." variant="outlined" size="small"/>
+                    <Chip label="31 ml/min/kg" variant="outlined" size="small"/>
                 </Grid>
 
                 <Grid item>
