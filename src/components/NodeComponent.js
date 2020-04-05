@@ -4,7 +4,6 @@ import Grid from '@material-ui/core/Grid';
 import Chip from '@material-ui/core/Chip';
 import Thermometer from './Thermometer';
 import PerformanceMeter from "./PerformanceMeter";
-import colors from '../colors';
 
 export default function NodeComponent(props) {
 

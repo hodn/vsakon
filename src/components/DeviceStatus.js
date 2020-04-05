@@ -97,7 +97,7 @@ function DeviceStatus(props) {
                 <Grid item>  <BatteryIndicator className={classes.battery} batteryPercentage={getBatteryPercentage(props)} /> </Grid>
                 <Grid item>  <GpsNotFixedIcon className={classes.icon} style={ {visibility: checkGps(props)}} /> </Grid>
                 <Grid item>  <SettingsInputComponentIcon className={classes.icon} style={ {visibility: checkNodes(props)}}/> </Grid>
-                <Grid item>  <Typography className={classes.name} variant="h6" >{" | "+ props.name}</Typography> </Grid>
+                {props.name && <Grid item>  <Typography className={classes.name} variant="h6" >{" | "+ props.name}</Typography> </Grid>}
             </Grid>
         </div>
 
