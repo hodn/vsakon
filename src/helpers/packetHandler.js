@@ -68,7 +68,6 @@ module.exports = class PacketHandler {
             }
             
         });
-
     }
 
     // Appending the data for timeseries

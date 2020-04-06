@@ -78,7 +78,7 @@ function parseBasicData(rawBasicArray){
         accX: convertAcceleration(rawBasicArray[13]),
         accY: convertAcceleration(rawBasicArray[14]),
         accZ: convertAcceleration(rawBasicArray[15]),
-        breathRate: [rawBasicArray[16],rawBasicArray[17]],
+        // breathRate: [rawBasicArray[16],rawBasicArray[17]],
         batteryVoltage: parseEZ14(rawBasicArray[18],rawBasicArray[19]),
         batteryPercentage: convertBatteryVoltage(parseEZ14(rawBasicArray[18],rawBasicArray[19]))
     }
@@ -165,13 +165,12 @@ function convertTemprature(rawOne, rawTwo){
     const parsedValue = parseEZ14(rawOne, rawTwo);
     const convertedValue = (parsedValue - 500.0) / 10.0;
 
-    return convertedValue;
+    return parseFloat(convertedValue);
 }
 
 function convertAcceleration(rawValue){
     
-    const convertedValue = ((rawValue - 127) * 20) / 1000;
-    convertedValue.toFixed(1);
+    const convertedValue = (((rawValue - 127) * 20) / 1000).toFixed(1);
 
     return parseFloat(convertedValue);
 }
@@ -180,7 +179,7 @@ function convertHumidity(rawValue){
     
     const convertedValue = (rawValue - 100.0);
 
-    return convertedValue;
+    return parseInt(convertedValue);
 }
 
 function convertLocationMins(rawMins, secs){
@@ -190,7 +189,7 @@ function convertLocationMins(rawMins, secs){
 
     const minutes = convertedMins + secsToMins
 
-    return minutes;
+    return minutes.toFixed(6);
 }
 
 function convertFixSat(raw){
