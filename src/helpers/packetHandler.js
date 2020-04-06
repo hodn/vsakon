@@ -52,6 +52,16 @@ module.exports = class PacketHandler {
 
     // Resending the state to components that unmounted - mainly in MainView
     resendState(){
+        
+        this.packets.forEach(packet => {
+
+            if (packet !== undefined && Date.now() - packet.basicData.timestamp < 2500) {
+
+                this.sendData(packet.basicData.devId);
+
+            }
+            
+        });
 
     }
 
