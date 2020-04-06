@@ -42,17 +42,17 @@ export default function DeviceView(passedProps) {
                 spacing={2}
             >
 
-                <Grid item>
+                <Grid xs={2} item>
                     <Paper className={classes.topRow} elevation={5}>
                         <ReactiveGauge hr={props.packet === null ? null : props.packet.basicData.heartRate} height={250} width={250} left={0} top={40} margin={-20} />
                     </Paper>
                 </Grid>
 
-                <Grid item>
+                <Grid xs={7} item>
                     <Paper className={classes.topRow} elevation={5}><PerformanceDetail initProps={props} /></Paper>
                 </Grid>
 
-                <Grid item>
+                <Grid xs={3} item>
                     <Paper className={classes.topRow} elevation={5}><TemperatureDetail initProps={props} /></Paper>
                 </Grid>
 
@@ -60,40 +60,40 @@ export default function DeviceView(passedProps) {
                     <Paper><DeviceControl initProps={props} /> </Paper>
                 </Grid>
 
-                <Grid item>
+                <Grid xs={12} item>
                     <Paper className={classes.nodes} elevation={5}><NodeDetail initProps={props} /></Paper>
                 </Grid>
 
                 <Grid item>
-                <XYPlot
-                    width={500}
-                    height={220}
-                    xType="time"
-                    yDomain={[0, 500]}
+                    <XYPlot
+                        width={500}
+                        height={220}
+                        xType="time"
+                        yDomain={[0, 500]}
                     >
-                    <HorizontalGridLines />
-                    <LineSeries
-                        fill={colors.secondary}
-                        data={props.activityGraph} />
-                    <XAxis />
-                    <YAxis title="nat" />
-                </XYPlot>
+                        <HorizontalGridLines />
+                        <LineSeries
+                            fill={colors.secondary}
+                            data={props.activityGraph} />
+                        <XAxis />
+                        <YAxis title="nat" />
+                    </XYPlot>
                 </Grid>
 
                 <Grid item>
-                <XYPlot
-                    width={500}
-                    height={220}
-                    xType="time"
-                    yDomain={[0, 220]}
+                    <XYPlot
+                        width={500}
+                        height={220}
+                        xType="time"
+                        yDomain={[0, 220]}
                     >
-                    <HorizontalGridLines />
-                    <LineSeries
-                        fill={colors.secondary}
-                        data={props.heartRateGraph} />
-                    <XAxis />
-                    <YAxis title="BPM" />
-                </XYPlot>
+                        <HorizontalGridLines />
+                        <LineSeries
+                            fill={colors.secondary}
+                            data={props.heartRateGraph} />
+                        <XAxis />
+                        <YAxis title="BPM" />
+                    </XYPlot>
                 </Grid>
 
             </Grid>

@@ -82,51 +82,19 @@ process.on('uncaughtException', error => {
 //////////////////////////////////////// Parsing data from COM port ////////////////////////////////////////
 // Module for IPC with Renderer
 const ipcMain = electron.ipcMain;
-// SerialPort init
-const SerialPort = require('serialport');
-// Delimiter init for data packets
-const SettingsHandler = require('./helpers/settingsHandler');
-const PortHandler = require('./helpers/portHandler');
-
-const settingsHandler = new SettingsHandler("user-settings.txt");
-settingsHandler.loadSettings();
-
-
-ipcMain.on('change-dir', (event, arg) => {
-
-    electron.dialog.showOpenDialog({
-        properties: ["openDirectory"],
-    }, function (files) {
-        if (files !== undefined) {
-            const newDir = files.toString();
-            settingsHandler.changeDir(newDir);
-        }
-
-    })
-
-})
-
-ipcMain.on('change-com', (event, arg) => {
-
-    const newCOM = arg;
-    settingsHandler.changeCOM(newCOM);
-})
-
-ipcMain.on('settings-info', (event, arg) => {
-    event.sender.send('settings-loaded', { dir: settingsHandler.settings.defaultDir, com: settingsHandler.settings.defaultCOM })
-})
-
 
 // Listens for app start
 ipcMain.on('clear-to-send', (event, arg) => {
 
-    // Import of Flexparser & DataManager lib
+    // Helpers init
     const FlexParser = require('./helpers/flexParser');
+    const SerialPort = require('serialport');
     const PacketHandler = require('./helpers/packetHandler');
+    const PortHandler = require('./helpers/portHandler');
 
-    // Port and state management init
+    // State management init
     let packetHandler = new PacketHandler(event, app);
-
+    
     // Listener for (re)connect receivers - on start and on demand from user
     ipcMain.on('connect-ports', (event, arg) => {
 
@@ -167,7 +135,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             // Raw packets are parsed into JSON object via FlexParser lib
                             const parsedPacket = FlexParser.parseFlexiData(rawPacket);
                             // Packet stored for timeseries and sent to Renderer
-                            packetHandler.storeAndSendData(parsedPacket);
+                            packetHandler.storeAndSendState(parsedPacket);
                         
                         } catch (error) {
                             console.log(error.message)

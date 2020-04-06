@@ -1,14 +1,18 @@
+const RecordHandler = require('./recordHandler');
+
 module.exports = class PacketHandler {
-    constructor(event) {
+    constructor(event, app) {
         this.event = event,
             this.packets = [],
             this.activityGraphs = [],
             this.heartRateGraphs = [],
-            this.recording = false
+            this.recordHandler = new RecordHandler(app);
+            this.recording = false,
+            this.recordingStart = null;
     }
 
     // Storing the state and sending the data to Renderer
-    storeAndSendData(packet) {
+    storeAndSendState(packet) {
 
         const devSlot = packet.basicData.devId - 1;
 
@@ -30,6 +34,8 @@ module.exports = class PacketHandler {
         this.appendToGraph(specialHeartRatePacket, this.heartRateGraphs, 'heartRate');
 
         this.sendData(packet.basicData.devId); // send to Renderer
+
+        if (this.recording === true) this.recordHandler.writeToCsv(packet);
     }
 
     // Sending the packet to the renderer
@@ -111,5 +117,8 @@ module.exports = class PacketHandler {
     setRecording() {
 
         this.recording = !this.recording;
+
+        if (this.recording === true) this.recordHandler.createCsvWriter(new Date());
+        if (this.recording === false) this.recordHandler.stopWriteToCsv();
     }
 }
