@@ -215,6 +215,12 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
+    ipcMain.on("main-view-mounted", (event, arg) => {
+
+        packetHandler.resendState();
+
+    })
+
 
 
 })

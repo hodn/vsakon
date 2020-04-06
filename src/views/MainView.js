@@ -1,7 +1,7 @@
 import React from 'react';
 import DeviceComponent from '../components/DeviceComponent.js';
 import Grid from '@material-ui/core/Grid';
-//const { ipcRenderer } = window.require('electron');
+const { ipcRenderer } = window.require('electron');
 
 
 export class MainView extends React.Component {
@@ -19,7 +19,7 @@ export class MainView extends React.Component {
   componentDidMount() {
 
     this._isMounted = true;
-    //ipcRenderer.send("clear-to-send");
+    ipcRenderer.send("main-view-mounted");
 
     for (let i = 1; i < 31; i++) {
 

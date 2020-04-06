@@ -7,15 +7,18 @@ module.exports = class PacketHandler {
             this.recording = false
     }
 
+    // Storing the state and sending the data to Renderer
     storeAndSendData(packet) {
 
+        const devSlot = packet.basicData.devId - 1;
+
         // First packet stored
-        if (this.packets[packet.basicData.devId] === undefined) {
-            this.packets[packet.basicData.devId] = packet;
+        if (this.packets[devSlot] === undefined) {
+            this.packets[devSlot] = packet;
         
         } // If the packet is newer than the stored one - avoiding collision of receivers 
-        else if (this.packets[packet.basicData.devId].basicData.timestamp < packet.basicData.timestamp){
-            this.packets[packet.basicData.devId] = packet;
+        else if (this.packets[devSlot].basicData.timestamp < packet.basicData.timestamp){
+            this.packets[devSlot] = packet;
 
         }
 
@@ -27,14 +30,16 @@ module.exports = class PacketHandler {
         this.appendToGraph(specialHeartRatePacket, this.heartRateGraphs, 'heartRate');
 
         this.sendData(packet.basicData.devId); // send to Renderer
-
     }
 
-    sendData(id) {
-        // Sending the packet to the renderer
-        const packet = this.packets[id];
-        const activityGraph = this.activityGraphs[id];
-        const heartRateGraph = this.heartRateGraphs[id];
+    // Sending the packet to the renderer
+    sendData(devId) {
+        
+        const devSlot = devId - 1;
+
+        const packet = this.packets[devSlot];
+        const activityGraph = this.activityGraphs[devSlot];
+        const heartRateGraph = this.heartRateGraphs[devSlot];
 
         const data = {
             packet,
@@ -42,28 +47,35 @@ module.exports = class PacketHandler {
             heartRateGraph
         };
 
-        this.event.reply(id.toString(), data);
+        this.event.reply(devId.toString(), data);
     }
 
+    // Resending the state to components that unmounted - mainly in MainView
+    resendState(){
+
+    }
+
+    // Appending the data for timeseries
     appendToGraph(packet, graphSet, valueName) {
 
         const dataPoint = { x: packet.basicData.timestamp, y: packet.basicData[valueName] };
+        const devSlot = packet.basicData.devId - 1;
 
         // If first data for the device
-        if (graphSet[packet.basicData.devId] === undefined) {
+        if (graphSet[devSlot] === undefined) {
 
-            graphSet[packet.basicData.devId] = [dataPoint];
+            graphSet[devSlot] = [dataPoint];
 
         }
         else {
 
             // If timeseries already available 
-            let timeSeries = graphSet[packet.basicData.devId];
+            let timeSeries = graphSet[devSlot];
 
             // Removes the first item - timeseries window adjustment
             if (timeSeries.length > 30) {
 
-                graphSet[packet.basicData.devId].shift();
+                graphSet[devSlot].shift();
             }
 
             // If the data is newer then last data in the timeseries - removes USB receiver collision
@@ -72,11 +84,11 @@ module.exports = class PacketHandler {
                 // If the timeseries resolution is too low - data points too far away -> reset the timeseries
                 if (packet.basicData.timestamp - timeSeries[timeSeries.length - 1].x > 20000) {
 
-                    graphSet[packet.basicData.devId] = [dataPoint];
+                    graphSet[devSlot] = [dataPoint];
 
                 } else {
 
-                    graphSet[packet.basicData.devId].push(dataPoint);
+                    graphSet[devSlot].push(dataPoint);
 
                 }
 
@@ -85,6 +97,7 @@ module.exports = class PacketHandler {
         }
     }
 
+    // Change the state of recording
     setRecording() {
 
         this.recording = !this.recording;
