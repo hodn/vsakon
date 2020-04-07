@@ -7,15 +7,21 @@ module.exports = class PacketHandler {
     }
 
     // Storing the state and sending the data to Renderer
-    storeAndSendState(packet) {
+    storeAndSendState(packet, port) {
 
         const devSlot = packet.basicData.devId - 1;
-        const newPacket = this.packets[devSlot] === undefined ? true : this.packets[devSlot].basicData.timestamp < packet.basicData.timestamp
+        const newPacket = this.packets[devSlot] === undefined ? true : (packet.basicData.timestamp - this.packets[devSlot].basicData.timestamp > 500)
 
         // // If the packet is newer than the stored one - avoiding collision of receivers or first packet
         if (newPacket) {
+            
+            // Sent from port
+            packet.basicData.port = port;
+            
             this.packets[devSlot] = packet;
-            this.sendData(packet.basicData.devId); // send to Renderer for device with ID...
+
+            // Send to Renderer for device with ID...
+            this.sendData(packet.basicData.devId); 
 
             // Because 2 and 3 are special values for measuring state of the sensor
             let specialHeartRatePacket = packet;
@@ -24,11 +30,9 @@ module.exports = class PacketHandler {
             this.appendToGraph(packet, this.activityGraphs, 'activity');
             this.appendToGraph(specialHeartRatePacket, this.heartRateGraphs, 'heartRate');
 
-            return true;
+            return this.packets[devSlot];
 
-        }
-
-        return false;
+        } else return false;
 
     }
 

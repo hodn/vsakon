@@ -137,8 +137,8 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             // Raw packets are parsed into JSON object via FlexParser lib
                             const parsedPacket = FlexParser.parseFlexiData(rawPacket);
                             // Packet stored for timeseries and sent to Renderer
-                            const storedPacket = packetHandler.storeAndSendState(parsedPacket);
-                            
+                            const storedPacket = packetHandler.storeAndSendState(parsedPacket, portHandler.com);
+                            // Packet from receiver is new and stored - recording is ON
                             if(storedPacket && recordHandler.recording) recordHandler.writeToCsv(parsedPacket);
                         
                         } catch (error) {
