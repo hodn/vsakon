@@ -6,7 +6,8 @@ import BatteryIndicator from './BatteryIndicator';
 import GpsNotFixedIcon from '@material-ui/icons/GpsNotFixed';
 import Typography from '@material-ui/core/Typography';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
-import colors from '../colors';;
+import Tooltip from '@material-ui/core/Tooltip';
+import colors from '../colors';
 
 
 const useStyles = makeStyles({
@@ -52,12 +53,12 @@ function DeviceStatus(props) {
 
         let connection = props.connected === true;
         let alarmOn = props.packet === null ? false : props.packet.deadMan;
-                
+
         if (connection) {
-            
+
             if (alarmOn) {
                 return colors.red;
-            }else {
+            } else {
                 return colors.green;
             }
 
@@ -71,33 +72,37 @@ function DeviceStatus(props) {
     }
 
     const getBatteryPercentage = (props) => {
-        if(props.packet !== null){
+        if (props.packet !== null) {
             return props.packet.basicData.batteryPercentage;
-        }else return null;
+        } else return null;
     }
 
     const checkGps = (props) => {
-        if(props.packet !== null && props.packet.locationData !== null){
+        if (props.packet !== null && props.packet.locationData !== null) {
             return "visible";
-        }else return "hidden";
+        } else return "hidden";
     }
 
     const checkNodes = (props) => {
-        if(props.packet !== null && props.packet.nodeData !== null){
+        if (props.packet !== null && props.packet.nodeData !== null) {
             return "visible";
-        }else return "hidden";
+        } else return "hidden";
     }
 
     const classes = useStyles();
     return (
 
-        <div style={ {backgroundColor: switchColor(props)}}>
+        <div style={{ backgroundColor: switchColor(props) }}>
             <Grid direction={props.direction} alignItems="center" container>
-                <Grid item>  <Avatar className={classes.avatar}>{props.devId}</Avatar> </Grid>
+                <Grid item>
+                    <Tooltip title={props.packet === null? "No receiver" : props.packet.basicData.port}>
+                        <Avatar className={classes.avatar}>{props.devId}</Avatar>
+                    </Tooltip>
+                </Grid>
                 <Grid item>  <BatteryIndicator className={classes.battery} batteryPercentage={getBatteryPercentage(props)} /> </Grid>
-                <Grid item>  <GpsNotFixedIcon className={classes.icon} style={ {visibility: checkGps(props)}} /> </Grid>
-                <Grid item>  <SettingsInputComponentIcon className={classes.icon} style={ {visibility: checkNodes(props)}}/> </Grid>
-                {props.name && <Grid item>  <Typography className={classes.name} variant="h6" >{" | "+ props.name}</Typography> </Grid>}
+                <Grid item>  <GpsNotFixedIcon className={classes.icon} style={{ visibility: checkGps(props) }} /> </Grid>
+                <Grid item>  <SettingsInputComponentIcon className={classes.icon} style={{ visibility: checkNodes(props) }} /> </Grid>
+                {props.name && <Grid item>  <Typography className={classes.name} variant="h6" >{" | " + props.name}</Typography> </Grid>}
             </Grid>
         </div>
 

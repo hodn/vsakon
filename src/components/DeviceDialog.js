@@ -17,16 +17,6 @@ const useStyles = makeStyles(theme => ({
     position: 'relative',
   },
 
-  avatar: {
-    height: 30,
-    width: 30,
-    fontSize: 15,
-    fontWeight: 'bold',
-    backgroundColor: 'transparent',
-    color: 'black',
-    borderColor: 'black',
-    borderStyle: 'solid'
-  },
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
