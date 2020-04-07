@@ -91,9 +91,11 @@ ipcMain.on('clear-to-send', (event, arg) => {
     const SerialPort = require('serialport');
     const PacketHandler = require('./helpers/packetHandler');
     const PortHandler = require('./helpers/portHandler');
+    const RecordHandler = require('./helpers/recordHandler');
 
     // State management init
-    let packetHandler = new PacketHandler(event, app);
+    let packetHandler = new PacketHandler(event);
+    let recordHandler = new RecordHandler(app);
     
     // Listener for (re)connect receivers - on start and on demand from user
     ipcMain.on('connect-ports', (event, arg) => {
@@ -135,7 +137,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             // Raw packets are parsed into JSON object via FlexParser lib
                             const parsedPacket = FlexParser.parseFlexiData(rawPacket);
                             // Packet stored for timeseries and sent to Renderer
-                            packetHandler.storeAndSendState(parsedPacket);
+                            const storedPacket = packetHandler.storeAndSendState(parsedPacket);
+                            
+                            if(storedPacket && recordHandler.recording) recordHandler.writeToCsv(parsedPacket);
                         
                         } catch (error) {
                             console.log(error.message)
@@ -179,7 +183,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     ipcMain.on("set-recording", (event, arg) => {
 
-        packetHandler.setRecording();
+        recordHandler.setRecording();
 
     })
 

@@ -9,7 +9,8 @@ module.exports = class RecordHandler {
     constructor(app) {
         this.directory = app.getPath('desktop'),
             this.writer = null,
-            this.filePath = null
+            this.filePath = null,
+            this.recording = false
     }
 
     // Loads user settings file if exists or creates new one with default values
@@ -33,7 +34,16 @@ module.exports = class RecordHandler {
         var that = this;
         setTimeout(function () {
             that.readFromCsv();
-        }, 10000);
+        }, 15000);
+    }
+
+    // Change the state of recording
+    setRecording() {
+
+        this.recording = !this.recording;
+
+        if (this.recording === true) this.createCsvWriter(new Date());
+        if (this.recording === false) this.stopWriteToCsv();
     }
 
     writeToCsv(packet) {
@@ -62,7 +72,7 @@ module.exports = class RecordHandler {
     }
 
     readFromCsv(path = this.filePath) {
-
+        
         fs.createReadStream(path)
             .pipe(csvParser({ separator: ';' }))
             .on('data', (data) => console.log(data))

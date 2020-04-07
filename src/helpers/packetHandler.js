@@ -1,46 +1,40 @@
-const RecordHandler = require('./recordHandler');
-
 module.exports = class PacketHandler {
-    constructor(event, app) {
+    constructor(event) {
         this.event = event,
             this.packets = [],
             this.activityGraphs = [],
-            this.heartRateGraphs = [],
-            this.recordHandler = new RecordHandler(app);
-            this.recording = false,
-            this.recordingStart = null;
+            this.heartRateGraphs = []
     }
 
     // Storing the state and sending the data to Renderer
     storeAndSendState(packet) {
 
         const devSlot = packet.basicData.devId - 1;
+        const newPacket = this.packets[devSlot] === undefined ? true : this.packets[devSlot].basicData.timestamp < packet.basicData.timestamp
 
-        // First packet stored
-        if (this.packets[devSlot] === undefined) {
+        // // If the packet is newer than the stored one - avoiding collision of receivers or first packet
+        if (newPacket) {
             this.packets[devSlot] = packet;
-        
-        } // If the packet is newer than the stored one - avoiding collision of receivers 
-        else if (this.packets[devSlot].basicData.timestamp < packet.basicData.timestamp){
-            this.packets[devSlot] = packet;
+            this.sendData(packet.basicData.devId); // send to Renderer for device with ID...
+
+            // Because 2 and 3 are special values for measuring state of the sensor
+            let specialHeartRatePacket = packet;
+            if (specialHeartRatePacket.basicData.heartRate < 4) specialHeartRatePacket.basicData.heartRate = 0;
+
+            this.appendToGraph(packet, this.activityGraphs, 'activity');
+            this.appendToGraph(specialHeartRatePacket, this.heartRateGraphs, 'heartRate');
+
+            return true;
 
         }
 
-        // Because 2 and 3 are special values for measuring state of the sensor
-        let specialHeartRatePacket = packet;
-        if (specialHeartRatePacket.basicData.heartRate < 4) specialHeartRatePacket.basicData.heartRate = 0;
+        return false;
 
-        this.appendToGraph(packet, this.activityGraphs, 'activity');
-        this.appendToGraph(specialHeartRatePacket, this.heartRateGraphs, 'heartRate');
-
-        this.sendData(packet.basicData.devId); // send to Renderer
-
-        if (this.recording === true) this.recordHandler.writeToCsv(packet);
     }
 
     // Sending the packet to the renderer
     sendData(devId) {
-        
+
         const devSlot = devId - 1;
 
         const packet = this.packets[devSlot];
@@ -57,8 +51,8 @@ module.exports = class PacketHandler {
     }
 
     // Resending the state to components that unmounted - mainly in MainView
-    resendState(){
-        
+    resendState() {
+
         this.packets.forEach(packet => {
 
             if (packet !== undefined && Date.now() - packet.basicData.timestamp < 2500) {
@@ -66,7 +60,7 @@ module.exports = class PacketHandler {
                 this.sendData(packet.basicData.devId);
 
             }
-            
+
         });
     }
 
@@ -93,31 +87,19 @@ module.exports = class PacketHandler {
                 graphSet[devSlot].shift();
             }
 
-            // If the data is newer then last data in the timeseries - removes USB receiver collision
-            if (packet.basicData.timestamp > timeSeries[timeSeries.length - 1].x) {
+            // If the timeseries resolution is too low - data points too far away -> reset the timeseries
+            if (packet.basicData.timestamp - timeSeries[timeSeries.length - 1].x > 20000) {
 
-                // If the timeseries resolution is too low - data points too far away -> reset the timeseries
-                if (packet.basicData.timestamp - timeSeries[timeSeries.length - 1].x > 20000) {
+                graphSet[devSlot] = [dataPoint];
 
-                    graphSet[devSlot] = [dataPoint];
+            } else {
 
-                } else {
-
-                    graphSet[devSlot].push(dataPoint);
-
-                }
+                graphSet[devSlot].push(dataPoint);
 
             }
 
+
+
         }
-    }
-
-    // Change the state of recording
-    setRecording() {
-
-        this.recording = !this.recording;
-
-        if (this.recording === true) this.recordHandler.createCsvWriter(new Date());
-        if (this.recording === false) this.recordHandler.stopWriteToCsv();
     }
 }
