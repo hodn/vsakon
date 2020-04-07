@@ -57,9 +57,9 @@ export default function DeviceView(passedProps) {
                     <Paper className={classes.topRow} elevation={5}><TemperatureDetail initProps={props} /></Paper>
                 </Grid>
 
-                {/* <Grid item>
+                { <Grid item>
                     <Paper><DeviceControl initProps={props} /> </Paper>
-                </Grid> */}
+                </Grid> }
 
                 <Grid xs ={12} item>
                     <div className={classes.nodes} elevation={5}><NodeDetail initProps={props} /></div>

@@ -100,10 +100,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
     // Listener for (re)connect receivers - on start and on demand from user
     ipcMain.on('connect-ports', (event, arg) => {
 
-        // Removes the old listeners when user instructs to Find Receivers
-        ipcMain.removeAllListeners("sync-devices");
-        ipcMain.removeAllListeners("remove-alarm");
-
         // Returns all Flexiguard receivers - ports
         SerialPort.list().then(ports => {
 
@@ -151,7 +147,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             // Packet stored for timeseries and sent to Renderer
                             const storedPacket = packetHandler.storeAndSendState(parsedPacket, portHandler.com);
                             // Packet from receiver is new and stored - recording is ON
-                            if (storedPacket) console.log(storedPacket.basicData.devId);
+                            if (storedPacket && recordHandler.recording) recordHandler.writeToCsv(storedPacket);
 
                         } catch (error) {
                             console.log(error.message)
@@ -180,7 +176,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
                     try {
 
                         portHandler.removeAlarm(arg);
-                        console.log("alarm: " + arg)
 
                     } catch (error) {
                         console.log(error);

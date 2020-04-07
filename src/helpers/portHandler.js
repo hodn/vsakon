@@ -158,7 +158,7 @@ module.exports = class PortHandler {
 
             } else {
                 // Alarm off packet written
-                console.log("Removed alarm" + devId);
+                console.log("Removed alarm: " + devId);
                 port.drain(function (err) {
                     if (err) {
 

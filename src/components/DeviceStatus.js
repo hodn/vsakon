@@ -78,12 +78,6 @@ function DeviceStatus(props) {
         } else return null;
     }
 
-    const checkGps = (props) => {
-        if (props.packet !== null && props.packet.locationData !== null) {
-            return "visible";
-        } else return "hidden";
-    }
-
     const checkNodes = (props) => {
         if (props.packet !== null && props.packet.nodeData !== null) {
             return "visible";
