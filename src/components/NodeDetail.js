@@ -31,9 +31,9 @@ export default function NodeDetail(passedProps) {
             <Grid
                 container
                 direction="row"
-                justify="flex-start"
+                justify="center"
                 alignItems="center"
-                spacing={5}
+                spacing={2}
             >
              {getNodes().map((component) => {
                 return component;

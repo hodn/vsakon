@@ -37,7 +37,7 @@ module.exports = class RecordHandler {
     }
 
     writeToCsv(packet) {
-        this.writer.write(this.formatCsv(packet))
+        this.writer.write(this.formatToCsv(packet))
     }
 
     stopWriteToCsv() {
@@ -45,7 +45,7 @@ module.exports = class RecordHandler {
         this.writer.end()
     }
 
-    formatCsv(packet) {
+    formatToCsv(packet) {
 
         const convert = (value) => this.dotToComma(value);
         let basic = packet.basicData;

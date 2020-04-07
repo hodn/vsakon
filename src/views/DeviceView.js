@@ -21,11 +21,12 @@ export default function DeviceView(passedProps) {
         },
         topRow: {
             height: 220,
-            padding: 30
+            padding: 20
         },
 
         nodes: {
-            padding: 20
+            padding: 20,
+            widht: 1280
         },
 
     });
@@ -38,30 +39,30 @@ export default function DeviceView(passedProps) {
                 container
                 direction="row"
                 justify="center"
-                alignItems="flex-start"
-                spacing={2}
+                alignItems="center"
+                spacing={1}
             >
 
-                <Grid xs={2} item>
+                <Grid item>
                     <Paper className={classes.topRow} elevation={5}>
                         <ReactiveGauge hr={props.packet === null ? null : props.packet.basicData.heartRate} height={250} width={250} left={0} top={40} margin={-20} />
                     </Paper>
                 </Grid>
 
-                <Grid xs={7} item>
+                <Grid item>
                     <Paper className={classes.topRow} elevation={5}><PerformanceDetail initProps={props} /></Paper>
                 </Grid>
 
-                <Grid xs={3} item>
+                <Grid item>
                     <Paper className={classes.topRow} elevation={5}><TemperatureDetail initProps={props} /></Paper>
                 </Grid>
 
-                <Grid item>
+                {/* <Grid item>
                     <Paper><DeviceControl initProps={props} /> </Paper>
-                </Grid>
+                </Grid> */}
 
-                <Grid xs={12} item>
-                    <Paper className={classes.nodes} elevation={5}><NodeDetail initProps={props} /></Paper>
+                <Grid xs ={12} item>
+                    <div className={classes.nodes} elevation={5}><NodeDetail initProps={props} /></div>
                 </Grid>
 
                 <Grid item>
