@@ -80,14 +80,14 @@ module.exports = class PortHandler {
     }
 
     // Sends syncing signal to all devices - all ports
-    sendSync() {
+    sendSync(forced, delay) {
 
         this.invalidDataCount += 1;
 
-        let stopArray = new Uint8Array([255, 251, 255, 1, 1, 1, 255, 0]);
-        let syncArray = new Uint8Array([255, 251, 255, 2, 2, 2, 255, 0]);
+        const stopArray = new Uint8Array([255, 251, 255, 1, 1, 1, 255, 0]);
+        const syncArray = new Uint8Array([255, 251, 255, 2, 2, 2, 255, 0]);
 
-        let port = this.port;
+        const port = this.port;
 
         // Stop and flush port -> call sendSyncSignal function
         const stopAndSync = () => port.write(stopArray, function (err) {
@@ -105,14 +105,16 @@ module.exports = class PortHandler {
                         throw Error(port + " not flushed")
 
                     } else {
-                        setTimeout(sendSyncSignal, 1500); //sends Sync signal
+                        setTimeout(function() {
+                            sendSyncSignal(port);
+                        }, 50); //sends Sync signal
                     }
                 })
             }
         })
 
         // Send sync signal and flush port
-        const sendSyncSignal = () => port.write(syncArray, function (err) {
+        const sendSyncSignal = (port) => port.write(syncArray, function (err) {
 
             if (err) {
 
@@ -132,10 +134,10 @@ module.exports = class PortHandler {
         })
 
         // If there are 3 invalid packets in the row - sync devices & reconnect the port
-        if (this.invalidDataCount >= 3) {
+        if (this.invalidDataCount >= 3 || forced) {
 
             this.invalidDataCount = 0;
-            stopAndSync();
+            setTimeout(stopAndSync, delay)
 
         }
 

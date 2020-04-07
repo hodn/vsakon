@@ -15,7 +15,7 @@ export default function ResetMenu() {
     const handleClose = (event) => {
         setAnchorEl(null);
 
-        if(event === 'devices') console.log("devs");
+        if(event === 'devices') ipcRenderer.send("sync-devices");
         if(event === 'receivers') ipcRenderer.send("connect-ports");
     };
 

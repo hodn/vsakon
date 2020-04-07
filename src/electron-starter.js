@@ -96,9 +96,13 @@ ipcMain.on('clear-to-send', (event, arg) => {
     // State management init
     let packetHandler = new PacketHandler(event);
     let recordHandler = new RecordHandler(app);
-    
+
     // Listener for (re)connect receivers - on start and on demand from user
     ipcMain.on('connect-ports', (event, arg) => {
+
+        // Removes the old listeners when user instructs to Find Receivers
+        ipcMain.removeAllListeners("sync-devices");
+        ipcMain.removeAllListeners("remove-alarm");
 
         // Returns all Flexiguard receivers - ports
         SerialPort.list().then(ports => {
@@ -118,8 +122,8 @@ ipcMain.on('clear-to-send', (event, arg) => {
         ).then(selectedPorts => {
 
             // For every Flexiguard port
-            selectedPorts.forEach(port => {
-
+            for (let index = 0; index < selectedPorts.length; index++) {
+                const port = selectedPorts[index];
                 const portHandler = new PortHandler(port, event);
 
                 // Get data from port - init parser, connect and data
@@ -127,6 +131,14 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
                     // Connecting (opening) port after the parser was configured
                     portHandler.connect();
+
+                    ipcMain.on("sync-devices", (event, arg) => {
+
+                        const delay = index * 50; // one after another - against sync collision
+                        const userForcedSync = true; // not because of invalid packets
+                        portHandler.sendSync(userForcedSync, delay);
+                    })
+
                     // Listener for data from port
                     parser.on('data', function (data) {
 
@@ -139,8 +151,8 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             // Packet stored for timeseries and sent to Renderer
                             const storedPacket = packetHandler.storeAndSendState(parsedPacket, portHandler.com);
                             // Packet from receiver is new and stored - recording is ON
-                            if(storedPacket && recordHandler.recording) recordHandler.writeToCsv(parsedPacket);
-                        
+                            if (storedPacket) console.log(storedPacket.basicData.devId);
+
                         } catch (error) {
                             console.log(error.message)
 
@@ -148,7 +160,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             if (error.message === "Invalid data format") {
 
                                 try {
-                                    portHandler.sendSync();
+                                    const delay = index * 50; // one port after another - against sync collision
+                                    const userForcedSync = false; // sync not forced by user
+                                    portHandler.sendSync(userForcedSync, delay);
                                 } catch (error) {
                                     console.log(error);
                                 }
@@ -174,7 +188,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
                 })
 
 
-            })
+
+            }
+
 
 
         })
