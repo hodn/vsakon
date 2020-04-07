@@ -4,6 +4,7 @@ import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import BatteryIndicator from './BatteryIndicator';
 import GpsNotFixedIcon from '@material-ui/icons/GpsNotFixed';
+import GpsFixedIcon from '@material-ui/icons/GpsFixed';
 import Typography from '@material-ui/core/Typography';
 import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponent';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -89,18 +90,26 @@ function DeviceStatus(props) {
         } else return "hidden";
     }
 
+    const getGpsIcon = (props) => {
+        if (props.packet !== null && props.packet.locationData !== null) {
+
+            if (props.packet.locationData.detected) return <GpsFixedIcon className={classes.icon} />
+            else return <GpsNotFixedIcon className={classes.icon} />
+        } else return <GpsNotFixedIcon className={classes.icon} style={{ visibility: "hidden" }} />
+    }
+
     const classes = useStyles();
     return (
 
         <div style={{ backgroundColor: switchColor(props) }}>
             <Grid direction={props.direction} alignItems="center" container>
                 <Grid item>
-                    <Tooltip title={props.packet === null? "No receiver" : props.packet.basicData.port}>
+                    <Tooltip title={props.packet === null ? "No receiver" : props.packet.basicData.port}>
                         <Avatar className={classes.avatar}>{props.devId}</Avatar>
                     </Tooltip>
                 </Grid>
                 <Grid item>  <BatteryIndicator className={classes.battery} batteryPercentage={getBatteryPercentage(props)} /> </Grid>
-                <Grid item>  <GpsNotFixedIcon className={classes.icon} style={{ visibility: checkGps(props) }} /> </Grid>
+                <Grid item>   {getGpsIcon(props)}  </Grid>
                 <Grid item>  <SettingsInputComponentIcon className={classes.icon} style={{ visibility: checkNodes(props) }} /> </Grid>
                 {props.name && <Grid item>  <Typography className={classes.name} variant="h6" >{" | " + props.name}</Typography> </Grid>}
             </Grid>
