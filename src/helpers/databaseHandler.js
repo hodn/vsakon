@@ -64,7 +64,7 @@ module.exports = class DatabaseHandler {
 
         // Filling the defaultTeam
         for (let index = 0; index < 30; index++) {
-            defaultTeam.members.push(defaultUser);
+            defaultTeam.members.push(defaultUser.id);
         }
 
         return defaultTeam;
@@ -91,6 +91,11 @@ module.exports = class DatabaseHandler {
     getSelectedTeam() {
         const selectedTeamId = this.getSettings().selectedTeam;
         const team = this.db.get("teams").getById(selectedTeamId).value();
+
+        for (let index = 0; index < team.members.length; index++) {
+            team.members[index] = this.db.get("users").getById(team.members[index]).value();
+            
+        }
 
         return team;
     }

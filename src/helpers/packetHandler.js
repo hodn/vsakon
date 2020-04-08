@@ -3,6 +3,7 @@ module.exports = class PacketHandler {
         this.event = event,
             this.packets = [],
             this.profiles = db.getSelectedTeam().members,
+            this.graphLength = db.getSettings().graphLength,
             this.activityGraphs = [],
             this.heartRateGraphs = []
     }
@@ -137,6 +138,6 @@ module.exports = class PacketHandler {
             this.event.reply((index + 1).toString() + "-profile", this.profiles[index]);
         }
         
-       
+       console.log(this.graphLength);
     }
 }
