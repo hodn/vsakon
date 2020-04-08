@@ -18,18 +18,24 @@ module.exports = class PacketHandler {
             
             // Sent from port
             packet.basicData.port = port;
-            
+
+            // Because 2 and 3 are special values for measuring state of the sensor
+            let specialHeartRatePacket = packet;
+            if (specialHeartRatePacket.basicData.heartRate < 4) {
+                specialHeartRatePacket.basicData.heartRate = 0;
+                packet.performanceData = null;
+            } 
+            else {
+                packet.performanceData = this.calculatePerformaceData(packet);
+            }
+
+            this.appendToGraph(packet, this.activityGraphs, 'activity');
+            this.appendToGraph(specialHeartRatePacket, this.heartRateGraphs, 'heartRate');
+
             this.packets[devSlot] = packet;
 
             // Send to Renderer for device with ID...
             this.sendData(packet.basicData.devId); 
-
-            // Because 2 and 3 are special values for measuring state of the sensor
-            let specialHeartRatePacket = packet;
-            if (specialHeartRatePacket.basicData.heartRate < 4) specialHeartRatePacket.basicData.heartRate = 0;
-
-            this.appendToGraph(packet, this.activityGraphs, 'activity');
-            this.appendToGraph(specialHeartRatePacket, this.heartRateGraphs, 'heartRate');
 
             return this.packets[devSlot];
 
@@ -51,7 +57,6 @@ module.exports = class PacketHandler {
             activityGraph,
             heartRateGraph
         };
-
         this.event.reply(devId.toString(), data);
     }
 
@@ -106,5 +111,21 @@ module.exports = class PacketHandler {
 
 
         }
+    }
+
+    calculatePerformaceData(packet){
+        
+        const user = this.profiles[packet.basicData.devId-1];
+        const vRest = (9.99 * parseInt(user.weight) + 6.25 * parseInt(user.height) + 4.92 * parseInt(user.age) + 5) * 0.144762299;
+        let ee = (packet.basicData.heartRate - parseInt(user.hrRest)) / ( parseInt(user.hrMax) - parseInt(user.hrRest)) * (parseInt(user.vMax) - vRest );
+        ee = (((ee + vRest ) * 0.35 ) / user.weight).toFixed(1);
+
+
+        const performanceData = {
+            stehlik: parseInt((100 * packet.basicData.heartRate / user.hrRef).toFixed(0)),
+            ee: parseFloat(ee)
+        }
+
+        return performanceData;
     }
 }

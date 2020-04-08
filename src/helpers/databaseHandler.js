@@ -42,7 +42,7 @@ module.exports = class DatabaseHandler {
             age: 40,
             weight: 80,
             height: 180,
-            hrStill: 70,
+            hrRest: 70,
             hrRef: 80,
             hrMax: 150,
             vMax: 2500,
