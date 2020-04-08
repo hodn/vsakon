@@ -37,7 +37,7 @@ module.exports = class DatabaseHandler {
         const defaultUser = {
             id: "0",
             name: "General",
-            surename: "User",
+            surname: "User",
             note: "This is a default user to be edited",
             age: 40,
             weight: 80,
