@@ -17,8 +17,8 @@ module.exports = class DatabaseHandler {
         const userDataPath = "" //this.app.getPath('userData')
         const adapter = new FileSync(userDataPath + 'db.json');
         const db = low(adapter);
-        db._.mixin(lodashId);
 
+        db._.mixin(lodashId);
         /*
         Team: id, name, note, members (users - id)
         User: id, name, surename, note, age, weight, height, hrStill, hrRef, hrMax, vMax, gender
@@ -35,7 +35,7 @@ module.exports = class DatabaseHandler {
 
     getDefaultUser() {
         const defaultUser = {
-            id: 0,
+            id: "0",
             name: "General",
             surename: "User",
             note: "This is a default user to be edited",
@@ -56,7 +56,7 @@ module.exports = class DatabaseHandler {
 
         const defaultUser = this.getDefaultUser();
         const defaultTeam = {
-            id: 0,
+            id: "0",
             name: "General Team",
             note: "This is a default team to be edited",
             members: []
@@ -72,7 +72,7 @@ module.exports = class DatabaseHandler {
 
     getDefaultSettings() {
         const defaultSettings = {
-            selectedTeam: 1,
+            selectedTeam: "0",
             csvDirectory: this.app.getPath('desktop'),
             csvComponents: { basicData: true, locationData: true, nodeData: true, performanceData: true },
             graphLength: 40,
@@ -86,5 +86,12 @@ module.exports = class DatabaseHandler {
     getSettings() {
         return this.db.get('settings')
             .value()
+    }
+
+    getSelectedTeam() {
+        const selectedTeamId = this.getSettings().selectedTeam;
+        const team = this.db.get("teams").getById(selectedTeamId).value();
+
+        return team;
     }
 }

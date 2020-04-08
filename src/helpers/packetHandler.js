@@ -1,7 +1,8 @@
 module.exports = class PacketHandler {
-    constructor(event) {
+    constructor(event, db) {
         this.event = event,
             this.packets = [],
+            this.profiles = db.getSelectedTeam().members,
             this.activityGraphs = [],
             this.heartRateGraphs = []
     }

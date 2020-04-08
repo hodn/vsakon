@@ -99,8 +99,8 @@ ipcMain.on('clear-to-send', (event, arg) => {
     databaseHandler.initDb();
 
     // State management init
-    const packetHandler = new PacketHandler(event);
-    const recordHandler = new RecordHandler(databaseHandler.getSettings());
+    const packetHandler = new PacketHandler(event, databaseHandler);
+    const recordHandler = new RecordHandler(databaseHandler);
 
     // Listener for (re)connect receivers - on start and on demand from user
     ipcMain.on('connect-ports', (event, arg) => {

@@ -1,12 +1,12 @@
 {
   "teams": [
     {
-      "id": 0,
+      "id": "0",
       "name": "General Team",
       "note": "This is a default team to be edited",
       "members": [
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -20,7 +20,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -34,7 +34,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -48,7 +48,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -62,7 +62,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -76,7 +76,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -90,7 +90,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -104,7 +104,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -118,7 +118,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -132,7 +132,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -146,7 +146,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -160,7 +160,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -174,7 +174,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -188,7 +188,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -202,7 +202,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -216,7 +216,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -230,7 +230,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -244,7 +244,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -258,7 +258,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -272,7 +272,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -286,7 +286,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -300,7 +300,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -314,7 +314,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -328,7 +328,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -342,7 +342,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -356,7 +356,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -370,7 +370,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -384,7 +384,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -398,7 +398,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -412,7 +412,7 @@
           "gender": "Male"
         },
         {
-          "id": 0,
+          "id": "0",
           "name": "General",
           "surename": "User",
           "note": "This is a default user to be edited",
@@ -430,7 +430,7 @@
   ],
   "users": [
     {
-      "id": 0,
+      "id": "0",
       "name": "General",
       "surename": "User",
       "note": "This is a default user to be edited",
@@ -446,7 +446,7 @@
   ],
   "records": [],
   "settings": {
-    "selectedTeam": 1,
+    "selectedTeam": "0",
     "csvDirectory": "C:\\Users\\Hoang\\Desktop",
     "csvComponents": {
       "basicData": true,

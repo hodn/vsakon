@@ -6,9 +6,9 @@ const csvParser = require('csv-parser');
 const path = require('path');
 
 module.exports = class RecordHandler {
-    constructor(settings) {
-        this.directory = settings.csvDirectory,
-            this.components = settings.csvComponents,
+    constructor(db) {
+        this.directory = db.getSettings().csvDirectory,
+            this.components = db.getSettings().csvComponents,
             this.writer = null,
             this.filePath = null,
             this.recording = false
@@ -20,7 +20,7 @@ module.exports = class RecordHandler {
         const date = recordingStart.toISOString().split("T");
         const time = recordingStart.toTimeString().split(":")
 
-        const fileName = date[0] + time[0] + time[1] + ".csv";
+        const fileName = date[0] + "-" + time[0] + time[1] + ".csv";
         this.filePath = path.join(this.directory, fileName);
         this.writer = csvWriter({
             separator: ';',
