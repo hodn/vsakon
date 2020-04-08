@@ -6,8 +6,9 @@ const csvParser = require('csv-parser');
 const path = require('path');
 
 module.exports = class RecordHandler {
-    constructor(app) {
-        this.directory = app.getPath('desktop'),
+    constructor(settings) {
+        this.directory = settings.csvDirectory,
+            this.components = settings.csvComponents,
             this.writer = null,
             this.filePath = null,
             this.recording = false
@@ -72,7 +73,7 @@ module.exports = class RecordHandler {
     }
 
     readFromCsv(path = this.filePath) {
-        
+
         fs.createReadStream(path)
             .pipe(csvParser({ separator: ';' }))
             .on('data', (data) => console.log(data))

@@ -7,13 +7,15 @@ const lodashId = require('lodash-id');
 
 module.exports = class DatabaseHandler {
     constructor(app) {
-        this.path = app.getPath('userData')
+        this.app = app,
+            this.db = null;
     }
 
     // DB initialization
     initDb() {
 
-        const adapter = new FileSync(this.path + '/db.json');
+        const userDataPath = "" //this.app.getPath('userData')
+        const adapter = new FileSync(userDataPath + 'db.json');
         const db = low(adapter);
         db._.mixin(lodashId);
 
@@ -21,8 +23,17 @@ module.exports = class DatabaseHandler {
         Team: id, name, note, members (users - id)
         User: id, name, surename, note, age, weight, height, hrStill, hrRef, hrMax, vMax, gender
         Record: id, path, start, end, members, note
+        Settings: selectedTeam, csvDirectory, csvComponents, Temperatures, graphLength, eventNames
         */
 
+        // Init of new database - if no db json is present
+        db.defaults({ teams: [this.getDefaultTeam()], users: [this.getDefaultUser()], records: [], settings: this.getDefaultSettings() })
+            .write();
+
+        this.db = db;
+    }
+
+    getDefaultUser() {
         const defaultUser = {
             id: 0,
             name: "General",
@@ -38,6 +49,12 @@ module.exports = class DatabaseHandler {
             gender: "Male"
         }
 
+        return defaultUser;
+    }
+
+    getDefaultTeam() {
+
+        const defaultUser = this.getDefaultUser();
         const defaultTeam = {
             id: 0,
             name: "General Team",
@@ -50,8 +67,24 @@ module.exports = class DatabaseHandler {
             defaultTeam.members.push(defaultUser);
         }
 
-        // Init of new database - if no db json is present
-        db.defaults({ teams: [defaultTeam], users: [defaultUser], records: [], settings: {} })
-            .write()
+        return defaultTeam;
+    }
+
+    getDefaultSettings() {
+        const defaultSettings = {
+            selectedTeam: 1,
+            csvDirectory: this.app.getPath('desktop'),
+            csvComponents: { basicData: true, locationData: true, nodeData: true, performanceData: true },
+            graphLength: 40,
+            optimalTemp: [30, 35],
+            eventNames: ["Event 1", "Event 2", "Event 3", "Event 4"]
+        }
+
+        return defaultSettings;
+    }
+
+    getSettings() {
+        return this.db.get('settings')
+            .value()
     }
 }
