@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SimpleMeter from './basics/SimpleMeter';
-import FlashOnIcon from '@material-ui/icons/FlashOn';
+import AccessibilityIcon from '@material-ui/icons/Accessibility';
 import colors from '../colors';
 
 function PerformanceMeter(props) {
@@ -39,8 +39,8 @@ function PerformanceMeter(props) {
 
         <div>
           <Grid direction="column" alignItems="center" container>
-                <Grid item className={classes.bar}>  <SimpleMeter percent={getActivityDisplay(props.activity)} height={props.height} width={props.width} color={colors.secondary}/> </Grid>
-                {props.icon && <Grid item> <FlashOnIcon className={classes.icon}/> </Grid>}
+                <Grid item className={classes.bar}>  <SimpleMeter percent={getActivityDisplay(props.activity)} height={props.height} width={props.width} color={colors.green}/> </Grid>
+                {props.icon && <Grid item> <AccessibilityIcon className={classes.icon}/> </Grid>}
             </Grid>
         </div>
 
