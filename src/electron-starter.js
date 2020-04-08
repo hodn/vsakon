@@ -92,10 +92,14 @@ ipcMain.on('clear-to-send', (event, arg) => {
     const PacketHandler = require('./helpers/packetHandler');
     const PortHandler = require('./helpers/portHandler');
     const RecordHandler = require('./helpers/recordHandler');
+    const DatabaseHandler = require('./helpers/databaseHandler');
 
     // State management init
-    let packetHandler = new PacketHandler(event);
-    let recordHandler = new RecordHandler(app);
+    const packetHandler = new PacketHandler(event);
+    const recordHandler = new RecordHandler(app);
+    const databaseHandler = new DatabaseHandler(app);
+
+    databaseHandler.initDb();
 
     // Listener for (re)connect receivers - on start and on demand from user
     ipcMain.on('connect-ports', (event, arg) => {
