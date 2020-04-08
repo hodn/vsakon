@@ -38,6 +38,7 @@ class DeviceComponent extends React.Component {
       packet: null,
       activityGraph: [],
       heartRateGraph: [],
+      user: null,
       connected: false,
       detailOpen: false
     }
@@ -53,9 +54,16 @@ class DeviceComponent extends React.Component {
 
     this._isMounted = true;
 
+    ipcRenderer.once(this.props.devId.toString() + "-profile", (event, arg) => {
+
+      const user = arg;
+      this._isMounted && this.setState({user});
+
+    })
+
     // Listener for data for the exact device
     ipcRenderer.on(this.props.devId.toString(), (event, arg) => {
-      
+
       // Connection checker
       setTimeout(this.checkDeviceConnection, 6000);
 
@@ -64,19 +72,12 @@ class DeviceComponent extends React.Component {
       const heartRateGraph = arg.heartRateGraph;
       const connected = true;
 
-      // Avoiding collision of same packets
-      if (packet !== this.state.packet) {
-
-        this._isMounted && this.setState((state, props) => ({
-          packet,
-          activityGraph,
-          heartRateGraph,
-          connected
-        }))
-
-      }
-
-
+      this._isMounted && this.setState((state, props) => ({
+        packet,
+        activityGraph,
+        heartRateGraph,
+        connected
+      }))
 
     })
 
@@ -141,22 +142,23 @@ class DeviceComponent extends React.Component {
               <ReactiveGauge hr={this.state.packet === null ? null : this.state.packet.basicData.heartRate} height={150} width={160} top={40} left={10} margin={-8} />
             </Grid>
             <Grid item xs={2}>
-              <PerformanceMeter icon activity={this.state.packet === null ? null : this.state.packet.basicData.activity} top={20}/>
+              <PerformanceMeter icon activity={this.state.packet === null ? null : this.state.packet.basicData.activity} top={20} />
             </Grid>
             <Grid item xs={2}>
-              <Thermometer showTemp temp={this.state.packet === null ? null : this.state.packet.basicData.tempSkin} top={20}/>
+              <Thermometer showTemp temp={this.state.packet === null ? null : this.state.packet.basicData.tempSkin} top={20} />
             </Grid>
           </Grid>
         </Paper>
-        <DeviceDialog 
-        devId={this.props.devId} 
-        packet={this.state.packet} 
-        heartRateGraph={this.state.heartRateGraph} 
-        activityGraph={this.state.activityGraph} 
-        connected={this.state.connected} 
-        alarm={this.alarmOff} 
-        open={this.state.detailOpen} 
-        close={this.closeDetail}/>
+        <DeviceDialog
+          devId={this.props.devId}
+          packet={this.state.packet}
+          heartRateGraph={this.state.heartRateGraph}
+          activityGraph={this.state.activityGraph}
+          user={this.state.user}
+          connected={this.state.connected}
+          alarm={this.alarmOff}
+          open={this.state.detailOpen}
+          close={this.closeDetail} />
       </div>
 
     );

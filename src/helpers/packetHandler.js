@@ -55,13 +55,14 @@ module.exports = class PacketHandler {
         const data = {
             packet,
             activityGraph,
-            heartRateGraph
+            heartRateGraph,
         };
+
         this.event.reply(devId.toString(), data);
     }
 
     // Resending the state to components that unmounted - mainly in MainView
-    resendState() {
+    sendState() {
 
         this.packets.forEach(packet => {
 
@@ -127,5 +128,15 @@ module.exports = class PacketHandler {
         }
 
         return performanceData;
+    }
+
+    sendUserProfiles(){
+        
+        for (let index = 0; index < this.profiles.length; index++) {
+            
+            this.event.reply((index + 1).toString() + "-profile", this.profiles[index]);
+        }
+        
+       
     }
 }
