@@ -1,9 +1,7 @@
 // Library init
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync'); // Synchronous
-
-// Lib for work with IDs
-const lodashId = require('lodash-id');
+const shortid = require('shortid'); // Maker of unique IDs
 
 module.exports = class DatabaseHandler {
     constructor(app) {
@@ -14,11 +12,10 @@ module.exports = class DatabaseHandler {
     // DB initialization
     initDb() {
 
-        const userDataPath = "" //this.app.getPath('userData')
-        const adapter = new FileSync(userDataPath + 'db.json');
+        const userDataPath = this.app.getPath('desktop');
+        const adapter = new FileSync(userDataPath + '/db.json');
         const db = low(adapter);
 
-        db._.mixin(lodashId);
         /*
         Team: id, name, note, members (users - id)
         User: id, name, surename, note, age, weight, height, hrStill, hrRef, hrMax, vMax, gender
@@ -88,15 +85,52 @@ module.exports = class DatabaseHandler {
             .value()
     }
 
-    getSelectedTeam() {
+    getSelectedTeam(membersId = false) {
         const selectedTeamId = this.getSettings().selectedTeam;
-        const team = this.db.get("teams").getById(selectedTeamId).value();
+        let team = this.db.get("teams").cloneDeep().find({ id: selectedTeamId }).value();
+        let members = [];
 
         for (let index = 0; index < team.members.length; index++) {
-            team.members[index] = this.db.get("users").getById(team.members[index]).value();
-            
+            const element = this.db.get("users").find({ id: team.members[index] }).value();
+            members[index] = element;
         }
 
-        return team;
+        if (membersId === true) {
+            return team; // Only with member IDs
+        }
+        else {
+
+            team.members = members
+            return team; // Members as objects
+
+        }
+    }
+
+    addRecord(start, path) {
+
+        let record = {
+            id: shortid.generate(),
+            path,
+            start,
+            end: null,
+            team: this.getSelectedTeam(true),
+            note: null
+        }
+
+        this.db.get('records')
+            .push(record)
+            .write()
+
+        return record.id;
+    }
+
+    updateRecord(id, parameter) {
+
+        this.db.get('records')
+            .find({ id: id })
+            .assign(parameter)
+            .write()
+
+        return id;
     }
 }

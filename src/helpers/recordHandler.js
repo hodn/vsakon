@@ -9,8 +9,10 @@ module.exports = class RecordHandler {
     constructor(db) {
         this.directory = db.getSettings().csvDirectory,
             this.components = db.getSettings().csvComponents,
+            this.db = db,
             this.writer = null,
             this.filePath = null,
+            this.recordId = null,
             this.recording = false
     }
 
@@ -42,18 +44,22 @@ module.exports = class RecordHandler {
     setRecording() {
 
         this.recording = !this.recording;
+        const date = new Date();
 
-        if (this.recording === true) this.createCsvWriter(new Date());
-        if (this.recording === false) this.stopWriteToCsv();
+        if (this.recording === true) {
+            
+            this.createCsvWriter(date);
+            this.recordId = this.db.addRecord(date, this.filePath);
+            
+        }
+        else {
+            this.db.updateRecord(this.recordId, {end: date});
+            this.writer.end()
+        }
     }
 
     writeToCsv(packet) {
         this.writer.write(this.formatToCsv(packet))
-    }
-
-    stopWriteToCsv() {
-
-        this.writer.end()
     }
 
     formatToCsv(packet) {

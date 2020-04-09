@@ -2,7 +2,7 @@ module.exports = class PacketHandler {
     constructor(event, db) {
         this.event = event,
             this.packets = [],
-            this.profiles = db.getSelectedTeam().members,
+            this.profiles = db.getSelectedTeam(false).members,
             this.graphLength = db.getSettings().graphLength,
             this.activityGraphs = [],
             this.heartRateGraphs = []
@@ -16,7 +16,7 @@ module.exports = class PacketHandler {
 
         // // If the packet is newer than the stored one - avoiding collision of receivers or first packet
         if (newPacket) {
-            
+
             // Sent from port
             packet.basicData.port = port;
 
@@ -25,7 +25,7 @@ module.exports = class PacketHandler {
             if (specialHeartRatePacket.basicData.heartRate < 4) {
                 specialHeartRatePacket.basicData.heartRate = 0;
                 packet.performanceData = null;
-            } 
+            }
             else {
                 packet.performanceData = this.calculatePerformaceData(packet);
             }
@@ -36,7 +36,7 @@ module.exports = class PacketHandler {
             this.packets[devSlot] = packet;
 
             // Send to Renderer for device with ID...
-            this.sendData(packet.basicData.devId); 
+            this.sendData(packet.basicData.devId);
 
             return this.packets[devSlot];
 
@@ -115,12 +115,12 @@ module.exports = class PacketHandler {
         }
     }
 
-    calculatePerformaceData(packet){
-        
-        const user = this.profiles[packet.basicData.devId-1];
+    calculatePerformaceData(packet) {
+
+        const user = this.profiles[packet.basicData.devId - 1];
         const vRest = (9.99 * parseInt(user.weight) + 6.25 * parseInt(user.height) + 4.92 * parseInt(user.age) + 5) * 0.144762299;
-        let ee = (packet.basicData.heartRate - parseInt(user.hrRest)) / ( parseInt(user.hrMax) - parseInt(user.hrRest)) * (parseInt(user.vMax) - vRest );
-        ee = (((ee + vRest ) * 0.35 ) / user.weight).toFixed(1);
+        let ee = (packet.basicData.heartRate - parseInt(user.hrRest)) / (parseInt(user.hrMax) - parseInt(user.hrRest)) * (parseInt(user.vMax) - vRest);
+        ee = (((ee + vRest) * 0.35) / user.weight).toFixed(1);
 
 
         const performanceData = {
@@ -131,13 +131,11 @@ module.exports = class PacketHandler {
         return performanceData;
     }
 
-    sendUserProfiles(){
-        
+    sendUserProfiles() {
+
         for (let index = 0; index < this.profiles.length; index++) {
-            
+
             this.event.reply((index + 1).toString() + "-profile", this.profiles[index]);
         }
-        
-       console.log(this.graphLength);
     }
 }
