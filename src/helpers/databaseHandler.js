@@ -35,7 +35,7 @@ module.exports = class DatabaseHandler {
             id: "0",
             name: "General",
             surname: "User",
-            note: "This is a default user to be edited",
+            note: "To be edited",
             age: 40,
             weight: 80,
             height: 180,
@@ -55,7 +55,7 @@ module.exports = class DatabaseHandler {
         const defaultTeam = {
             id: "0",
             name: "General Team",
-            note: "This is a default team to be edited",
+            note: "To be edited",
             members: []
         }
 

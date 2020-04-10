@@ -8,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import colors from "../colors";
+const { ipcRenderer } = window.require('electron');
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -31,6 +32,11 @@ export default function EditUserDialog(props) {
     setValues({ ...values, [name]: event.target.value });
   };
 
+  const submitForm = () => {
+    props.handleDialog();
+    ipcRenderer.send("update-teams", {collection: "users", data: values});
+    ipcRenderer.send("get-teams");
+  }
   /* props: title, type of operation, state of close, event to send*/
 
   return (
@@ -71,10 +77,10 @@ export default function EditUserDialog(props) {
             </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.handleUserDialog}>
+          <Button onClick={props.handleDialog}>
             Cancel
           </Button>
-          <Button type="submit" onClick={props.handleUserDialog} style={{color: colors.secondary}}>
+          <Button type="submit" onClick={submitForm} style={{color: colors.secondary}}>
             Save
           </Button>
         </DialogActions>

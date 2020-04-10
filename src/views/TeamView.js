@@ -76,13 +76,17 @@ export class TeamView extends React.Component {
     return (
 
       <div>
-        <Grid direction="row" spacing={3} container>
+        <Grid direction="row" spacing={2} container>
           <Grid xs={5} item>
             <MaterialTable
               columns={[
                 { title: 'Name', field: 'name' },
                 { title: 'Surname', field: 'surname' },
-                { title: 'Note', field: 'note' }
+                { title: 'Note', field: 'note' },
+                { title: 'Weight', field: 'weight' },
+                { title: 'Height', field: 'height' },
+                { title: 'Age', field: 'age' }
+                
               ]}
               data={this.state.users}
               title="Users"

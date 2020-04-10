@@ -229,6 +229,12 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
+    ipcMain.on("update-teams", (event, arg) => {
+
+        databaseHandler.updateUserOrTeam(arg.data.id, arg.data, arg.collection)
+
+    })
+
 
 
 })
