@@ -8,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import colors from "../colors";
+const { ipcRenderer } = window.require('electron');
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -33,7 +34,8 @@ export default function AddUserDialog(props) {
 
   const submitForm = () => {
     props.handleDialog();
-    console.log(values);
+    ipcRenderer.send("add-teams", {collection: "users", data: values});
+    ipcRenderer.send("get-teams");
   }
   return (
     <div>

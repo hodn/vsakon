@@ -223,6 +223,12 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
+    ipcMain.on("add-teams", (event, arg) => {
+
+        databaseHandler.addUserOrTeam(arg.data, arg.collection)
+
+    })
+
 
 
 })

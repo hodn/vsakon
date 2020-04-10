@@ -150,6 +150,8 @@ module.exports = class DatabaseHandler {
 
     addUserOrTeam(record, collection) {
 
+        record.id = shortid.generate();
+
         this.db.get(collection)
             .push(record)
             .write()

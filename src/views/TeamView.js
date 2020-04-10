@@ -32,7 +32,7 @@ export class TeamView extends React.Component {
     this._isMounted = true;
     ipcRenderer.send("get-teams");
 
-    ipcRenderer.once('teams-loaded', (event, arg) => {
+    ipcRenderer.on('teams-loaded', (event, arg) => {
 
       const teams = arg.teams;
       const users = arg.users;
