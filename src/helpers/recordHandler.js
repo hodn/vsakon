@@ -44,16 +44,17 @@ module.exports = class RecordHandler {
     setRecording() {
 
         this.recording = !this.recording;
-        const date = new Date();
+        const date = new Date().toLocaleString();
 
         if (this.recording === true) {
             
-            this.createCsvWriter(date);
-            this.recordId = this.db.addRecord(date, this.filePath);
+            this.createCsvWriter(date); 
+            this.recordId = this.db.addRecord(date, this.filePath); // Make a new DB record
             
         }
         else {
-            this.db.updateRecord(this.recordId, {end: date});
+            this.db.updateRecord(this.recordId, {end: date}); // Add end time to DB record
+            this.recordId = null;
             this.writer.end()
         }
     }

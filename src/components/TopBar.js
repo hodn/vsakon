@@ -19,6 +19,8 @@ import colors from '../colors';
 import ResetMenu from './ResetMenu';
 import { MainView } from '../views/MainView';
 import { SettingsView } from '../views/SettingsView';
+import { HistoryView } from '../views/HistoryView';
+import { TeamView } from '../views/TeamView'
 
 
 const { ipcRenderer } = window.require('electron');
@@ -193,7 +195,7 @@ class TopBar extends React.Component {
 
         {this.state.tabValue === 0 && <this.TabContainer> <MainView /> </this.TabContainer>}
         {this.state.tabValue === 1 && <this.TabContainer> Map </this.TabContainer>}
-        {this.state.tabValue === 2 && <this.TabContainer> History </this.TabContainer>}
+        {this.state.tabValue === 2 && <this.TabContainer> <HistoryView/> </this.TabContainer>}
         {this.state.tabValue === 3 && <this.TabContainer> Teams </this.TabContainer>}
         {this.state.tabValue === 4 && <this.TabContainer> <SettingsView/> </this.TabContainer>}
 
