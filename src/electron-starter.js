@@ -214,8 +214,10 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         const teams = databaseHandler.getAllTeams();
         const users = databaseHandler.getAllUsers();
+        const defTeam = databaseHandler.getDefaultTeam();
+        const defUser = databaseHandler.getDefaultUser();
         
-        const data = {teams, users}
+        const data = {teams, users, defTeam, defUser}
 
         event.reply("teams-loaded", data)
 

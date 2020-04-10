@@ -18,7 +18,7 @@ module.exports = class DatabaseHandler {
 
         /*
         Team: id, name, note, members (users - id)
-        User: id, name, surename, note, age, weight, height, hrStill, hrRef, hrMax, vMax, gender
+        User: id, name, surname, note, age, weight, height, hrStill, hrRef, hrMax, vMax, gender
         Record: id, path, start, end, members, note
         Settings: selectedTeam, csvDirectory, csvComponents, Temperatures, graphLength, eventNames
         */
