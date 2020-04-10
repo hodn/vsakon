@@ -10,8 +10,8 @@ class App extends Component {
 
   render() {
 
-    ipcRenderer.send("clear-to-send");
-    ipcRenderer.send("connect-ports");
+    //ipcRenderer.send("clear-to-send");
+    //ipcRenderer.send("connect-ports");
 
     return (
 
