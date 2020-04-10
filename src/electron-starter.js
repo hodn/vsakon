@@ -210,6 +210,17 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
+    ipcMain.on("get-teams", (event, arg) => {
+
+        const teams = databaseHandler.getAllTeams();
+        const users = databaseHandler.getAllUsers();
+        
+        const data = {teams, users}
+
+        event.reply("teams-loaded", data)
+
+    })
+
 
 
 })

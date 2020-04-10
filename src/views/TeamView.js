@@ -1,6 +1,8 @@
 import React from 'react';
 import MaterialTable from 'material-table';
 import Grid from '@material-ui/core/Grid';
+import colors from "../colors";
+const { ipcRenderer } = window.require('electron');
 
 export class TeamView extends React.Component {
   constructor(props) {
@@ -9,7 +11,8 @@ export class TeamView extends React.Component {
     this._isMounted = false;
 
     this.state = {
-      devComponents: []
+      users: [],
+      teams: []
 
     }
   }
@@ -17,13 +20,25 @@ export class TeamView extends React.Component {
   componentDidMount() {
 
     this._isMounted = true;
+    ipcRenderer.send("get-teams");
+
+    ipcRenderer.once('teams-loaded', (event, arg) => {
+
+      const teams = arg.teams;
+      const users = arg.users;
+
+      this._isMounted && this.setState((state, props) => ({
+        users,
+        teams
+      }))
+    })
+
   }
 
   componentWillUnmount() {
 
   }
 
-  // What the actual component renders
   render() {
 
     return (
@@ -35,23 +50,30 @@ export class TeamView extends React.Component {
               columns={[
                 { title: 'Name', field: 'name' },
                 { title: 'Surname', field: 'surname' },
-                { title: 'Note', field: 'note', type: 'numeric' }
+                { title: 'Note', field: 'note' }
               ]}
-              data={[{ name: 'Mehmet', surname: 'Baran', note: "Captain"}]}
+              data={this.state.users}
               title="Users"
               options={
-                {searchFieldStyle: {width: 200}}
+                { searchFieldStyle: { width: 200 }}
               }
               actions={[
                 {
                   icon: 'edit',
-                  tooltip: 'Edit team',
+                  tooltip: 'Edit user',
                   onClick: (event, rowData) => alert("You saved " + rowData.name)
                 },
                 {
                   tooltip: 'Delete user',
                   icon: 'delete',
                   onClick: (evt, data) => alert('You want to delete ' + data.length + ' rows')
+                },
+                {
+                  icon: 'add',
+                  iconProps: {style: {color: colors.secondary}},
+                  tooltip: 'Add user',
+                  isFreeAction: true,
+                  onClick: (event) => alert("You want to add a new row")
                 }
               ]}
             />
@@ -59,16 +81,16 @@ export class TeamView extends React.Component {
 
           <Grid xs={4} item>
             <MaterialTable
-               columns={[
+              columns={[
                 { title: 'Name', field: 'name' },
-                { title: 'Note', field: 'note', type: 'numeric' }
+                { title: 'Note', field: 'note' }
               ]}
-              data={[{ id: "asdfasd", name: 'General Team', note: 'Firefighters 001'}, { id: "asdfasd", name: 'General Team', note: 'Firefighters 001'}]}
+              data={this.state.teams}
               title="Teams"
               options={
-                {searchFieldStyle: {width: 200}}
+                { searchFieldStyle: { width: 200 } }
               }
-              
+
               actions={[
                 {
                   icon: 'edit',
@@ -76,9 +98,16 @@ export class TeamView extends React.Component {
                   onClick: (event, rowData) => alert("You saved " + rowData.name)
                 },
                 {
-                  tooltip: 'Delete selected team',
+                  tooltip: 'Delete team',
                   icon: 'delete',
                   onClick: (evt, data) => alert(data)
+                },
+                {
+                  icon: 'add',
+                  iconProps: {style: {color: colors.secondary}},
+                  tooltip: 'Add team',
+                  isFreeAction: true,
+                  onClick: (event) => alert("You want to add a new row")
                 }
               ]}
             />

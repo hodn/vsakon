@@ -133,4 +133,38 @@ module.exports = class DatabaseHandler {
 
         return id;
     }
+
+    getAllTeams() {
+
+        return this.db.get('teams')
+            .value()
+
+    }
+
+    getAllUsers() {
+
+        return this.db.get('users')
+            .value()
+
+    }
+
+    addUserOrTeam(record, collection) {
+
+        this.db.get(collection)
+            .push(record)
+            .write()
+    }
+
+    updateUserOrTeam(id, record, collection) {
+
+        this.db.get(collection)
+            .find({ id: id })
+            .assign(record)
+            .write()
+    }
+
+    deleteUserOrTeam(id, collection){
+        this.db.get(collection)
+            .remove({ id: id })
+    }
 }
