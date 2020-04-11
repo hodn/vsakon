@@ -114,7 +114,7 @@ module.exports = class DatabaseHandler {
             path,
             start,
             end: null,
-            team: this.getSelectedTeam(true),
+            team: this.getSelectedTeam(),
             note: null
         }
 
