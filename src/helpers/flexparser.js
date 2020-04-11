@@ -123,7 +123,16 @@ function parseNodeData(rawNodeArray){
         const moZ = rawNodeArray[63 + i];
         const activity = convertActivity(moX, moY, moZ);
 
-        nodeJSON[i] = { 
+        nodeJSON["tempSkin_" + i.toString()] = tempSkin;
+        nodeJSON["tempCloth_" + i.toString()] = tempCloth;
+        nodeJSON["humidity_" + i.toString()] = hum;
+        nodeJSON["motionX_" + i.toString()] = moX;
+        nodeJSON["motionY_" + i.toString()] = moY;
+        nodeJSON["motionZ_" + i.toString()] = moZ;
+        nodeJSON["activity_" + i.toString()] = activity;
+        nodeJSON["connected_" + i.toString()] = isNodeConnected(tempSkin, tempCloth, hum, moX, moY, moZ)
+        
+        /* nodeJSON[i] = { 
         
             tempSkin,
             tempCloth, 
@@ -133,7 +142,7 @@ function parseNodeData(rawNodeArray){
             motionZ: moZ, 
             activity,
             connected: isNodeConnected(tempSkin, tempCloth, hum, moX, moY, moZ)
-        }
+        } */
 
     }
 

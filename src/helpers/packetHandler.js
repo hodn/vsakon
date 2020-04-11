@@ -40,7 +40,7 @@ module.exports = class PacketHandler {
 
             return this.packets[devSlot];
 
-        } else return false;
+        } else return false; // Packet was not stored - don't manipulate with it further
 
     }
 
