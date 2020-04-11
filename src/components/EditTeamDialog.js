@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function AddTeamDialog(props) {
+export default function EditTeamDialog(props) {
   const classes = useStyles();
   const [team, setTeam] = React.useState(props.team);
 
@@ -42,7 +42,7 @@ export default function AddTeamDialog(props) {
       teamWithIDsOnly.members[index] = teamWithIDsOnly.members[index].id;
     };
 
-    ipcRenderer.send("add-teams", {collection: "teams", data: teamWithIDsOnly});
+    ipcRenderer.send("update-teams", {collection: "teams", data: teamWithIDsOnly});
     ipcRenderer.send("get-teams");
   }
 
@@ -75,7 +75,7 @@ export default function AddTeamDialog(props) {
   return (
     <div>
       <Dialog open={true} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Add new team</DialogTitle>
+        <DialogTitle id="form-dialog-title">Edit team</DialogTitle>
         <DialogContent>
           <TextField className={classes.textField} required label="Name" name="name" value={team.name} onChange={handleChange('name')} />
           <TextField className={classes.textField} required multiline label="Note" name="note" value={team.note} onChange={handleChange('note')} />
@@ -90,7 +90,7 @@ export default function AddTeamDialog(props) {
             Cancel
           </Button>
           <Button type="submit" onClick={submitForm} style={{ color: colors.secondary }}>
-            Add
+            Edit
           </Button>
         </DialogActions>
 

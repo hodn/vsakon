@@ -85,11 +85,11 @@ module.exports = class DatabaseHandler {
             .value()
     }
 
-    getSelectedTeam(membersId = false) {
+    getSelectedTeam(onlyMembersId = false) {
         const selectedTeamId = this.getSettings().selectedTeam;
         let team = this.db.get("teams").cloneDeep().find({ id: selectedTeamId }).value();
 
-        if (membersId === true) {
+        if (onlyMembersId === true) {
             return team; // Only with member IDs
         }
         else {
@@ -134,12 +134,12 @@ module.exports = class DatabaseHandler {
         return id;
     }
 
-    getAllTeams(membersId = false) {
+    getAllTeams(onlyMembersId = false) {
 
         let teams = this.db.get('teams').cloneDeep()
             .value()
 
-        if (membersId) {
+        if (onlyMembersId) {
             return teams;
         } else {
             

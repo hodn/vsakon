@@ -3,6 +3,7 @@ import MaterialTable from 'material-table';
 import Grid from '@material-ui/core/Grid';
 import AddUserDialog from "../components/AddUserDialog";
 import EditUserDialog from "../components/EditUserDialog";
+import EditTeamDialog from "../components/EditTeamDialog";
 import AddTeamDialog from "../components/AddTeamDialog";
 import DeleteDialog from "../components/DeleteDialog";
 import colors from "../colors";
@@ -21,16 +22,17 @@ export class TeamView extends React.Component {
       defTeam: null,
       selectedRow: null,
       activeTeam: null,
-      addUserDialog: false,
-      editUserDialog: false,
-      deleteDialog: false,
-      addTeamDialog: false
+      showAddUserDialog: false,
+      showEditUserDialog: false,
+      showDeleteDialog: false,
+      showAddTeamDialog: false,
+      showEditTeamDialog: false
     }
 
-    this.showAddUserDialog = this.showAddUserDialog.bind(this);
-    this.showAddTeamDialog = this.showAddTeamDialog.bind(this);
-    this.showEditUserDialog = this.showEditUserDialog.bind(this);
-    this.showDeleteDialog = this.showDeleteDialog.bind(this);
+    this.toggleAddUserDialog = this.toggleAddUserDialog.bind(this);
+    this.toggleAddTeamDialog = this.toggleAddTeamDialog.bind(this);
+    this.toggleEditUserDialog = this.toggleEditUserDialog.bind(this);
+    this.toggleEditTeamDialog = this.toggleEditTeamDialog.bind(this);
 
   }
 
@@ -60,37 +62,46 @@ export class TeamView extends React.Component {
 
   }
 
-  showAddUserDialog(){
+  toggleAddUserDialog(){
     
     this._isMounted && this.setState((state, props) => ({
-     addUserDialog: !state.addUserDialog
+     showAddUserDialog: !state.showAddUserDialog
     }))
 
   }
 
-  showEditUserDialog(user){
+  toggleEditUserDialog(user){
     
     this._isMounted && this.setState((state, props) => ({
-     editUserDialog: !state.editUserDialog,
+      showEditUserDialog: !state.showEditUserDialog,
      selectedRow: user
     }))
 
   }
 
-  showDeleteDialog(item){
+  toggleDeleteDialog(item){
     
     this._isMounted && this.setState((state, props) => ({
-      deleteDialog: !state.deleteDialog,
+      showDeleteDialog: !state.showDeleteDialog,
       selectedRow: item
      }))
  
   }
 
-  showAddTeamDialog(){
+  toggleAddTeamDialog(){
     
     this._isMounted && this.setState((state, props) => ({
-      addTeamDialog: !state.addTeamDialog
+      showAddTeamDialog: !state.showAddTeamDialog
      }))
+  }
+
+  toggleEditTeamDialog(team){
+    
+    this._isMounted && this.setState((state, props) => ({
+      showEditTeamDialog: !state.showEditTeamDialog,
+      selectedRow: team
+    }))
+
   }
 
 
@@ -120,19 +131,19 @@ export class TeamView extends React.Component {
                 {
                   icon: 'edit',
                   tooltip: 'Edit user',
-                  onClick: (event, rowData) => this.showEditUserDialog(rowData)
+                  onClick: (event, rowData) => this.toggleEditUserDialog(rowData)
                 },
                 {
                   tooltip: 'Delete user',
                   icon: 'delete',
-                  onClick: (evt, data) => this.showDeleteDialog(data)
+                  onClick: (evt, data) => this.toggleDeleteDialog(data)
                 },
                 {
                   icon: 'add',
                   iconProps: {style: {color: colors.secondary}},
                   tooltip: 'Add user',
                   isFreeAction: true,
-                  onClick: (event) => this.showAddUserDialog()
+                  onClick: (event) => this.toggleAddUserDialog()
                 }
               ]}
             />
@@ -154,29 +165,30 @@ export class TeamView extends React.Component {
                 {
                   icon: 'edit',
                   tooltip: 'Edit team',
-                  onClick: (event, rowData) => alert("You saved " + rowData.name)
+                  onClick: (event, rowData) => this.toggleEditTeamDialog(rowData)
                 },
                 {
                   tooltip: 'Delete team',
                   icon: 'delete',
-                  onClick: (evt, data) => this.showDeleteDialog(data)
+                  onClick: (evt, data) => this.toggleDeleteDialog(data)
                 },
                 {
                   icon: 'add',
                   iconProps: {style: {color: colors.secondary}},
                   tooltip: 'Add team',
                   isFreeAction: true,
-                  onClick: (event) => this.showAddTeamDialog()
+                  onClick: (event) => this.toggleAddTeamDialog()
                 }
               ]}
             />
           </Grid>
         </Grid>
 
-        {this.state.addUserDialog && <AddUserDialog user={this.state.defUser} handleDialog={this.showAddUserDialog}/>}
-        {this.state.editUserDialog && <EditUserDialog user={this.state.selectedRow} handleDialog={this.showEditUserDialog}/>}
-        {this.state.deleteDialog && <DeleteDialog item={this.state.selectedRow} handleDialog={this.showDeleteDialog}/>}
-        {this.state.addTeamDialog && <AddTeamDialog team={this.state.defTeam} users={this.state.users} handleDialog={this.showAddTeamDialog}/>}
+        {this.state.showAddUserDialog && <AddUserDialog user={this.state.defUser} handleDialog={this.toggleAddUserDialog}/>}
+        {this.state.showEditUserDialog && <EditUserDialog user={this.state.selectedRow} handleDialog={this.toggleEditUserDialog}/>}
+        {this.state.showDeleteDialog && <DeleteDialog item={this.state.selectedRow} handleDialog={this.toggleDeleteDialog}/>}
+        {this.state.showAddTeamDialog && <AddTeamDialog team={this.state.defTeam} users={this.state.users} handleDialog={this.toggleAddTeamDialog}/>}
+        {this.state.showEditTeamDialog && <EditTeamDialog team={this.state.selectedRow} users={this.state.users} handleDialog={this.toggleEditTeamDialog}/>}
       </div>
 
     );

@@ -79,7 +79,7 @@ export default function AddUserDialog(props) {
             Cancel
           </Button>
           <Button type="submit" onClick={submitForm} style={{color: colors.secondary}}>
-            Save
+            Add
           </Button>
         </DialogActions>
        
