@@ -68,6 +68,8 @@ export class TeamView extends React.Component {
 
   componentWillUnmount() {
 
+    ipcRenderer.removeAllListeners();
+
   }
 
   toggleAddUserDialog(){

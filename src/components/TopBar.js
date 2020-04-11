@@ -90,7 +90,7 @@ class TopBar extends React.Component {
 
       });
 
-      this.setState(prevState => ({
+      this._isMounted && this.setState(prevState => ({
         ports: foundPorts
       }))
 

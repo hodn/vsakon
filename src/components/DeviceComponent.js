@@ -84,7 +84,7 @@ class DeviceComponent extends React.Component {
   }
 
   componentWillUnmount() {
-
+    ipcRenderer.removeAllListeners();
   }
 
   checkDeviceConnection() {
