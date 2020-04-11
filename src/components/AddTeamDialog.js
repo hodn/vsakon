@@ -41,7 +41,6 @@ export default function AddTeamDialog(props) {
     let teamWithIDsOnly = Object.assign({}, team);
     for (let index = 0; index < teamWithIDsOnly.members.length; index++) {
       teamWithIDsOnly.members[index] = teamWithIDsOnly.members[index].id;
-      
     };
 
     ipcRenderer.send("add-teams", {collection: "teams", data: teamWithIDsOnly});
@@ -54,7 +53,9 @@ export default function AddTeamDialog(props) {
 
     for (let index = 0; index < 30; index++) {
       
-      const topValue = props.users.find(element => element.id === team.members[index].id);
+      const topValue = props.users.find(element => { 
+        if(team.members[index] !== null && team.members[index] !== undefined ) return element.id === team.members[index].id;
+      });
       
       units.push(<Autocomplete
               options={props.users}
