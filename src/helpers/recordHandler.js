@@ -47,31 +47,37 @@ module.exports = class RecordHandler {
         const date = new Date();
 
         if (this.recording === true) {
-            
-            this.createCsvWriter(date); 
+
+            this.createCsvWriter(date);
             this.recordId = this.db.addRecord(date.toLocaleString(), this.filePath); // Make a new DB record
         }
         else {
-            this.db.updateRecord(this.recordId, {end: date.toLocaleString()}); // Add end time to DB record
+            this.db.updateRecord(this.recordId, { end: date.toLocaleString() }); // Add end time to DB record
             this.recordId = null;
             this.writer.end()
         }
     }
 
     writeToCsv(packet) {
-        this.writer.write(this.formatToCsv(packet))
+
+        let csvWriteString = {};
+        Object.assign(csvWriteString, packet.basicData, {deadMan: packet.deadMan});
+        if (packet.performanceData !== null) Object.assign(csvWriteString, packet.performanceData);
+        if (packet.locationData !== null) Object.assign(csvWriteString, packet.locationData);
+        if (packet.nodeData !== null) Object.assign(csvWriteString, packet.nodeData);
+
+        this.writer.write(this.formatToCsv(csvWriteString))
     }
 
     formatToCsv(packet) {
 
         const convert = (value) => this.dotToComma(value);
-        let basic = packet.basicData;
 
-        Object.keys(basic).forEach(function (key) {
-            basic[key] = convert(basic[key]);
+        Object.keys(packet).forEach(function (key) {
+            packet[key] = convert(packet[key]);
         })
 
-        return basic;
+        return packet;
     }
 
     dotToComma(value) {

@@ -153,7 +153,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             const storedPacket = packetHandler.storeAndSendState(parsedPacket, portHandler.com);
                             // Packet from receiver is new and stored - recording is ON
                             if (storedPacket && recordHandler.recording) recordHandler.writeToCsv(storedPacket);
-                            console.log(storedPacket)
 
                         } catch (error) {
                             console.log(error.message)
@@ -249,9 +248,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
     })
 
     ipcMain.on("update-settings", (event, arg) => {
-        
+
         databaseHandler.updateSettings(arg);
-        if(arg.selectedTeam !== undefined) packetHandler.profiles = databaseHandler.getSelectedTeam(false).members;
+        if (arg.selectedTeam !== undefined) packetHandler.profiles = databaseHandler.getSelectedTeam(false).members;
     })
 
 
