@@ -37,7 +37,7 @@ export default function EditTeamDialog(props) {
 
   const submitForm = () => {
     props.handleDialog();
-    let teamWithIDsOnly = Object.assign({}, team);
+    let teamWithIDsOnly = Object.assign({}, team); // later for refactor
     for (let index = 0; index < teamWithIDsOnly.members.length; index++) {
       teamWithIDsOnly.members[index] = teamWithIDsOnly.members[index].id;
     };
@@ -54,6 +54,7 @@ export default function EditTeamDialog(props) {
       
       const topValue = props.users.find(element => { 
         if(team.members[index] !== null && team.members[index] !== undefined ) return element.id === team.members[index].id;
+        else return null;
       });
       
       units.push(<Autocomplete
@@ -89,7 +90,7 @@ export default function EditTeamDialog(props) {
           <Button onClick={props.handleDialog}>
             Cancel
           </Button>
-          <Button type="submit" onClick={submitForm} style={{ color: colors.secondary }}>
+          <Button variant="outlined" onClick={submitForm} style={{ color: colors.secondary }}>
             Edit
           </Button>
         </DialogActions>

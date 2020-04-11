@@ -1,4 +1,5 @@
 import React from 'react';
+import { forwardRef } from 'react';
 import MaterialTable from 'material-table';
 import Grid from '@material-ui/core/Grid';
 import AddUserDialog from "../components/AddUserDialog";
@@ -6,7 +7,9 @@ import EditUserDialog from "../components/EditUserDialog";
 import EditTeamDialog from "../components/EditTeamDialog";
 import AddTeamDialog from "../components/AddTeamDialog";
 import DeleteDialog from "../components/DeleteDialog";
+import ChangeActiveTeamDialog from "../components/ChangeActiveTeamDialog";
 import colors from "../colors";
+import Rotate90DegreesCcwIcon from '@material-ui/icons/Rotate90DegreesCcw';
 const { ipcRenderer } = window.require('electron');
 
 export class TeamView extends React.Component {
@@ -26,13 +29,16 @@ export class TeamView extends React.Component {
       showEditUserDialog: false,
       showDeleteDialog: false,
       showAddTeamDialog: false,
-      showEditTeamDialog: false
+      showEditTeamDialog: false,
+      showChangeActiveTeamDialog: false
     }
 
     this.toggleAddUserDialog = this.toggleAddUserDialog.bind(this);
     this.toggleAddTeamDialog = this.toggleAddTeamDialog.bind(this);
     this.toggleEditUserDialog = this.toggleEditUserDialog.bind(this);
     this.toggleEditTeamDialog = this.toggleEditTeamDialog.bind(this);
+    this.toggleChangeActiveTeamDialog = this.toggleChangeActiveTeamDialog.bind(this);
+
 
   }
 
@@ -47,12 +53,14 @@ export class TeamView extends React.Component {
       const users = arg.users;
       const defUser = arg.defUser;
       const defTeam = arg.defTeam;
+      const activeTeam = arg.activeTeam;
 
       this._isMounted && this.setState((state, props) => ({
         users,
         teams,
         defUser,
-        defTeam
+        defTeam,
+        activeTeam
       }))
     })
 
@@ -104,12 +112,21 @@ export class TeamView extends React.Component {
 
   }
 
+  toggleChangeActiveTeamDialog(){
+    this._isMounted && this.setState((state, props) => ({
+      showChangeActiveTeamDialog: !state.showChangeActiveTeamDialog,
+    }))
+
+    console.log(this.props.recording);
+  }
+
 
   render() {
 
     return (
 
       <div>
+        
         <Grid spacing={2} container>
           <Grid xs={8} item>
             <MaterialTable
@@ -156,7 +173,7 @@ export class TeamView extends React.Component {
                 { title: 'Note', field: 'note' }
               ]}
               data={this.state.teams}
-              title="Teams"
+              title={this.state.activeTeam === null ? "Teams" : "Teams | "+ this.state.activeTeam.name}
               options={
                 { searchFieldStyle: { width: 200 } }
               }
@@ -178,6 +195,13 @@ export class TeamView extends React.Component {
                   tooltip: 'Add team',
                   isFreeAction: true,
                   onClick: (event) => this.toggleAddTeamDialog()
+                },
+                {
+                  icon: forwardRef((props, ref) => <Rotate90DegreesCcwIcon style={{color: colors.secondary}} {...props} ref={ref} />),
+                  iconProps: {style: {color: colors.secondary}},
+                  tooltip: 'Change active team',
+                  isFreeAction: true,
+                  onClick: (event) => this.toggleChangeActiveTeamDialog()
                 }
               ]}
             />
@@ -189,6 +213,12 @@ export class TeamView extends React.Component {
         {this.state.showDeleteDialog && <DeleteDialog item={this.state.selectedRow} handleDialog={this.toggleDeleteDialog}/>}
         {this.state.showAddTeamDialog && <AddTeamDialog team={this.state.defTeam} users={this.state.users} handleDialog={this.toggleAddTeamDialog}/>}
         {this.state.showEditTeamDialog && <EditTeamDialog team={this.state.selectedRow} users={this.state.users} handleDialog={this.toggleEditTeamDialog}/>}
+        {this.state.showChangeActiveTeamDialog && <ChangeActiveTeamDialog 
+        recording={this.props.recording} 
+        teams={this.state.teams} 
+        activeTeam={this.state.activeTeam}
+        handleDialog={this.toggleChangeActiveTeamDialog}/>}
+     
       </div>
 
     );

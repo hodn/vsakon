@@ -49,7 +49,7 @@ module.exports = class DatabaseHandler {
         return defaultUser;
     }
 
-    getDefaultTeam() {
+    getDefaultTeam(onlyMembersId = false) {
 
         const defaultUser = this.getDefaultUser();
         const defaultTeam = {
@@ -58,10 +58,11 @@ module.exports = class DatabaseHandler {
             note: "To be edited",
             members: []
         }
-
+        
         // Filling the defaultTeam
         for (let index = 0; index < 30; index++) {
-            defaultTeam.members.push(defaultUser.id);
+           if(onlyMembersId) defaultTeam.members.push(defaultUser.id);
+           else defaultTeam.members.push(defaultUser);
         }
 
         return defaultTeam;
@@ -186,6 +187,13 @@ module.exports = class DatabaseHandler {
     deleteUserOrTeam(id, collection) {
         this.db.get(collection)
             .remove({ id: id })
+            .write()
+    }
+
+    updateSettings(parameter){
+
+        this.db.get('settings')
+            .assign(parameter)
             .write()
     }
 }

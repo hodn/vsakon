@@ -78,7 +78,7 @@ export default function AddUserDialog(props) {
           <Button onClick={props.handleDialog}>
             Cancel
           </Button>
-          <Button type="submit" onClick={submitForm} style={{color: colors.secondary}}>
+          <Button variant="outlined" onClick={submitForm} style={{color: colors.secondary}}>
             Add
           </Button>
         </DialogActions>

@@ -214,10 +214,11 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         const teams = databaseHandler.getAllTeams(false);
         const users = databaseHandler.getAllUsers();
-        const defTeam = databaseHandler.getSelectedTeam(false);
+        const defTeam = databaseHandler.getDefaultTeam(false);
+        const activeTeam = databaseHandler.getSelectedTeam(true);
         const defUser = databaseHandler.getDefaultUser();
-        
-        const data = {teams, users, defTeam, defUser}
+
+        const data = { teams, users, defTeam, defUser, activeTeam }
 
         event.reply("teams-loaded", data)
 
@@ -231,7 +232,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     ipcMain.on("update-teams", (event, arg) => {
 
-        if(arg.data.tableData !== undefined){
+        if (arg.data.tableData !== undefined) {
             let data = arg.data;
             delete data.tableData;
             databaseHandler.updateUserOrTeam(arg.data.id, data, arg.collection)
@@ -244,6 +245,12 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         databaseHandler.deleteUserOrTeam(arg.id, arg.collection);
 
+    })
+
+    ipcMain.on("update-settings", (event, arg) => {
+        
+        databaseHandler.updateSettings(arg);
+        if(arg.selectedTeam !== undefined) packetHandler.profiles = databaseHandler.getSelectedTeam(false).members;
     })
 
 
