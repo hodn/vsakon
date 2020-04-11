@@ -23,22 +23,28 @@ const useStyles = makeStyles(theme => ({
 
 export default function AddTeamDialog(props) {
   const classes = useStyles();
-  const [defaultTeam, setDefaultTeam] = React.useState(props.team);
+  const [team, setTeam] = React.useState(props.team);
 
   const handleChange = name => event => {
-    setDefaultTeam({ ...defaultTeam, [name]: event.target.value });
+    setTeam({ ...team, [name]: event.target.value });
   };
 
   const handleSelect = (value, index) => {
-    let newMembers = [...defaultTeam.members];
+    let newMembers = [...team.members];
     newMembers[index] = value;
     console.log(newMembers);
-    setDefaultTeam({ ...defaultTeam, members: newMembers });
+    setTeam({ ...team, members: newMembers });
   }
 
   const submitForm = () => {
     props.handleDialog();
-    ipcRenderer.send("add-teams", {collection: "teams", data: defaultTeam});
+    let teamWithIDsOnly = Object.assign({}, team);
+    for (let index = 0; index < teamWithIDsOnly.members.length; index++) {
+      teamWithIDsOnly.members[index] = teamWithIDsOnly.members[index].id;
+      
+    };
+
+    ipcRenderer.send("add-teams", {collection: "teams", data: teamWithIDsOnly});
     ipcRenderer.send("get-teams");
   }
 
@@ -48,7 +54,7 @@ export default function AddTeamDialog(props) {
 
     for (let index = 0; index < 30; index++) {
       
-      const topValue = props.users.find(element => element.id === defaultTeam.members[index].id);
+      const topValue = props.users.find(element => element.id === team.members[index].id);
       
       units.push(<Autocomplete
               options={props.users}
@@ -71,8 +77,8 @@ export default function AddTeamDialog(props) {
       <Dialog open={true} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add new team</DialogTitle>
         <DialogContent>
-          <TextField className={classes.textField} required label="Name" name="name" value={defaultTeam.name} onChange={handleChange('name')} />
-          <TextField className={classes.textField} required multiline label="Note" name="note" value={defaultTeam.note} onChange={handleChange('note')} />
+          <TextField className={classes.textField} required label="Name" name="name" value={team.name} onChange={handleChange('name')} />
+          <TextField className={classes.textField} required multiline label="Note" name="note" value={team.note} onChange={handleChange('note')} />
           <form className={classes.container}> 
           {getUnits().map((component) => {
             return component;
