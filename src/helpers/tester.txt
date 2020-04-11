@@ -126,3 +126,5 @@
         motionZ: '255',
         activity: 442,
         connected: false } } }
+
+        performanceData: { stehlik: 140, ee: 6.4 } 

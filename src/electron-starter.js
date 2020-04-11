@@ -136,7 +136,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                     ipcMain.on("sync-devices", (event, arg) => {
 
                         const delay = index * 50; // one after another - against sync collision
-                        const userForcedSync = true; // not because of invalid packets
+                        const userForcedSync = true; // not because of invalid packet detection
                         portHandler.sendSync(userForcedSync, delay);
                     })
 
@@ -153,6 +153,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             const storedPacket = packetHandler.storeAndSendState(parsedPacket, portHandler.com);
                             // Packet from receiver is new and stored - recording is ON
                             if (storedPacket && recordHandler.recording) recordHandler.writeToCsv(storedPacket);
+                            console.log(storedPacket)
 
                         } catch (error) {
                             console.log(error.message)
