@@ -212,9 +212,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     ipcMain.on("get-teams", (event, arg) => {
 
-        const teams = databaseHandler.getAllTeams();
+        const teams = databaseHandler.getAllTeams(false);
         const users = databaseHandler.getAllUsers();
-        const defTeam = databaseHandler.getDefaultTeam();
+        const defTeam = databaseHandler.getSelectedTeam(false);
         const defUser = databaseHandler.getDefaultUser();
         
         const data = {teams, users, defTeam, defUser}
@@ -231,7 +231,18 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     ipcMain.on("update-teams", (event, arg) => {
 
-        databaseHandler.updateUserOrTeam(arg.data.id, arg.data, arg.collection)
+        if(arg.data.tableData !== undefined){
+            let data = arg.data;
+            delete data.tableData;
+            databaseHandler.updateUserOrTeam(arg.data.id, data, arg.collection)
+        }
+        else databaseHandler.updateUserOrTeam(arg.data.id, arg.data, arg.collection)
+
+    })
+
+    ipcMain.on("delete-teams", (event, arg) => {
+
+        databaseHandler.deleteUserOrTeam(arg.id, arg.collection);
 
     })
 

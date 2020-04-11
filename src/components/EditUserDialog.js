@@ -27,7 +27,6 @@ const useStyles = makeStyles(theme => ({
 export default function EditUserDialog(props) {
   const classes = useStyles();
   const [values, setValues] = React.useState(props.user);
-  console.log(values);
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
   };

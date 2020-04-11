@@ -3,6 +3,8 @@ import MaterialTable from 'material-table';
 import Grid from '@material-ui/core/Grid';
 import AddUserDialog from "../components/AddUserDialog";
 import EditUserDialog from "../components/EditUserDialog";
+import AddTeamDialog from "../components/AddTeamDialog";
+import DeleteDialog from "../components/DeleteDialog";
 import colors from "../colors";
 const { ipcRenderer } = window.require('electron');
 
@@ -17,13 +19,18 @@ export class TeamView extends React.Component {
       teams: [],
       defUser: null,
       defTeam: null,
+      selectedRow: null,
+      activeTeam: null,
       addUserDialog: false,
       editUserDialog: false,
-      selectedUser: null
+      deleteDialog: false,
+      addTeamDialog: false
     }
 
     this.showAddUserDialog = this.showAddUserDialog.bind(this);
+    this.showAddTeamDialog = this.showAddTeamDialog.bind(this);
     this.showEditUserDialog = this.showEditUserDialog.bind(this);
+    this.showDeleteDialog = this.showDeleteDialog.bind(this);
 
   }
 
@@ -65,9 +72,25 @@ export class TeamView extends React.Component {
     
     this._isMounted && this.setState((state, props) => ({
      editUserDialog: !state.editUserDialog,
-     selectedUser: user
+     selectedRow: user
     }))
 
+  }
+
+  showDeleteDialog(item){
+    
+    this._isMounted && this.setState((state, props) => ({
+      deleteDialog: !state.deleteDialog,
+      selectedRow: item
+     }))
+ 
+  }
+
+  showAddTeamDialog(){
+    
+    this._isMounted && this.setState((state, props) => ({
+      addTeamDialog: !state.addTeamDialog
+     }))
   }
 
 
@@ -76,8 +99,8 @@ export class TeamView extends React.Component {
     return (
 
       <div>
-        <Grid direction="row" spacing={2} container>
-          <Grid xs={5} item>
+        <Grid spacing={2} container>
+          <Grid xs={8} item>
             <MaterialTable
               columns={[
                 { title: 'Name', field: 'name' },
@@ -102,7 +125,7 @@ export class TeamView extends React.Component {
                 {
                   tooltip: 'Delete user',
                   icon: 'delete',
-                  onClick: (evt, data) => alert('You want to delete ' + data.length + ' rows')
+                  onClick: (evt, data) => this.showDeleteDialog(data)
                 },
                 {
                   icon: 'add',
@@ -136,14 +159,14 @@ export class TeamView extends React.Component {
                 {
                   tooltip: 'Delete team',
                   icon: 'delete',
-                  onClick: (evt, data) => alert(data)
+                  onClick: (evt, data) => this.showDeleteDialog(data)
                 },
                 {
                   icon: 'add',
                   iconProps: {style: {color: colors.secondary}},
                   tooltip: 'Add team',
                   isFreeAction: true,
-                  onClick: (event) => alert("You want to add a new row")
+                  onClick: (event) => this.showAddTeamDialog()
                 }
               ]}
             />
@@ -151,7 +174,9 @@ export class TeamView extends React.Component {
         </Grid>
 
         {this.state.addUserDialog && <AddUserDialog user={this.state.defUser} handleDialog={this.showAddUserDialog}/>}
-        {this.state.editUserDialog && <EditUserDialog user={this.state.selectedUser} handleDialog={this.showEditUserDialog}/>}
+        {this.state.editUserDialog && <EditUserDialog user={this.state.selectedRow} handleDialog={this.showEditUserDialog}/>}
+        {this.state.deleteDialog && <DeleteDialog item={this.state.selectedRow} handleDialog={this.showDeleteDialog}/>}
+        {this.state.addTeamDialog && <AddTeamDialog team={this.state.defTeam} users={this.state.users} handleDialog={this.showAddTeamDialog}/>}
       </div>
 
     );

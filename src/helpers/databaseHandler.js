@@ -88,17 +88,17 @@ module.exports = class DatabaseHandler {
     getSelectedTeam(membersId = false) {
         const selectedTeamId = this.getSettings().selectedTeam;
         let team = this.db.get("teams").cloneDeep().find({ id: selectedTeamId }).value();
-        let members = [];
-
-        for (let index = 0; index < team.members.length; index++) {
-            const element = this.db.get("users").find({ id: team.members[index] }).value();
-            members[index] = element;
-        }
 
         if (membersId === true) {
             return team; // Only with member IDs
         }
         else {
+
+            let members = [];
+            for (let index = 0; index < team.members.length; index++) {
+                const element = this.db.get("users").find({ id: team.members[index] }).value();
+                members[index] = element;
+            }
 
             team.members = members
             return team; // Members as objects
@@ -134,10 +134,28 @@ module.exports = class DatabaseHandler {
         return id;
     }
 
-    getAllTeams() {
+    getAllTeams(membersId = false) {
 
-        return this.db.get('teams')
+        let teams = this.db.get('teams').cloneDeep()
             .value()
+
+        if (membersId) {
+            return teams;
+        } else {
+            
+            teams.forEach(team => {
+
+                let members = [];
+                for (let index = 0; index < team.members.length; index++) {
+                    const element = this.db.get("users").find({ id: team.members[index] }).value();
+                    members[index] = element;
+                }
+                team.members = members;
+            });
+
+            return teams;
+        }
+
 
     }
 
@@ -165,8 +183,9 @@ module.exports = class DatabaseHandler {
             .write()
     }
 
-    deleteUserOrTeam(id, collection){
+    deleteUserOrTeam(id, collection) {
         this.db.get(collection)
             .remove({ id: id })
+            .write()
     }
 }
