@@ -66,6 +66,42 @@ module.exports = class RecordHandler {
         }*/
     }
 
+    readFromCsv() {
+
+        let readStream = fs.createReadStream("C:\\Users\\Hoang\\Desktop\\2020-04-12-1927.csv")
+            .pipe(csvParser({ separator: ';' }))
+            .on('data', (data) => {
+
+                console.log(this.formatFromCsv(data))
+                readStream.destroy()
+
+
+            })
+            .on('end', () => {
+                console.log("END");
+            });
+    }
+
+    createHeaders() {
+
+        const basic = ["timestamp", "devId", "heartRate", "tempSkin", "tempCloth", "humidity", "activity", "accX", "accY", "accZ", "batteryVoltage", "batteryPercentage", "port", "deadMan"];
+        const performance = ["stehlik", "ee"];
+        const location = ["latMins", "longMins", "fix", "sat", "dilution", "alt", "detected"];
+        let node = [];
+
+        for (let index = 0; index < 9; index++) {
+            const unit = ["connected_" + index.toString(), "tempSkin_" + index.toString(), "humidity_" + index.toString(), "tempCloth_" + index.toString(), "motionX_" + index.toString(), "motionY_" + index.toString(), "motionZ_" + index.toString(), "activity_" + index.toString()];
+            node = node.concat(unit);
+        }
+
+        let headers = basic;
+        if (this.components.performanceData === true) headers = headers.concat(performance);
+        if (this.components.locationData === true) headers = headers.concat(location);
+        if (this.components.nodeData === true) headers = headers.concat(node);
+
+        return headers;
+    }
+
     formatToCsv(packet) {
 
         const convert = (value) => this.dotToComma(value);
@@ -155,41 +191,5 @@ module.exports = class RecordHandler {
         let convertedValue = parseFloat(value.replace(',', '.').replace(' ', ''));
 
         return convertedValue ? convertedValue : 0;
-    }
-
-    readFromCsv() {
-
-        let readStream = fs.createReadStream("C:\\Users\\Hoang\\Desktop\\2020-04-12-1927.csv")
-            .pipe(csvParser({ separator: ';' }))
-            .on('data', (data) => {
-
-                console.log(this.formatFromCsv(data))
-                readStream.destroy()
-
-
-            })
-            .on('end', () => {
-                console.log("END");
-            });
-    }
-
-    createHeaders() {
-
-        const basic = ["timestamp", "devId", "heartRate", "tempSkin", "tempCloth", "humidity", "activity", "accX", "accY", "accZ", "batteryVoltage", "batteryPercentage", "port", "deadMan"];
-        const performance = ["stehlik", "ee"];
-        const location = ["latMins", "longMins", "fix", "sat", "dilution", "alt", "detected"];
-        let node = [];
-
-        for (let index = 0; index < 9; index++) {
-            const unit = ["connected_" + index.toString(), "tempSkin_" + index.toString(), "humidity_" + index.toString(), "tempCloth_" + index.toString(), "motionX_" + index.toString(), "motionY_" + index.toString(), "motionZ_" + index.toString(), "activity_" + index.toString()];
-            node = node.concat(unit);
-        }
-
-        let headers = basic;
-        if (this.components.performanceData === true) headers = headers.concat(performance);
-        if (this.components.locationData === true) headers = headers.concat(location);
-        if (this.components.nodeData === true) headers = headers.concat(node);
-
-        return headers;
     }
 }
