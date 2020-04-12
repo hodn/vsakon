@@ -20,14 +20,14 @@ module.exports = class RecordHandler {
     createCsvWriter(recordingStart) {
 
         const date = recordingStart.toISOString().split("T");
-        const time = recordingStart.toTimeString().split(":")
+        const time = recordingStart.toTimeString().split(":");
 
         const fileName = date[0] + "-" + time[0] + time[1] + ".csv";
         this.filePath = path.join(this.directory, fileName);
         this.writer = csvWriter({
             separator: ';',
             newline: '\n',
-            headers: undefined
+            headers: this.createHeaders()
         })
 
         this.writer.sendHeaders = fs.existsSync(this.filePath) ? false : true;
@@ -62,9 +62,9 @@ module.exports = class RecordHandler {
 
         let csvWriteString = {};
         Object.assign(csvWriteString, packet.basicData, {deadMan: packet.deadMan});
-        if (packet.performanceData !== null) Object.assign(csvWriteString, packet.performanceData);
-        if (packet.locationData !== null) Object.assign(csvWriteString, packet.locationData);
-        if (packet.nodeData !== null) Object.assign(csvWriteString, packet.nodeData);
+        if (packet.performanceData !== null && this.components.performanceData === true) Object.assign(csvWriteString, packet.performanceData);
+        if (packet.locationData !== null && this.components.locationData === true) Object.assign(csvWriteString, packet.locationData);
+        if (packet.nodeData !== null && this.components.nodeData === true) Object.assign(csvWriteString, packet.nodeData);
 
         this.writer.write(this.formatToCsv(csvWriteString))
     }
@@ -92,5 +92,25 @@ module.exports = class RecordHandler {
             .on('end', () => {
                 console.log("end");
             });
+    }
+
+    createHeaders(){
+
+        const basic = ["timestamp","devId","heartRate","tempSkin","tempCloth","humidity","activity","accX","accY","accZ","batteryVoltage","batteryPercentage","port","deadMan"];
+        const performance = ["stehlik","ee"];
+        const location =  ["latMins","longMins","fix","sat","dilution","alt","detected"];
+        let node = [];
+        
+        for (let index = 0; index < 9; index++) {
+            const unit = ["connected_" + index.toString(),"tempSkin_" + index.toString(), "humidity_" + index.toString(),"tempCloth_" + index.toString(),"motionX_" + index.toString(),"motionY_" + index.toString(),"motionZ_" + index.toString(),"activity_" + index.toString()];
+            node = node.concat(unit);
+        }
+
+        let headers = basic;
+        if (this.components.performanceData === true) headers = headers.concat(performance);
+        if (this.components.locationData === true) headers = headers.concat(location);
+        if (this.components.nodeData === true) headers = headers.concat(node);
+        
+        return headers;
     }
 }

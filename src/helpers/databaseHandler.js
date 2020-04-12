@@ -28,6 +28,8 @@ module.exports = class DatabaseHandler {
             .write();
 
         this.db = db;
+
+        //db.get("records").remove().write()
     }
 
     getDefaultUser() {

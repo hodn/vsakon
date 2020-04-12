@@ -253,6 +253,8 @@ ipcMain.on('clear-to-send', (event, arg) => {
         if (arg.selectedTeam !== undefined) packetHandler.profiles = databaseHandler.getSelectedTeam(false).members;
     })
 
+    // ON Register - EVENT from component - change the value in PacketHandler
+
 
 
 })

@@ -41,6 +41,7 @@ class DeviceComponent extends React.Component {
       user: null,
       connected: false,
       detailOpen: false
+      // Settings here (events, thermo, tepovka) - can load with profiles
     }
 
     this.alarmOff = this.alarmOff.bind(this);

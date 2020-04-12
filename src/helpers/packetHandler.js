@@ -6,6 +6,7 @@ module.exports = class PacketHandler {
             this.graphLength = db.getSettings().graphLength,
             this.activityGraphs = [],
             this.heartRateGraphs = []
+            // array of events - changing the value, if not null add to packet
     }
 
     // Storing the state and sending the data to Renderer
@@ -62,7 +63,7 @@ module.exports = class PacketHandler {
         this.event.reply(devId.toString(), data);
     }
 
-    // Resending the state to components that unmounted - mainly in MainView
+    // Resending the state to components that unmounted - MainView
     sendState() {
 
         this.packets.forEach(packet => {
