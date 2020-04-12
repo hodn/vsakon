@@ -1,8 +1,7 @@
 // Simplify.js for sampling
 
-module.exports = class PacketHandler {
-    constructor(event, db) {
-        this.event = event,
+module.exports = class HistoryGraphHandler {
+    constructor() {
         //this.components = db.getRequiredGraphs    
         this.activity = [],
             this.heartRate = [],
@@ -17,7 +16,7 @@ module.exports = class PacketHandler {
 
     storeData(packet){
 
-        this.appendToGraph(packet, this.heartRate, "hearRate");
+        this.appendToGraph(packet, this.heartRate, 'heartRate');
         this.appendToGraph(packet, this.tempSkin, "tempSkin");
         this.appendToGraph(packet, this.tempCloth, "tempCloth");
         this.appendToGraph(packet, this.humidity, "humidity");
@@ -29,7 +28,21 @@ module.exports = class PacketHandler {
     }
     
     appendToGraph(packet, graph, valueName){
-        const dataPoint = { x: packet.basicData.timestamp, y: packet.basicData[valueName] };
+        let dataPoint = { x: packet.basicData.timestamp, y: packet.basicData[valueName] };
         graph.push(dataPoint);
+    }
+
+    getGraphs(){
+        const graphs = {
+            hearRate: this.heartRate,
+            activity: this.activity,
+            accX: this.accX,
+            accY: this.accY,
+            accZ: this.accZ,
+            tempSkin: this.tempSkin,
+            tempCloth: this.tempCloth,
+            humidity: this.humidity
+        }
+        return graphs;
     }
 }

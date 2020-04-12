@@ -4,6 +4,7 @@ const fs = require('fs');
 const csvWriter = require('csv-write-stream');
 const csvParser = require('csv-parser');
 const path = require('path');
+const HistoryGraphHandler = require('./historyGraphHandler');
 
 module.exports = class RecordHandler {
     constructor(db) {
@@ -14,6 +15,7 @@ module.exports = class RecordHandler {
             this.filePath = null,
             this.recordId = null,
             this.recording = false,
+            this.graphHandler = new HistoryGraphHandler();
             this.test = null;
     }
 
@@ -57,28 +59,21 @@ module.exports = class RecordHandler {
 
     writeToCsv(packet) {
 
-        this.writer.write(this.formatToCsv(packet));
-        /*if (packet.basicData.timestamp - this.test < 3000){
-            for (let index = 0; index < 4000; index++) {
-                csvWriteString.timestamp = (3000 * index) + parseInt(csvWriteString.timestamp); 
-                this.writer.write(this.formatToCsv(csvWriteString))
-            }
-        }*/
+        this.writer.write(this.formatToCsv(packet))
     }
-
+    // This will be called straight from electron-starter
     readFromCsv() {
 
         let readStream = fs.createReadStream("C:\\Users\\Hoang\\Desktop\\2020-04-12-1927.csv")
             .pipe(csvParser({ separator: ';' }))
             .on('data', (data) => {
 
-                console.log(this.formatFromCsv(data))
-                readStream.destroy()
-
-
+                
+                this.graphHandler.storeData(this.formatFromCsv(data));
+                
             })
             .on('end', () => {
-                console.log("END");
+               console.log(this.graphHandler.getGraphs().humidity)
             });
     }
 
@@ -106,15 +101,15 @@ module.exports = class RecordHandler {
 
         const convert = (value) => this.dotToComma(value);
 
-        Object.keys(packet).forEach(function (key) {
-            packet[key] = convert(packet[key]);
-        })
-
         let csvWriteString = {};
         Object.assign(csvWriteString, packet.basicData, { deadMan: packet.deadMan });
         if (packet.performanceData !== null && this.components.performanceData === true) Object.assign(csvWriteString, packet.performanceData);
         if (packet.locationData !== null && this.components.locationData === true) Object.assign(csvWriteString, packet.locationData);
         if (packet.nodeData !== null && this.components.nodeData === true) Object.assign(csvWriteString, packet.nodeData);
+
+        Object.keys(csvWriteString).forEach(function (key) {
+            csvWriteString[key] = convert(csvWriteString[key]);
+        })
 
         return csvWriteString;
     }
