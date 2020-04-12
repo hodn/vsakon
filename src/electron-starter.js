@@ -199,7 +199,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     ipcMain.on("set-recording", (event, arg) => {
 
-        recordHandler.setRecording();
+        recordHandler.readFromCsv();
 
     })
 
