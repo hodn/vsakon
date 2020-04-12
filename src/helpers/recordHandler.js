@@ -73,6 +73,8 @@ module.exports = class RecordHandler {
 
         const convert = (value) => this.dotToComma(value);
 
+        packet.timestamp = packet.timestamp
+
         Object.keys(packet).forEach(function (key) {
             packet[key] = convert(packet[key]);
         })

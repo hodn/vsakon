@@ -130,7 +130,7 @@ export class TeamView extends React.Component {
       <div>
         
         <Grid spacing={2} container>
-          <Grid xs={8} item>
+          <Grid xs={12} item>
             <MaterialTable
               columns={[
                 { title: 'Name', field: 'name' },
@@ -168,7 +168,7 @@ export class TeamView extends React.Component {
             />
           </Grid>
 
-          <Grid xs={4} item>
+          <Grid xs={12} item>
             <MaterialTable
               columns={[
                 { title: 'Name', field: 'name' },
