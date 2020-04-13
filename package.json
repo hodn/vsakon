@@ -31,6 +31,7 @@
     "react-vis": "^1.11.7",
     "serialport": "^7.1.5",
     "shortid": "^2.2.15",
+    "simplify-js": "^1.2.4",
     "typeface-roboto": "0.0.75"
   },
   "main": "src/electron-starter.js",

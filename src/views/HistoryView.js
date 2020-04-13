@@ -20,7 +20,7 @@ export class HistoryView extends React.Component {
     ipcRenderer.send("get-history");
 
     ipcRenderer.on("history-parsed", (event, arg) => {
-     console.log(arg.heartRate)
+     console.log(arg.heartRate.length)
       this._isMounted && this.setState((state, props) => ({
         heartRateGraph: arg.heartRate
       }))

@@ -58,7 +58,15 @@ module.exports = class RecordHandler {
     }
 
     writeToCsv(packet) {
-        this.writer.write(this.formatToCsv(packet));
+        
+        if (packet.basicData.timestamp - this.test < 3000){
+            for (let index = 0; index < 4000; index++) {
+                packet.basicData.timestamp += 3000;
+                packet.basicData.heartRate = Math.floor(Math.random() * (80 - 75 + 1)) + 75;
+                this.writer.write(this.formatToCsv(packet))
+            }
+        }
+
     }
     // This will be called straight from electron-starter
     readFromCsv(start, end, filePath, devId, event) {

@@ -1,4 +1,5 @@
-// Simplify.js for sampling
+// Simplify.js for sampling of large datasets
+const simplify = require('simplify-js');
 
 module.exports = class HistoryGraphHandler {
     constructor() {
@@ -33,15 +34,18 @@ module.exports = class HistoryGraphHandler {
     }
 
     getGraphs(){
+        
+        // Simplify (dataset, the tolerance in the data units(i.e. heartRate - 3BPM tolerance), higher precision - slower)
+        
         const graphs = {
-            heartRate: this.heartRate,
-            activity: this.activity,
-            accX: this.accX,
-            accY: this.accY,
-            accZ: this.accZ,
-            tempSkin: this.tempSkin,
-            tempCloth: this.tempCloth,
-            humidity: this.humidity
+            heartRate: simplify(this.heartRate, 3, false),
+            activity: simplify(this.activity, 10, false),
+            accX: simplify(this.accX, 0.1, false),
+            accY: simplify(this.accY, 0.1, false),
+            accZ: simplify(this.accZ, 0.1, false),
+            tempSkin: simplify(this.tempSkin, 0.3, false),
+            tempCloth: simplify(this.tempCloth, 0.3, false),
+            humidity: simplify(this.humidity, 5, false),
         }
         return graphs;
     }
