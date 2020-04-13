@@ -16,7 +16,7 @@ module.exports = class RecordHandler {
             this.recordId = null,
             this.recording = false,
             this.graphHandler = new HistoryGraphHandler();
-            this.test = null;
+        this.test = null;
     }
 
     // Loads user settings file if exists or creates new one with default values
@@ -58,22 +58,27 @@ module.exports = class RecordHandler {
     }
 
     writeToCsv(packet) {
-
-        this.writer.write(this.formatToCsv(packet))
+        this.writer.write(this.formatToCsv(packet));
     }
     // This will be called straight from electron-starter
-    readFromCsv() {
+    readFromCsv(start, end, filePath, devId, event) {
 
-        let readStream = fs.createReadStream("C:\\Users\\Hoang\\Desktop\\2020-04-12-1927.csv")
+        let readStream = fs.createReadStream(filePath)
             .pipe(csvParser({ separator: ';' }))
             .on('data', (data) => {
 
-                
-                this.graphHandler.storeData(this.formatFromCsv(data));
-                
+                if (data.timestamp > end && data.devId === devId.toString()) {
+                    
+                    console.log(this.graphHandler.getGraphs())
+                    readStream.destroy();
+                    
+                } else if (data.timestamp <= end && data.timestamp >= start && data.devId === devId.toString()) {
+                    this.graphHandler.storeData(this.formatFromCsv(data));
+                }
             })
             .on('end', () => {
-               console.log(this.graphHandler.getGraphs().humidity)
+                console.log("end")
+                console.log(this.graphHandler.getGraphs().length)
             });
     }
 
@@ -120,7 +125,7 @@ module.exports = class RecordHandler {
 
         const basicData = {
             timestamp: convert(packet.timestamp),
-            devId: packet.devId,
+            devId: convert(packet.devId),
             heartRate: convert(packet.heartRate),
             tempSkin: convert(packet.tempSkin),
             tempCloth: convert(packet.tempCloth),
@@ -142,7 +147,7 @@ module.exports = class RecordHandler {
 
         const deadMan = packet.deadMan;
 
-        const locationData= packet.detected ? {
+        const locationData = packet.detected ? {
             latMins: convert(packet.latMins),
             longMins: convert(packet.longMins),
             fix: convert(packet.fix),
@@ -176,7 +181,7 @@ module.exports = class RecordHandler {
         };
 
         return parsedData;
-    }   
+    }
 
     dotToComma(value) {
         return value.toString().replace(/\./g, ',');

@@ -197,11 +197,11 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
-    ipcMain.on("set-recording", (event, arg) => {
+    /*ipcMain.on("set-recording", (event, arg) => {
 
         recordHandler.setRecording();
 
-    })
+    }) */
 
     ipcMain.on("main-view-mounted", (event, arg) => {
 
@@ -251,6 +251,18 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         databaseHandler.updateSettings(arg);
         if (arg.selectedTeam !== undefined) packetHandler.profiles = databaseHandler.getSelectedTeam(false).members;
+    })
+
+    //Load history
+    ipcMain.on("set-recording", (event, arg) => {
+
+        let start = 1604936552863;
+        let end = 1605230426863 //1682711942863
+        let filePath = "C:\\Users\\Hoang\\Desktop\\2020-04-12-2239.csv";
+        let devId = 1;
+
+        recordHandler.readFromCsv(start, end, filePath, devId, event)
+
     })
 
     // ON Register - EVENT from component - change the value in PacketHandler

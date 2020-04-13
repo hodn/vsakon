@@ -43,6 +43,6 @@ module.exports = class HistoryGraphHandler {
             tempCloth: this.tempCloth,
             humidity: this.humidity
         }
-        return graphs;
+        return graphs.hearRate;
     }
 }
