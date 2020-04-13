@@ -1,5 +1,6 @@
 import React from 'react';
-
+import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries } from 'react-vis';
+const { ipcRenderer } = window.require('electron');
 
 export class HistoryView extends React.Component {
   constructor(props) {
@@ -8,7 +9,7 @@ export class HistoryView extends React.Component {
     this._isMounted = false;
 
     this.state = {
-      devComponents: []
+      heartRateGraph: []
 
     }
   }
@@ -16,8 +17,17 @@ export class HistoryView extends React.Component {
   componentDidMount() {
 
     this._isMounted = true;
+    ipcRenderer.send("get-history");
+
+    ipcRenderer.on("history-parsed", (event, arg) => {
+     console.log(arg.heartRate)
+      this._isMounted && this.setState((state, props) => ({
+        heartRateGraph: arg.heartRate
+      }))
+
+    })
   }
-  
+
   componentWillUnmount() {
 
   }
@@ -28,7 +38,19 @@ export class HistoryView extends React.Component {
     return (
 
       <div>
-          jl
+        XXX
+        <XYPlot
+          width={500}
+          height={220}
+          xType="time"
+          yDomain={[0, 220]}
+        >
+          <HorizontalGridLines />
+          <LineSeries
+            data={this.state.heartRateGraph} />
+          <XAxis />
+          <YAxis title="BPM" />
+        </XYPlot>
       </div>
 
 

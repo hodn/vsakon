@@ -34,7 +34,7 @@ module.exports = class HistoryGraphHandler {
 
     getGraphs(){
         const graphs = {
-            hearRate: this.heartRate,
+            heartRate: this.heartRate,
             activity: this.activity,
             accX: this.accX,
             accY: this.accY,
@@ -43,6 +43,6 @@ module.exports = class HistoryGraphHandler {
             tempCloth: this.tempCloth,
             humidity: this.humidity
         }
-        return graphs.hearRate;
+        return graphs;
     }
 }

@@ -197,11 +197,11 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
-    /*ipcMain.on("set-recording", (event, arg) => {
+    ipcMain.on("set-recording", (event, arg) => {
 
         recordHandler.setRecording();
 
-    }) */
+    })
 
     ipcMain.on("main-view-mounted", (event, arg) => {
 
@@ -254,10 +254,10 @@ ipcMain.on('clear-to-send', (event, arg) => {
     })
 
     //Load history
-    ipcMain.on("set-recording", (event, arg) => {
+    ipcMain.on("get-history", (event, arg) => {
 
         let start = 1604936552863;
-        let end = 1605230426863 //1682711942863
+        let end = 1682711942863 //1605230426863
         let filePath = "C:\\Users\\Hoang\\Desktop\\2020-04-12-2239.csv";
         let devId = 1;
 

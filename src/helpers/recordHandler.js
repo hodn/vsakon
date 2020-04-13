@@ -69,16 +69,15 @@ module.exports = class RecordHandler {
 
                 if (data.timestamp > end && data.devId === devId.toString()) {
                     
-                    console.log(this.graphHandler.getGraphs())
+                    event.reply("history-parsed", this.graphHandler.getGraphs());
                     readStream.destroy();
-                    
+
                 } else if (data.timestamp <= end && data.timestamp >= start && data.devId === devId.toString()) {
                     this.graphHandler.storeData(this.formatFromCsv(data));
                 }
             })
             .on('end', () => {
-                console.log("end")
-                console.log(this.graphHandler.getGraphs().length)
+                event.reply("history-parsed", this.graphHandler.getGraphs());
             });
     }
 
