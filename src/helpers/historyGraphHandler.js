@@ -40,9 +40,9 @@ module.exports = class HistoryGraphHandler {
         const graphs = {
             heartRate: simplify(this.heartRate, 3, false),
             activity: simplify(this.activity, 10, false),
-            accX: simplify(this.accX, 0.1, false),
-            accY: simplify(this.accY, 0.1, false),
-            accZ: simplify(this.accZ, 0.1, false),
+            accX: simplify(this.accX, 0.05, false),
+            accY: simplify(this.accY, 0.05, false),
+            accZ: simplify(this.accZ, 0.05, false),
             tempSkin: simplify(this.tempSkin, 0.3, false),
             tempCloth: simplify(this.tempCloth, 0.3, false),
             humidity: simplify(this.humidity, 5, false),

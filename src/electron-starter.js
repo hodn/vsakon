@@ -257,7 +257,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     ipcMain.on("get-history", (event, arg) => {
 
         let start = 1586770728112;
-        let end = 1586771853112;
+        let end = 1586774979112;
         let filePath = "C:\\Users\\Hoang\\Desktop\\2020-04-13-1138.csv";
         let devId = 14;
 

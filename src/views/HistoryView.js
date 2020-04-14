@@ -1,5 +1,8 @@
 import React from 'react';
 import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries } from 'react-vis';
+import { DateTimePicker } from "@material-ui/pickers";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from '@date-io/date-fns';
 const { ipcRenderer } = window.require('electron');
 
 export class HistoryView extends React.Component {
@@ -9,9 +12,13 @@ export class HistoryView extends React.Component {
     this._isMounted = false;
 
     this.state = {
-      heartRateGraph: []
+      heartRateGraph: [],
+      time: new Date()
 
     }
+
+    this.onChange = this.onChange.bind(this);
+
   }
 
   componentDidMount() {
@@ -20,7 +27,7 @@ export class HistoryView extends React.Component {
     ipcRenderer.send("get-history");
 
     ipcRenderer.on("history-parsed", (event, arg) => {
-     console.log(arg.heartRate.length)
+      console.log(arg.heartRate.length)
       this._isMounted && this.setState((state, props) => ({
         heartRateGraph: arg.heartRate
       }))
@@ -32,13 +39,16 @@ export class HistoryView extends React.Component {
 
   }
 
+  onChange() {
+    return
+  }
+
   // What the actual component renders
   render() {
 
     return (
 
       <div>
-        XXX
         <XYPlot
           width={500}
           height={220}
@@ -51,6 +61,26 @@ export class HistoryView extends React.Component {
           <XAxis />
           <YAxis title="BPM" />
         </XYPlot>
+        
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <DateTimePicker
+            autoOk
+            ampm={false}
+            value={this.state.time}
+            onChange={this.onChange}
+            label="From"
+            openTo="minutes"
+          />
+
+          <DateTimePicker
+            autoOk
+            ampm={false}
+            value={this.state.time}
+            onChange={this.onChange}
+            label="To"
+            openTo="minutes"
+          />
+        </MuiPickersUtilsProvider>
       </div>
 
 
