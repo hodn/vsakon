@@ -37,6 +37,7 @@ export class TeamView extends React.Component {
     this.toggleAddTeamDialog = this.toggleAddTeamDialog.bind(this);
     this.toggleEditUserDialog = this.toggleEditUserDialog.bind(this);
     this.toggleEditTeamDialog = this.toggleEditTeamDialog.bind(this);
+    this.toggleDeleteDialog = this.toggleDeleteDialog.bind(this);
     this.toggleChangeActiveTeamDialog = this.toggleChangeActiveTeamDialog.bind(this);
 
 
