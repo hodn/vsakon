@@ -169,6 +169,11 @@ module.exports = class DatabaseHandler {
 
     }
 
+    getAllRecords() {
+        return this.db.get('records')
+            .value()
+    }
+
     addUserOrTeam(record, collection) {
 
         record.id = shortid.generate();

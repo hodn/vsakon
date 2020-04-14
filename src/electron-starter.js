@@ -265,6 +265,16 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
+    ipcMain.on("get-records", (event, arg) => {
+
+        const data = databaseHandler.getAllRecords();
+
+        event.reply("records-loaded", data)
+
+    })
+
+
+
     // ON Register - EVENT from component - change the value in PacketHandler
 
 
