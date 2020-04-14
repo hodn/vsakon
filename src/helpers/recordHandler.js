@@ -51,7 +51,7 @@ module.exports = class RecordHandler {
             this.recordId = this.db.addRecord(date.toLocaleString(), this.filePath); // Make a new DB record
         }
         else {
-            this.db.updateRecord(this.recordId, { end: date.toLocaleString() }); // Add end time to DB record
+            this.db.updateItem(this.recordId, { end: date.toLocaleString() }, "records"); // Add end time to DB record
             this.recordId = null;
             this.writer.end()
         }
