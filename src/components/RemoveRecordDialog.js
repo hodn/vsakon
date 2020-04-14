@@ -11,9 +11,8 @@ export default function RemoveRecordDialog(props) {
   
   const submitForm = () => {
     props.handleDialog();
-    const collection = props.item.weight === undefined ? "teams" : "users"
-    ipcRenderer.send("delete-teams", {collection, id: props.item.id});
-    ipcRenderer.send("get-teams");
+    ipcRenderer.send("delete-item", {collection: "records", id: props.item.id});
+    ipcRenderer.send("get-records");
   }
 
   return (
@@ -25,7 +24,7 @@ export default function RemoveRecordDialog(props) {
         <DialogTitle id="alert-dialog-title">Are you sure?</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Would you like to delete {props.item.name}?
+  Would you like to remove this record of {props.item.team.name} from {props.item.start}? The source file will not be affected.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -33,7 +32,7 @@ export default function RemoveRecordDialog(props) {
             Cancel
           </Button>
           <Button onClick={submitForm} style={{color:"red"}} autoFocus>
-            Delete
+            Remove
           </Button>
         </DialogActions>
       </Dialog>

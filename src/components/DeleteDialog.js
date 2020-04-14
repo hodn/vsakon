@@ -12,7 +12,7 @@ export default function DeleteDialog(props) {
   const submitForm = () => {
     props.handleDialog();
     const collection = props.item.weight === undefined ? "teams" : "users"
-    ipcRenderer.send("delete-teams", {collection, id: props.item.id});
+    ipcRenderer.send("delete-item", {collection, id: props.item.id});
     ipcRenderer.send("get-teams");
   }
 

@@ -191,7 +191,7 @@ module.exports = class DatabaseHandler {
             .write()
     }
 
-    deleteUserOrTeam(id, collection) {
+    deleteItem(id, collection) {
         this.db.get(collection)
             .remove({ id: id })
             .write()

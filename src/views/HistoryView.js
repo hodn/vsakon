@@ -4,6 +4,7 @@ import { DateTimePicker } from "@material-ui/pickers";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 import MaterialTable from 'material-table';
+import RemoveRecordDialog from "../components/RemoveRecordDialog";
 import colors from "../colors";
 const { ipcRenderer } = window.require('electron');
 
@@ -17,12 +18,17 @@ export class HistoryView extends React.Component {
       heartRateGraph: [],
       time: new Date(),
       records:[],
-      activeRecord: null
+      activeRecord: null,
+      showRemoveDialog: false,
+      showEditDialog: false,
+      selectedRow: null
 
     }
 
     this.onChange = this.onChange.bind(this);
     this.setActiveRecord = this.setActiveRecord.bind(this);
+    this.toggleRemoveDialog = this.toggleRemoveDialog.bind(this);
+    //this.toggleEditDialog = this.toggleEditDialog.bind(this);
 
   }
 
@@ -80,13 +86,64 @@ export class HistoryView extends React.Component {
     }))
   }
 
+  toggleRemoveDialog(rowData){
+    this._isMounted && this.setState((state, props) => ({
+      showRemoveDialog: !state.showRemoveDialog,
+      selectedRow: rowData
+    }))
+  }
+
   // What the actual component renders
   render() {
 
     return (
 
       <div>
-        <XYPlot
+        
+    <p>{this.state.activeRecord ? this.state.activeRecord.team.name : "XXX"}</p>
+        <MaterialTable
+              columns={[
+                { title: 'Start', field: 'start', type: "datetime", defaultSort: "desc" },
+                { title: 'Team', field: 'team.name' },
+                { title: 'Note', field: 'note' },
+                { title: 'Path', field: 'path' },
+                { title: 'Users', field: 'surnames' }
+                
+              ]}
+              data={this.state.records}
+              title="Records"
+              options={
+                { searchFieldStyle: { width: 200 }}
+              }
+              actions={[
+                {
+                  icon: 'check',
+                  tooltip: 'Select record',
+                  iconProps: {style: {color: colors.secondary}},
+                  onClick: (event, rowData) => this.setActiveRecord(rowData)
+                },
+                {
+                  icon: 'edit',
+                  tooltip: 'Edit record',
+                  onClick: (event, rowData) => this.toggleEditUserDialog(rowData)
+                },
+                {
+                  tooltip: 'Delete record',
+                  icon: 'delete',
+                  onClick: (evt, data) => this.toggleRemoveDialog(data)
+                },
+                {
+                  icon: 'add',
+                  iconProps: {style: {color: colors.secondary}},
+                  tooltip: 'Read CSV file',
+                  isFreeAction: true,
+                  onClick: (event) => this.toggleAddUserDialog()
+                }
+              ]}
+            />
+      
+      {this.state.showRemoveDialog && <RemoveRecordDialog item={this.state.selectedRow} handleDialog={this.toggleRemoveDialog}/>}
+      <XYPlot
           width={500}
           height={220}
           xType="time"
@@ -118,49 +175,7 @@ export class HistoryView extends React.Component {
             openTo="minutes"
           />
         </MuiPickersUtilsProvider>
-    <p>{this.state.activeRecord ? this.state.activeRecord.team.name : "XXX"}</p>
-        <MaterialTable
-              columns={[
-                { title: 'Start', field: 'start' },
-                { title: 'Team', field: 'team.name' },
-                { title: 'Note', field: 'note' },
-                { title: 'Path', field: 'path' },
-                { title: 'Users', field: 'surnames' }
-                
-              ]}
-              data={this.state.records}
-              title="Records"
-              options={
-                { searchFieldStyle: { width: 200 }}
-              }
-              actions={[
-                {
-                  icon: 'check',
-                  tooltip: 'Select record',
-                  iconProps: {style: {color: colors.secondary}},
-                  onClick: (event, rowData) => this.setActiveRecord(rowData)
-                },
-                {
-                  icon: 'edit',
-                  tooltip: 'Edit note',
-                  onClick: (event, rowData) => this.toggleEditUserDialog(rowData)
-                },
-                {
-                  tooltip: 'Delete user',
-                  icon: 'delete',
-                  onClick: (evt, data) => this.toggleDeleteDialog(data)
-                },
-                {
-                  icon: 'add',
-                  iconProps: {style: {color: colors.secondary}},
-                  tooltip: 'Read CSV',
-                  isFreeAction: true,
-                  onClick: (event) => this.toggleAddUserDialog()
-                }
-              ]}
-            />
       </div>
-
 
     );
 

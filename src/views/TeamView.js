@@ -119,8 +119,6 @@ export class TeamView extends React.Component {
     this._isMounted && this.setState((state, props) => ({
       showChangeActiveTeamDialog: !state.showChangeActiveTeamDialog,
     }))
-
-    console.log(this.props.recording);
   }
 
 

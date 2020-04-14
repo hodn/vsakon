@@ -241,9 +241,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
-    ipcMain.on("delete-teams", (event, arg) => {
+    ipcMain.on("delete-item", (event, arg) => {
 
-        databaseHandler.deleteUserOrTeam(arg.id, arg.collection);
+        databaseHandler.deleteItem(arg.id, arg.collection);
 
     })
 
@@ -272,8 +272,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
         event.reply("records-loaded", data)
 
     })
-
-
 
     // ON Register - EVENT from component - change the value in PacketHandler
 
