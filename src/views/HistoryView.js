@@ -5,6 +5,7 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 import MaterialTable from 'material-table';
 import RemoveRecordDialog from "../components/RemoveRecordDialog";
+import EditRecordDialog from "../components/EditRecordDialog";
 import colors from "../colors";
 const { ipcRenderer } = window.require('electron');
 
@@ -17,7 +18,7 @@ export class HistoryView extends React.Component {
     this.state = {
       heartRateGraph: [],
       time: new Date(),
-      records:[],
+      records: [],
       activeRecord: null,
       showRemoveDialog: false,
       showEditDialog: false,
@@ -28,7 +29,7 @@ export class HistoryView extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.setActiveRecord = this.setActiveRecord.bind(this);
     this.toggleRemoveDialog = this.toggleRemoveDialog.bind(this);
-    //this.toggleEditDialog = this.toggleEditDialog.bind(this);
+    this.toggleEditDialog = this.toggleEditDialog.bind(this);
 
   }
 
@@ -54,14 +55,14 @@ export class HistoryView extends React.Component {
       records.forEach(record => {
 
         const surnames = [];
-        
+
         for (let index = 0; index < record.team.members.length; index++) {
-          
-            surnames.push(record.team.members[index].surname)          
+
+          surnames.push(record.team.members[index].surname)
         }
 
         record.surnames = surnames.toString()
-        
+
       });
 
       this._isMounted && this.setState((state, props) => ({
@@ -79,16 +80,23 @@ export class HistoryView extends React.Component {
     return
   }
 
-  setActiveRecord(rowData){
-    
+  setActiveRecord(rowData) {
+
     this._isMounted && this.setState((state, props) => ({
       activeRecord: rowData
     }))
   }
 
-  toggleRemoveDialog(rowData){
+  toggleRemoveDialog(rowData) {
     this._isMounted && this.setState((state, props) => ({
       showRemoveDialog: !state.showRemoveDialog,
+      selectedRow: rowData
+    }))
+  }
+
+  toggleEditDialog(rowData) {
+    this._isMounted && this.setState((state, props) => ({
+      showEditDialog: !state.showEditDialog,
       selectedRow: rowData
     }))
   }
@@ -99,51 +107,53 @@ export class HistoryView extends React.Component {
     return (
 
       <div>
-        
-    <p>{this.state.activeRecord ? this.state.activeRecord.team.name : "XXX"}</p>
+
+        <p>{this.state.activeRecord ? this.state.activeRecord.team.name : "XXX"}</p>
         <MaterialTable
-              columns={[
-                { title: 'Start', field: 'start', type: "datetime", defaultSort: "desc" },
-                { title: 'Team', field: 'team.name' },
-                { title: 'Note', field: 'note' },
-                { title: 'Path', field: 'path' },
-                { title: 'Users', field: 'surnames' }
-                
-              ]}
-              data={this.state.records}
-              title="Records"
-              options={
-                { searchFieldStyle: { width: 200 }}
-              }
-              actions={[
-                {
-                  icon: 'check',
-                  tooltip: 'Select record',
-                  iconProps: {style: {color: colors.secondary}},
-                  onClick: (event, rowData) => this.setActiveRecord(rowData)
-                },
-                {
-                  icon: 'edit',
-                  tooltip: 'Edit record',
-                  onClick: (event, rowData) => this.toggleEditUserDialog(rowData)
-                },
-                {
-                  tooltip: 'Delete record',
-                  icon: 'delete',
-                  onClick: (evt, data) => this.toggleRemoveDialog(data)
-                },
-                {
-                  icon: 'add',
-                  iconProps: {style: {color: colors.secondary}},
-                  tooltip: 'Read CSV file',
-                  isFreeAction: true,
-                  onClick: (event) => this.toggleAddUserDialog()
-                }
-              ]}
-            />
-      
-      {this.state.showRemoveDialog && <RemoveRecordDialog item={this.state.selectedRow} handleDialog={this.toggleRemoveDialog}/>}
-      <XYPlot
+          columns={[
+            { title: 'Start', field: 'start', type: "datetime", defaultSort: "desc" },
+            { title: 'End', field: 'end', type: "datetime"},
+            { title: 'Team', field: 'team.name' },
+            { title: 'Note', field: 'note' },
+            { title: 'Path', field: 'path' },
+            { title: 'Users', field: 'surnames' }
+
+          ]}
+          data={this.state.records}
+          title="Records"
+          options={
+            { searchFieldStyle: { width: 200 } }
+          }
+          actions={[
+            {
+              icon: 'check',
+              tooltip: 'Select record',
+              iconProps: { style: { color: colors.secondary } },
+              onClick: (event, rowData) => this.setActiveRecord(rowData)
+            },
+            {
+              icon: 'edit',
+              tooltip: 'Edit record',
+              onClick: (event, rowData) => this.toggleEditDialog(rowData)
+            },
+            {
+              tooltip: 'Delete record',
+              icon: 'delete',
+              onClick: (evt, data) => this.toggleRemoveDialog(data)
+            },
+            {
+              icon: 'add',
+              iconProps: { style: { color: colors.secondary } },
+              tooltip: 'Read CSV file',
+              isFreeAction: true,
+              onClick: (event) => this.toggleAddUserDialog()
+            }
+          ]}
+        />
+
+        {this.state.showEditDialog && <EditRecordDialog item={this.state.selectedRow} handleDialog={this.toggleEditDialog} />}¨
+        {this.state.showRemoveDialog && <RemoveRecordDialog item={this.state.selectedRow} handleDialog={this.toggleRemoveDialog} />}
+        <XYPlot
           width={500}
           height={220}
           xType="time"
@@ -155,7 +165,7 @@ export class HistoryView extends React.Component {
           <XAxis />
           <YAxis title="BPM" />
         </XYPlot>
-        
+
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <DateTimePicker
             autoOk

@@ -230,14 +230,14 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
-    ipcMain.on("update-teams", (event, arg) => {
+    ipcMain.on("update-item", (event, arg) => {
 
         if (arg.data.tableData !== undefined) {
             let data = arg.data;
             delete data.tableData;
-            databaseHandler.updateUserOrTeam(arg.data.id, data, arg.collection)
+            databaseHandler.updateItem(arg.data.id, data, arg.collection)
         }
-        else databaseHandler.updateUserOrTeam(arg.data.id, arg.data, arg.collection)
+        else databaseHandler.updateItem(arg.data.id, arg.data, arg.collection)
 
     })
 

@@ -42,7 +42,7 @@ export default function EditTeamDialog(props) {
       teamWithIDsOnly.members[index] = teamWithIDsOnly.members[index].id;
     };
 
-    ipcRenderer.send("update-teams", {collection: "teams", data: teamWithIDsOnly});
+    ipcRenderer.send("update-item", {collection: "teams", data: teamWithIDsOnly});
     ipcRenderer.send("get-teams");
   }
 

@@ -127,16 +127,6 @@ module.exports = class DatabaseHandler {
         return record.id;
     }
 
-    updateRecord(id, parameter) {
-
-        this.db.get('records')
-            .find({ id: id })
-            .assign(parameter)
-            .write()
-
-        return id;
-    }
-
     getAllTeams(onlyMembersId = false) {
 
         let teams = this.db.get('teams').cloneDeep()
@@ -183,7 +173,7 @@ module.exports = class DatabaseHandler {
             .write()
     }
 
-    updateUserOrTeam(id, record, collection) {
+    updateItem(id, record, collection) {
 
         this.db.get(collection)
             .find({ id: id })

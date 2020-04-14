@@ -33,7 +33,7 @@ export default function EditUserDialog(props) {
 
   const submitForm = () => {
     props.handleDialog();
-    ipcRenderer.send("update-teams", {collection: "users", data: values});
+    ipcRenderer.send("update-item", {collection: "users", data: values});
     ipcRenderer.send("get-teams");
   }
   /* props: title, type of operation, state of close, event to send*/
