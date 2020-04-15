@@ -48,10 +48,10 @@ module.exports = class RecordHandler {
         if (this.recording === true) {
 
             this.createCsvWriter(date);
-            this.recordId = this.db.addRecord(date.toLocaleString(), this.filePath); // Make a new DB record
+            this.recordId = this.db.addRecord(date.toString(), this.filePath); // Make a new DB record
         }
         else {
-            this.db.updateItem(this.recordId, { end: date.toLocaleString() }, "records"); // Add end time to DB record
+            this.db.updateItem(this.recordId, { end: date.toString() }, "records"); // Add end time to DB record
             this.recordId = null;
             this.writer.end()
         }

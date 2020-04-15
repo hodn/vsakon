@@ -17,7 +17,8 @@ export class HistoryView extends React.Component {
 
     this.state = {
       heartRateGraph: [],
-      time: new Date(),
+      from: null,
+      to: null, 
       records: [],
       activeRecord: null,
       showRemoveDialog: false,
@@ -26,7 +27,8 @@ export class HistoryView extends React.Component {
 
     }
 
-    this.onChange = this.onChange.bind(this);
+    this.onFromChange = this.onFromChange.bind(this);
+    this.onToChange = this.onToChange.bind(this);
     this.setActiveRecord = this.setActiveRecord.bind(this);
     this.toggleRemoveDialog = this.toggleRemoveDialog.bind(this);
     this.toggleEditDialog = this.toggleEditDialog.bind(this);
@@ -52,22 +54,11 @@ export class HistoryView extends React.Component {
 
       const records = arg;
 
-      records.forEach(record => {
-
-        const surnames = [];
-
-        for (let index = 0; index < record.team.members.length; index++) {
-
-          surnames.push(record.team.members[index].surname)
-        }
-
-        record.surnames = surnames.toString()
-
-      });
-
       this._isMounted && this.setState((state, props) => ({
         records,
-        activeRecord: records[records.length - 1]
+        activeRecord: records[records.length - 1],
+        from: records[records.length - 1].start,
+        to: records[records.length - 1].end,
       }))
     })
   }
@@ -76,14 +67,24 @@ export class HistoryView extends React.Component {
 
   }
 
-  onChange() {
-    return
+  onFromChange(time) {
+    this._isMounted && this.setState((state, props) => ({
+      from: time
+    }))
+  }
+
+  onToChange(time){
+    this._isMounted && this.setState((state, props) => ({
+      to: time
+    }))
   }
 
   setActiveRecord(rowData) {
 
     this._isMounted && this.setState((state, props) => ({
-      activeRecord: rowData
+      activeRecord: rowData,
+      from: rowData.start,
+      to: rowData.end
     }))
   }
 
@@ -109,14 +110,42 @@ export class HistoryView extends React.Component {
       <div>
 
         <p>{this.state.activeRecord ? this.state.activeRecord.team.name : "XXX"}</p>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <DateTimePicker
+            autoOk
+            ampm={false}
+            value={this.state.from}
+            onChange={this.onFromChange}
+            label="From"
+            openTo="minutes"
+          />
+
+          <DateTimePicker
+            autoOk
+            ampm={false}
+            value={this.state.to}
+            onChange={this.onToChange}
+            label="To"
+            openTo="minutes"
+          />
+        </MuiPickersUtilsProvider>
         <MaterialTable
           columns={[
-            { title: 'Start', field: 'start', type: "datetime", defaultSort: "desc" },
-            { title: 'End', field: 'end', type: "datetime"},
+            { title: 'Start', field: 'start', type: "datetime", defaultSort: "desc", render: rowData => new Date(rowData.start).toLocaleString() },
+            { title: 'End', field: 'end', type: "datetime", render: rowData => new Date(rowData.end).toLocaleString() },
             { title: 'Team', field: 'team.name' },
             { title: 'Note', field: 'note' },
             { title: 'Path', field: 'path' },
-            { title: 'Users', field: 'surnames' }
+            { title: 'Users', field: 'users', render: rowData => {
+              
+              let surnames = [];
+              for (let index = 0; index < rowData.team.members.length; index++) {
+
+                surnames.push(rowData.team.members[index].surname);
+              }
+
+              return surnames.toString();
+            } }
 
           ]}
           data={this.state.records}
@@ -150,9 +179,6 @@ export class HistoryView extends React.Component {
             }
           ]}
         />
-
-        {this.state.showEditDialog && <EditRecordDialog item={this.state.selectedRow} handleDialog={this.toggleEditDialog} />}¨
-        {this.state.showRemoveDialog && <RemoveRecordDialog item={this.state.selectedRow} handleDialog={this.toggleRemoveDialog} />}
         <XYPlot
           width={500}
           height={220}
@@ -165,26 +191,9 @@ export class HistoryView extends React.Component {
           <XAxis />
           <YAxis title="BPM" />
         </XYPlot>
-
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <DateTimePicker
-            autoOk
-            ampm={false}
-            value={this.state.time}
-            onChange={this.onChange}
-            label="From"
-            openTo="minutes"
-          />
-
-          <DateTimePicker
-            autoOk
-            ampm={false}
-            value={this.state.time}
-            onChange={this.onChange}
-            label="To"
-            openTo="minutes"
-          />
-        </MuiPickersUtilsProvider>
+        
+        {this.state.showEditDialog && <EditRecordDialog item={this.state.selectedRow} handleDialog={this.toggleEditDialog} />}
+        {this.state.showRemoveDialog && <RemoveRecordDialog item={this.state.selectedRow} handleDialog={this.toggleRemoveDialog} />}
       </div>
 
     );
