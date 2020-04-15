@@ -1,12 +1,17 @@
 import React from 'react';
 import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries } from 'react-vis';
 import { DateTimePicker } from "@material-ui/pickers";
+import Paper from "@material-ui/core/Paper";
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 import MaterialTable from 'material-table';
 import RemoveRecordDialog from "../components/RemoveRecordDialog";
 import EditRecordDialog from "../components/EditRecordDialog";
+import HistoryUsersDetail from "../components/HistoryUsersDetail";
 import colors from "../colors";
+import { Grid } from '@material-ui/core';
 const { ipcRenderer } = window.require('electron');
 
 export class HistoryView extends React.Component {
@@ -18,7 +23,7 @@ export class HistoryView extends React.Component {
     this.state = {
       heartRateGraph: [],
       from: null,
-      to: null, 
+      to: null,
       records: [],
       activeRecord: null,
       showRemoveDialog: false,
@@ -75,7 +80,7 @@ export class HistoryView extends React.Component {
     }))
   }
 
-  onToChange(time){
+  onToChange(time) {
     this._isMounted && this.setState((state, props) => ({
       to: time
     }))
@@ -110,27 +115,38 @@ export class HistoryView extends React.Component {
     return (
 
       <div>
+        <Grid>
+        <Paper elevation={3} style={{ padding: 15 }}>
+          <div style={{ margin: 15 }}>
+            <Typography variant="h5"> {this.state.activeRecord ? this.state.activeRecord.team.name : "No record"} </Typography>
+            <Typography style={{ marginBottom: 10 }} variant="subtitle2"> {this.state.activeRecord ? this.state.activeRecord.note : "---"} </Typography>
+            <Typography variant="body2"> Start: {this.state.activeRecord ? new Date(this.state.activeRecord.start).toLocaleString() : "---"} </Typography>
+            <Typography variant="body2"> End: {this.state.activeRecord ? this.state.activeRecord.end ? new Date(this.state.activeRecord.end).toLocaleString() : "---" : "---"} </Typography>
+            <Divider />
+          </div>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <DateTimePicker
+              autoOk
+              ampm={false}
+              value={this.state.from}
+              onChange={this.onFromChange}
+              label="From"
+              openTo="minutes"
+              style={{ margin: 15 }}
+            />
 
-        <p>{this.state.activeRecord ? this.state.activeRecord.team.name : "XXX"}</p>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <DateTimePicker
-            autoOk
-            ampm={false}
-            value={this.state.from}
-            onChange={this.onFromChange}
-            label="From"
-            openTo="minutes"
-          />
-
-          <DateTimePicker
-            autoOk
-            ampm={false}
-            value={this.state.to}
-            onChange={this.onToChange}
-            label="To"
-            openTo="minutes"
-          />
-        </MuiPickersUtilsProvider>
+            <DateTimePicker
+              autoOk
+              ampm={false}
+              value={this.state.to}
+              onChange={this.onToChange}
+              label="To"
+              openTo="minutes"
+              style={{ margin: 15 }}
+            />
+          </MuiPickersUtilsProvider>
+        </Paper>
+        <HistoryUsersDetail/>
         <MaterialTable
           columns={[
             { title: 'Start', field: 'start', type: "datetime", defaultSort: "desc", render: rowData => new Date(rowData.start).toLocaleString() },
@@ -138,16 +154,18 @@ export class HistoryView extends React.Component {
             { title: 'Team', field: 'team.name' },
             { title: 'Note', field: 'note' },
             { title: 'Path', field: 'path' },
-            { title: 'Users', field: 'users', render: rowData => {
-              
-              let surnames = [];
-              for (let index = 0; index < rowData.team.members.length; index++) {
+            {
+              title: 'Users', field: 'users', render: rowData => {
 
-                surnames.push(rowData.team.members[index].surname);
+                let surnames = [];
+                for (let index = 0; index < rowData.team.members.length; index++) {
+
+                  surnames.push(rowData.team.members[index].surname);
+                }
+
+                return surnames.toString();
               }
-
-              return surnames.toString();
-            } }
+            }
 
           ]}
           data={this.state.records}
@@ -193,7 +211,7 @@ export class HistoryView extends React.Component {
           <XAxis />
           <YAxis title="BPM" />
         </XYPlot>
-        
+          </Grid>
         {this.state.showEditDialog && <EditRecordDialog item={this.state.selectedRow} handleDialog={this.toggleEditDialog} />}
         {this.state.showRemoveDialog && <RemoveRecordDialog item={this.state.selectedRow} handleDialog={this.toggleRemoveDialog} />}
       </div>
