@@ -18,7 +18,7 @@ export default function HistoryDetail(props) {
             users.push(
                 <Grid xs={2} key={"item" + i} item>
                     <Chip variant="outlined" avatar={<Avatar style={{ backgroundColor: colors.secondary, color: "white" }} >{i + 1}</Avatar>} 
-                    label={members ? (members[i].name + " " + members[i].surname): "User not loaded"} />
+                    label={members ? (members[i].name + " " + members[i].surname): "User not loaded"} onClick={() => props.openDetail(i+1)}/>
                 </Grid>
             );
         }

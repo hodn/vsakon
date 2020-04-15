@@ -1,5 +1,4 @@
 import React from 'react';
-import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries } from 'react-vis';
 import { DateTimePicker } from "@material-ui/pickers";
 import Paper from "@material-ui/core/Paper";
 import Typography from '@material-ui/core/Typography';
@@ -10,6 +9,7 @@ import MaterialTable from 'material-table';
 import RemoveRecordDialog from "../components/RemoveRecordDialog";
 import EditRecordDialog from "../components/EditRecordDialog";
 import HistoryUsersDetail from "../components/HistoryUsersDetail";
+import HistoryDialog from "../components/HistoryDialog";
 import colors from "../colors";
 import { Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -36,14 +36,16 @@ class HistoryView extends React.Component {
     this._isMounted = false;
 
     this.state = {
-      heartRateGraph: [],
       from: null,
       to: null,
       records: [],
       activeRecord: null,
       showRemoveDialog: false,
       showEditDialog: false,
-      selectedRow: null
+      selectedRow: null,
+      selectedUser: null,
+      devId: null,
+      detailOpen: false
 
     }
 
@@ -52,21 +54,15 @@ class HistoryView extends React.Component {
     this.setActiveRecord = this.setActiveRecord.bind(this);
     this.toggleRemoveDialog = this.toggleRemoveDialog.bind(this);
     this.toggleEditDialog = this.toggleEditDialog.bind(this);
+    this.openDetailDialog = this.openDetailDialog.bind(this);
+    this.closeDetailDialog = this.closeDetailDialog.bind(this);
+
 
   }
 
   componentDidMount() {
 
     this._isMounted = true;
-    // ipcRenderer.send("get-history"); this will be initiated by on click of the device
-
-    /* ipcRenderer.on("history-parsed", (event, arg) => {
-      console.log(arg.heartRate.length)
-      this._isMounted && this.setState((state, props) => ({
-        heartRateGraph: arg.heartRate
-      })) this will be for the dialog
-
-    })*/
 
     ipcRenderer.send("get-records");
 
@@ -124,6 +120,25 @@ class HistoryView extends React.Component {
     }))
   }
 
+ openDetailDialog(devId) {
+    this.setState({ 
+      detailOpen: true,
+      selectedUser: this.state.activeRecord.team.members[devId-1],
+      devId 
+    });
+    
+    ipcRenderer.send("get-history", {
+      from: new Date(this.state.from).getTime(),
+      to: new Date(this.state.to).getTime(),
+      devId: devId,
+      filePath: this.state.activeRecord.path
+    });
+  }
+
+  closeDetailDialog() {
+    this.setState({ detailOpen: false });
+  }
+
   // What the actual component renders
   render() {
 
@@ -170,7 +185,7 @@ class HistoryView extends React.Component {
               </MuiPickersUtilsProvider>
             </Paper>
           </Grid>
-          <Grid item xs={9}> <HistoryUsersDetail record={this.state.activeRecord}/> </Grid>
+          <Grid item xs={9}> <HistoryUsersDetail record={this.state.activeRecord} openDetail={this.openDetailDialog} /> </Grid>
           <Grid item xs={12}><MaterialTable
             columns={[
               { title: 'Start', field: 'start', type: "datetime", defaultSort: "desc", render: rowData => new Date(rowData.start).toLocaleString() },
@@ -223,19 +238,15 @@ class HistoryView extends React.Component {
               }
             ]}
           /> </Grid>
-          <XYPlot
-            width={500}
-            height={220}
-            xType="time"
-            yDomain={[0, 220]}
-          >
-            <HorizontalGridLines />
-            <LineSeries
-              data={this.state.heartRateGraph} />
-            <XAxis />
-            <YAxis title="BPM" />
-          </XYPlot>
         </Grid>
+        <HistoryDialog
+            openState={this.state.detailOpen}
+            open={this.openDetailDialog}
+            close={this.closeDetailDialog}
+            devId={this.state.devId}
+            user={this.state.selectedUser}
+          />
+
         {this.state.showEditDialog && <EditRecordDialog item={this.state.selectedRow} handleDialog={this.toggleEditDialog} />}
         {this.state.showRemoveDialog && <RemoveRecordDialog item={this.state.selectedRow} handleDialog={this.toggleRemoveDialog} />}
       </div>
