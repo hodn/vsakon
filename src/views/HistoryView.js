@@ -12,9 +12,24 @@ import EditRecordDialog from "../components/EditRecordDialog";
 import HistoryUsersDetail from "../components/HistoryUsersDetail";
 import colors from "../colors";
 import { Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 const { ipcRenderer } = window.require('electron');
 
-export class HistoryView extends React.Component {
+const styles = {
+
+  infoContainer: {
+    padding: 15
+  },
+  pickers: {
+    margin: 5,
+  },
+  recordInfo: {
+    margin: 5
+  },
+};
+
+class HistoryView extends React.Component {
   constructor(props) {
     super(props);
 
@@ -112,106 +127,115 @@ export class HistoryView extends React.Component {
   // What the actual component renders
   render() {
 
+    const { classes } = this.props;
     return (
 
       <div>
-        <Grid>
-        <Paper elevation={3} style={{ padding: 15 }}>
-          <div style={{ margin: 15 }}>
-            <Typography variant="h5"> {this.state.activeRecord ? this.state.activeRecord.team.name : "No record"} </Typography>
-            <Typography style={{ marginBottom: 10 }} variant="subtitle2"> {this.state.activeRecord ? this.state.activeRecord.note : "---"} </Typography>
-            <Typography variant="body2"> Start: {this.state.activeRecord ? new Date(this.state.activeRecord.start).toLocaleString() : "---"} </Typography>
-            <Typography variant="body2"> End: {this.state.activeRecord ? this.state.activeRecord.end ? new Date(this.state.activeRecord.end).toLocaleString() : "---" : "---"} </Typography>
-            <Divider />
-          </div>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <DateTimePicker
-              autoOk
-              ampm={false}
-              value={this.state.from}
-              onChange={this.onFromChange}
-              label="From"
-              openTo="minutes"
-              style={{ margin: 15 }}
-            />
-
-            <DateTimePicker
-              autoOk
-              ampm={false}
-              value={this.state.to}
-              onChange={this.onToChange}
-              label="To"
-              openTo="minutes"
-              style={{ margin: 15 }}
-            />
-          </MuiPickersUtilsProvider>
-        </Paper>
-        <HistoryUsersDetail/>
-        <MaterialTable
-          columns={[
-            { title: 'Start', field: 'start', type: "datetime", defaultSort: "desc", render: rowData => new Date(rowData.start).toLocaleString() },
-            { title: 'End', field: 'end', type: "datetime", render: rowData => rowData.end ? new Date(rowData.end).toLocaleString() : "Recording..." },
-            { title: 'Team', field: 'team.name' },
-            { title: 'Note', field: 'note' },
-            { title: 'Path', field: 'path' },
-            {
-              title: 'Users', field: 'users', render: rowData => {
-
-                let surnames = [];
-                for (let index = 0; index < rowData.team.members.length; index++) {
-
-                  surnames.push(rowData.team.members[index].surname);
-                }
-
-                return surnames.toString();
-              }
-            }
-
-          ]}
-          data={this.state.records}
-          title="Records"
-          options={
-            { searchFieldStyle: { width: 200 } }
-          }
-          actions={[
-            {
-              icon: 'check',
-              tooltip: 'Select record',
-              iconProps: { style: { color: colors.secondary } },
-              onClick: (event, rowData) => this.setActiveRecord(rowData)
-            },
-            {
-              icon: 'edit',
-              tooltip: 'Edit record',
-              onClick: (event, rowData) => this.toggleEditDialog(rowData)
-            },
-            {
-              tooltip: 'Delete record',
-              icon: 'delete',
-              onClick: (evt, data) => this.toggleRemoveDialog(data)
-            },
-            {
-              icon: 'add',
-              iconProps: { style: { color: colors.secondary } },
-              tooltip: 'Read CSV file',
-              isFreeAction: true,
-              onClick: (event) => this.toggleAddUserDialog()
-            }
-          ]}
-        />
-        <XYPlot
-          width={500}
-          height={220}
-          xType="time"
-          yDomain={[0, 220]}
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          spacing={2}
         >
-          <HorizontalGridLines />
-          <LineSeries
-            data={this.state.heartRateGraph} />
-          <XAxis />
-          <YAxis title="BPM" />
-        </XYPlot>
+          <Grid item xs={3}>
+            <Paper elevation={3} className={classes.infoContainer}>
+              <div className={classes.recordInfo}>
+                <Typography variant="h5"> {this.state.activeRecord ? this.state.activeRecord.team.name : "No record"} </Typography>
+                <Typography style={{ marginBottom: 10 }} variant="subtitle2"> {this.state.activeRecord ? this.state.activeRecord.note ? this.state.activeRecord.note : "---" : "---"} </Typography>
+                <Typography variant="body2"> Start: {this.state.activeRecord ? new Date(this.state.activeRecord.start).toLocaleString() : "---"} </Typography>
+                <Typography variant="body2"> End: {this.state.activeRecord ? this.state.activeRecord.end ? new Date(this.state.activeRecord.end).toLocaleString() : "---" : "---"} </Typography>
+                <Divider style={{ marginBottom: 10 }} />
+              </div>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DateTimePicker
+                  autoOk
+                  ampm={false}
+                  value={this.state.from}
+                  onChange={this.onFromChange}
+                  label="From"
+                  openTo="minutes"
+                  className={classes.pickers}
+                />
+
+                <DateTimePicker
+                  autoOk
+                  ampm={false}
+                  value={this.state.to}
+                  onChange={this.onToChange}
+                  label="To"
+                  openTo="minutes"
+                  className={classes.pickers}
+                />
+              </MuiPickersUtilsProvider>
+            </Paper>
           </Grid>
+          <Grid item xs={9}> <HistoryUsersDetail record={this.state.activeRecord}/> </Grid>
+          <Grid item xs={12}><MaterialTable
+            columns={[
+              { title: 'Start', field: 'start', type: "datetime", defaultSort: "desc", render: rowData => new Date(rowData.start).toLocaleString() },
+              { title: 'End', field: 'end', type: "datetime", render: rowData => rowData.end ? new Date(rowData.end).toLocaleString() : "Recording..." },
+              { title: 'Team', field: 'team.name' },
+              { title: 'Note', field: 'note' },
+              { title: 'Path', field: 'path' },
+              {
+                title: 'Users', field: 'users', render: rowData => {
+
+                  let surnames = [];
+                  for (let index = 0; index < rowData.team.members.length; index++) {
+
+                    surnames.push(rowData.team.members[index].surname);
+                  }
+
+                  return surnames.toString();
+                }
+              }
+
+            ]}
+            data={this.state.records}
+            title="Records"
+            options={
+              { searchFieldStyle: { width: 200 } }
+            }
+            actions={[
+              {
+                icon: 'check',
+                tooltip: 'Select record',
+                iconProps: { style: { color: colors.secondary } },
+                onClick: (event, rowData) => this.setActiveRecord(rowData)
+              },
+              {
+                icon: 'edit',
+                tooltip: 'Edit record',
+                onClick: (event, rowData) => this.toggleEditDialog(rowData)
+              },
+              {
+                tooltip: 'Delete record',
+                icon: 'delete',
+                onClick: (evt, data) => this.toggleRemoveDialog(data)
+              },
+              {
+                icon: 'save',
+                iconProps: { style: { color: colors.secondary } },
+                tooltip: 'Read CSV file',
+                isFreeAction: true,
+                onClick: (event) => this.toggleAddUserDialog()
+              }
+            ]}
+          /> </Grid>
+          <XYPlot
+            width={500}
+            height={220}
+            xType="time"
+            yDomain={[0, 220]}
+          >
+            <HorizontalGridLines />
+            <LineSeries
+              data={this.state.heartRateGraph} />
+            <XAxis />
+            <YAxis title="BPM" />
+          </XYPlot>
+        </Grid>
         {this.state.showEditDialog && <EditRecordDialog item={this.state.selectedRow} handleDialog={this.toggleEditDialog} />}
         {this.state.showRemoveDialog && <RemoveRecordDialog item={this.state.selectedRow} handleDialog={this.toggleRemoveDialog} />}
       </div>
@@ -222,4 +246,10 @@ export class HistoryView extends React.Component {
   }
 
 }
+
+HistoryView.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(HistoryView);
 

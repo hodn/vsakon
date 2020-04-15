@@ -3,16 +3,24 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
+import colors from "../colors"
 
 export default function HistoryDetail(props) {
-
+    
+    const members = props.record ? props.record.team.members : null;
+    
     const getUsers = () => {
 
         let users = [];
 
         for (let i = 0; i < 30; i++) {
 
-            users.push(<Grid key={"item" + i} item> <Chip avatar={<Avatar>{i + 1}</Avatar>} label="Clickable" onClick={console.log("MAMA")} /> </Grid>);
+            users.push(
+                <Grid xs={2} key={"item" + i} item>
+                    <Chip variant="outlined" avatar={<Avatar style={{ backgroundColor: colors.secondary, color: "white" }} >{i + 1}</Avatar>} 
+                    label={members ? (members[i].name + " " + members[i].surname): "User not loaded"} />
+                </Grid>
+            );
         }
 
         return users;
@@ -21,7 +29,7 @@ export default function HistoryDetail(props) {
 
     return (
         <div>
-            <Paper elevation={3}>
+            <Paper elevation={3} style={{padding: 15}}>
                 <Grid
                     container
                     direction="row"

@@ -19,7 +19,7 @@ import colors from '../colors';
 import ResetMenu from './ResetMenu';
 import { MainView } from '../views/MainView';
 import { SettingsView } from '../views/SettingsView';
-import { HistoryView } from '../views/HistoryView';
+import HistoryView from '../views/HistoryView';
 import { TeamView } from '../views/TeamView'
 
 
