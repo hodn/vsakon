@@ -8,9 +8,11 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
-import { XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, LineSeries, DiscreteColorLegend } from 'react-vis';
+import { FlexibleWidthXYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, LineSeries, DiscreteColorLegend } from 'react-vis';
 import colors from '../colors';
 
 const { ipcRenderer } = window.require('electron');
@@ -85,117 +87,151 @@ export default function HistoryDialog(props) {
           </Toolbar>
         </AppBar>
         <DialogContent>
-          <Chip variant="outlined" label={props.user ? (props.user.age + " " + "y.o.") : "--"} />
-          <Chip variant="outlined" label={props.user ? (props.user.weight + " " + "kg") : "--"} />
-          <Chip variant="outlined" label={props.user ? (props.user.height + " " + "cm") : "--"} />
-          <Chip variant="outlined" label={props.user ? (props.user.hrRest + " " + "BPM REST") : "--"} />
-          <Chip variant="outlined" label={props.user ? (props.user.hrRef + " " + "BPM REF") : "--"} />
-          <Chip variant="outlined" label={props.user ? (props.user.hrMax + " " + "BPM MAX") : "--"} />
-          <Chip variant="outlined" label={props.user ? (props.user.vMax + " " + "ml/min") : "--"} />
-          <Chip variant="outlined" label={props.user ? props.user.gender : "--"} />
-          <XYPlot
-            width={500}
-            height={220}
-            xType="time"
-            yDomain={[0, 220]}
-          >
-            <HorizontalGridLines />
-            <VerticalGridLines />
-            <LineSeries
-              data={heartRate} />
-            <XAxis />
-            <YAxis title="BPM" />
-          </XYPlot>
-          <XYPlot
-            width={500}
-            height={220}
-            xType="time"
-            yDomain={[0, 500]}
-          >
-            <HorizontalGridLines />
-            <VerticalGridLines />
-            <LineSeries
-              data={activity} />
-            <XAxis />
-            <YAxis title="nat" />
-          </XYPlot>
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <Chip variant="outlined" label={props.user ? (props.user.age + " y.o.") : "--"} />
+              <Chip variant="outlined" label={props.user ? (props.user.weight + " kg") : "--"} />
+              <Chip variant="outlined" label={props.user ? (props.user.height + " cm") : "--"} />
+              <Chip variant="outlined" label={props.user ? (props.user.hrRest + " BPM REST") : "--"} />
+              <Chip variant="outlined" label={props.user ? (props.user.hrRef + " BPM REF") : "--"} />
+              <Chip variant="outlined" label={props.user ? (props.user.hrMax + " BPM MAX") : "--"} />
+              <Chip variant="outlined" label={props.user ? (props.user.vMax + " ml/min") : "--"} />
+              <Chip variant="outlined" label={props.user ? props.user.gender : "--"} />
+            </Grid>
 
-          <XYPlot
-            width={500}
-            height={220}
-            xType="time"
-            yDomain={[-1, 1]}
-          >
-            <HorizontalGridLines />
-            <VerticalGridLines />
-            <LineSeries
-              data={accX}
-              color={colors.yellow} />
-            <LineSeries
-              data={accY}
-              color={colors.red} />
-            <LineSeries
-              data={accY}
-              color={colors.green} />
-            <XAxis />
-            <YAxis title="G" />
-            <DiscreteColorLegend
-              colors={[
-                colors.yellow,
-                colors.red,
-                colors.green
-              ]}
-              items={[
-                'Axis X',
-                'Axis Y',
-                'Axis Z',
-              ]}
-              orientation="horizontal"
-            />
-          </XYPlot>
+            <Grid item xs={6}>
+              <Paper> 
+                <Typography variant="h6"> Heart rate </Typography>
+                <FlexibleWidthXYPlot
+                  
+                  height={220}
+                  xType="time"
+                  yDomain={[0, 220]}
+                >
+                  <HorizontalGridLines />
+                  <VerticalGridLines />
+                  <LineSeries
+                    data={heartRate} />
+                  <XAxis />
+                  <YAxis title="BPM" />
+                </FlexibleWidthXYPlot>
+              </Paper>
+            </Grid>
 
-          <XYPlot
-            width={500}
-            height={220}
-            xType="time"
-            yDomain={[0, 45]}
-          >
-            <HorizontalGridLines />
-            <VerticalGridLines />
-            <LineSeries
-              data={tempSkin} />
-            <XAxis />
-            <YAxis title="°C" />
-          </XYPlot>
+            <Grid item xs={6}>
+              <Paper>
+                <Typography variant="h6"> Activity </Typography>
+                <FlexibleWidthXYPlot
+                  
+                  height={220}
+                  xType="time"
+                  yDomain={[0, 500]}
+                >
+                  <HorizontalGridLines />
+                  <VerticalGridLines />
+                  <LineSeries
+                    data={activity} />
+                  <XAxis />
+                  <YAxis title="nat" />
+                </FlexibleWidthXYPlot>
+              </Paper>
+            </Grid>
 
-          <XYPlot
-            width={500}
-            height={220}
-            xType="time"
-            yDomain={[0, 45]}
-          >
-            <HorizontalGridLines />
-            <VerticalGridLines />
-            <LineSeries
-              data={tempCloth} />
-            <XAxis />
-            <YAxis title="°C" />
-          </XYPlot>
+            <Grid item xs={6}>
+              <Paper>
+                <Typography variant="h6"> Acceleration </Typography>
+                <FlexibleWidthXYPlot
+                  
+                  height={200}
+                  xType="time"
+                  yDomain={[-1, 1]}
+                >
+                  <HorizontalGridLines />
+                  <VerticalGridLines />
+                  <LineSeries
+                    data={accX}
+                    color={colors.yellow} />
+                  <LineSeries
+                    data={accY}
+                    color={colors.red} />
+                  <LineSeries
+                    data={accZ}
+                    color={colors.green} />
+                  <XAxis />
+                  <YAxis title="G" />
+                </FlexibleWidthXYPlot>
+                <DiscreteColorLegend
+                  colors={[
+                    colors.yellow,
+                    colors.red,
+                    colors.green
+                  ]}
+                  items={[
+                    'Axis X',
+                    'Axis Y',
+                    'Axis Z',
+                  ]}
+                  orientation="horizontal"
+                />
+              </Paper>
+            </Grid>
 
-          <XYPlot
-            width={500}
-            height={220}
-            xType="time"
-            yDomain={[0, 100]}
-          >
-            <HorizontalGridLines />
-            <VerticalGridLines />
-            <LineSeries
-              data={humidity} />
-            <XAxis />
-            <YAxis title="%" />
-          </XYPlot>
+            <Grid item xs={6}>
+              <Paper>
+                <Typography variant="h6"> Temperature - skin </Typography>
+                <FlexibleWidthXYPlot
+                  height={220}
+                  xType="time"
+                  yDomain={[0, 45]}
+                >
+                  <HorizontalGridLines />
+                  <VerticalGridLines />
+                  <LineSeries
+                    data={tempSkin} />
+                  <XAxis />
+                  <YAxis title="°C" />
+                </FlexibleWidthXYPlot>
+              </Paper>
+            </Grid>
 
+            <Grid item xs={6}>
+              <Paper>
+                <Typography variant="h6"> Temperature - environment </Typography>
+                <FlexibleWidthXYPlot
+                  height={220}
+                  xType="time"
+                  yDomain={[0, 45]}
+                >
+                  <HorizontalGridLines />
+                  <VerticalGridLines />
+                  <LineSeries
+                    data={tempCloth} />
+                  <XAxis />
+                  <YAxis title="°C" />
+                </FlexibleWidthXYPlot>
+              </Paper>
+            </Grid>
+
+            <Grid item xs={6}>
+              <Paper>
+                <Typography variant="h6"> Humidity </Typography>
+                <FlexibleWidthXYPlot
+                  
+                  height={220}
+                  xType="time"
+                  yDomain={[0, 100]}
+                >
+                  <HorizontalGridLines />
+                  <VerticalGridLines />
+                  <LineSeries
+                    data={humidity} />
+                  <XAxis />
+                  <YAxis title="%" />
+                </FlexibleWidthXYPlot>
+              </Paper>
+            </Grid>
+          
+          </Grid>
         </DialogContent>
       </Dialog>
     </div>
