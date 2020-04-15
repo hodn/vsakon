@@ -3,7 +3,6 @@ const simplify = require('simplify-js');
 
 module.exports = class HistoryGraphHandler {
     constructor() {
-        //this.components = db.getRequiredGraphs    
         this.activity = [],
             this.heartRate = [],
             this.accX = [],
@@ -12,10 +11,9 @@ module.exports = class HistoryGraphHandler {
             this.tempSkin = [],
             this.tempCloth = [],
             this.humidity = []
-        // array of events - changing the value, if not null add to packet
     }
 
-    storeData(packet){
+    storeData(packet) {
 
         this.appendToGraph(packet, this.heartRate, 'heartRate');
         this.appendToGraph(packet, this.tempSkin, "tempSkin");
@@ -27,16 +25,28 @@ module.exports = class HistoryGraphHandler {
         this.appendToGraph(packet, this.accZ, "accZ");
 
     }
-    
-    appendToGraph(packet, graph, valueName){
+
+    appendToGraph(packet, graph, valueName) {
         let dataPoint = { x: packet.basicData.timestamp, y: packet.basicData[valueName] };
         graph.push(dataPoint);
     }
 
-    getGraphs(){
-        
+    resetGraphs(){
+        this.activity = [],
+        this.heartRate = [],
+        this.accX = [],
+        this.accY = [],
+        this.accZ = [],
+        this.tempSkin = [],
+        this.tempCloth = [],
+        this.humidity = []
+
+    }
+
+    getGraphs() {
+
         // Simplify (dataset, the tolerance in the data units(i.e. heartRate - 3BPM tolerance), higher precision - slower)
-        
+
         const graphs = {
             heartRate: simplify(this.heartRate, 3, false),
             activity: simplify(this.activity, 10, false),
@@ -47,6 +57,8 @@ module.exports = class HistoryGraphHandler {
             tempCloth: simplify(this.tempCloth, 0.3, false),
             humidity: simplify(this.humidity, 5, false),
         }
+
+        this.resetGraphs();
         return graphs;
     }
 }

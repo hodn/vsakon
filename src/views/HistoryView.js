@@ -87,13 +87,13 @@ class HistoryView extends React.Component {
 
   onFromChange(time) {
     this._isMounted && this.setState((state, props) => ({
-      from: time
+      from: new Date(time)
     }))
   }
 
   onToChange(time) {
     this._isMounted && this.setState((state, props) => ({
-      to: time
+      to: new Date(time)
     }))
   }
 
