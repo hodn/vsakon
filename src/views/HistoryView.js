@@ -132,7 +132,7 @@ export class HistoryView extends React.Component {
         <MaterialTable
           columns={[
             { title: 'Start', field: 'start', type: "datetime", defaultSort: "desc", render: rowData => new Date(rowData.start).toLocaleString() },
-            { title: 'End', field: 'end', type: "datetime", render: rowData => new Date(rowData.end).toLocaleString() },
+            { title: 'End', field: 'end', type: "datetime", render: rowData => rowData.end ? new Date(rowData.end).toLocaleString() : "Recording..." },
             { title: 'Team', field: 'team.name' },
             { title: 'Note', field: 'note' },
             { title: 'Path', field: 'path' },

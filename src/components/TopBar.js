@@ -136,6 +136,7 @@ class TopBar extends React.Component {
   setRecording() {
     this.setState({ recording: !this.state.recording });
     ipcRenderer.send("set-recording");
+    ipcRenderer.send("get-records");
   }
 
   // Helper functions for tab - navigation
