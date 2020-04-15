@@ -106,7 +106,6 @@ class TopBar extends React.Component {
       })
     })
 
-
   }
 
   componentWillUnmount() {

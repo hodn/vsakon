@@ -50,14 +50,8 @@ app.on('window-all-closed', function () {
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
 
-        // If the windows is closed while recording, save the CSV record and clear the array
-        /* if (recordingON === true) {
-            saveRecord(csvRecord)
-            csvRecord = [];
-        } */
-
         app.quit();
-
+        
     }
 });
 
@@ -93,7 +87,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     const PortHandler = require('./helpers/portHandler');
     const RecordHandler = require('./helpers/recordHandler');
     const DatabaseHandler = require('./helpers/databaseHandler');
-
+    
     // Init of the database
     const databaseHandler = new DatabaseHandler(app);
     databaseHandler.initDb();
@@ -101,7 +95,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
     // State management init
     const packetHandler = new PacketHandler(event, databaseHandler);
     const recordHandler = new RecordHandler(databaseHandler);
-
     // Listener for (re)connect receivers - on start and on demand from user
     ipcMain.on('connect-ports', (event, arg) => {
 
@@ -271,6 +264,10 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         event.reply("records-loaded", data)
 
+    })
+
+    app.on('window-all-closed', () => {
+        if(recordHandler.recording) recordHandler.setRecording();
     })
 
     // ON Register - EVENT from component - change the value in PacketHandler

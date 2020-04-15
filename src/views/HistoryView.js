@@ -58,12 +58,14 @@ export class HistoryView extends React.Component {
         records,
         activeRecord: records[records.length - 1],
         from: records[records.length - 1].start,
-        to: records[records.length - 1].end,
+        to: records[records.length - 1].end ? records[records.length - 1].end : new Date(),
       }))
     })
   }
 
   componentWillUnmount() {
+
+    ipcRenderer.removeAllListeners();
 
   }
 
@@ -84,7 +86,7 @@ export class HistoryView extends React.Component {
     this._isMounted && this.setState((state, props) => ({
       activeRecord: rowData,
       from: rowData.start,
-      to: rowData.end
+      to: rowData.end ? rowData.end : new Date()
     }))
   }
 
