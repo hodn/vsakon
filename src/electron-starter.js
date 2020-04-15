@@ -249,13 +249,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
     //Load history
     ipcMain.on("get-history", (event, arg) => {
 
-        /*let start = 1586770728112;
-        let end = 1586774979112;
-        let filePath = "C:\\Users\\Hoang\\Desktop\\2020-04-13-1138.csv";
-        let devId = 14; */
-
-        console.log(arg)
-
         recordHandler.readFromCsv(arg.from, arg.to, arg.filePath, arg.devId, event)
 
     })

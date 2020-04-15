@@ -10,7 +10,7 @@ import Slide from '@material-ui/core/Slide';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
-import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries } from 'react-vis';
+import { XYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, LineSeries, DiscreteColorLegend } from 'react-vis';
 import colors from '../colors';
 
 const { ipcRenderer } = window.require('electron');
@@ -20,9 +20,9 @@ const useStyles = makeStyles(theme => ({
     position: 'relative',
     backgroundColor: colors.secondary
   },
-  closeButton:{
-    marginLeft: "auto", 
-    color:"white" 
+  closeButton: {
+    marginLeft: "auto",
+    color: "white"
   },
   avatar: {
     height: 30,
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     color: 'white',
     borderColor: 'white',
     borderStyle: 'solid'
-},
+  },
 
 }));
 
@@ -56,7 +56,7 @@ export default function HistoryDialog(props) {
 
   React.useEffect(() => {
     ipcRenderer.on("history-parsed", (event, arg) => {
-      
+
       setHeartRate(arg.heartRate);
       setActivity(arg.activity);
       setAccX(arg.accX);
@@ -66,46 +66,135 @@ export default function HistoryDialog(props) {
       setTempCloth(arg.tempCloth);
       setHumidity(arg.humidity)
     })
-  
+
     return () => {
       ipcRenderer.removeAllListeners();
     }
   }, [])
-  
+
   return (
     <div>
-      <Dialog style={{padding: 10}} fullScreen open={props.openState} TransitionComponent={Transition}>
-        <AppBar style={{margin: 0 }} className={classes.appBar}>
+      <Dialog style={{ padding: 10 }} fullScreen open={props.openState} TransitionComponent={Transition}>
+        <AppBar style={{ margin: 0 }} className={classes.appBar}>
           <Toolbar>
-          <Avatar className={classes.avatar}>{props.devId}</Avatar> 
-          <Typography variant="h6"> {props.user ? props.user.name : "--"} {props.user ? props.user.surname : "--"} </Typography>
+            <Avatar className={classes.avatar}>{props.devId}</Avatar>
+            <Typography variant="h6"> {props.user ? props.user.name : "--"} {props.user ? props.user.surname : "--"} </Typography>
             <IconButton color="inherit" onClick={props.close} className={classes.closeButton} aria-label="close">
               <CloseIcon />
             </IconButton>
           </Toolbar>
         </AppBar>
         <DialogContent>
-        <Chip variant="outlined" label= {props.user ? (props.user.age + " " + "y.o.") : "--"}/>
-        <Chip variant="outlined" label= {props.user ? (props.user.weight + " " + "kg") : "--"}/>
-        <Chip variant="outlined" label= {props.user ? (props.user.height + " " + "cm") : "--"}/>
-        <Chip variant="outlined" label= {props.user ? (props.user.hrRest + " " + "BPM REST") : "--"}/>
-        <Chip variant="outlined" label= {props.user ? (props.user.hrRef + " " + "BPM REF") : "--"}/>
-        <Chip variant="outlined" label= {props.user ? (props.user.hrMax + " " + "BPM MAX") : "--"}/>
-        <Chip variant="outlined" label= {props.user ? (props.user.vMax + " " + "ml/min") : "--"}/>
-        <Chip variant="outlined" label={props.user ? props.user.gender : "--"}/>
-        <XYPlot
+          <Chip variant="outlined" label={props.user ? (props.user.age + " " + "y.o.") : "--"} />
+          <Chip variant="outlined" label={props.user ? (props.user.weight + " " + "kg") : "--"} />
+          <Chip variant="outlined" label={props.user ? (props.user.height + " " + "cm") : "--"} />
+          <Chip variant="outlined" label={props.user ? (props.user.hrRest + " " + "BPM REST") : "--"} />
+          <Chip variant="outlined" label={props.user ? (props.user.hrRef + " " + "BPM REF") : "--"} />
+          <Chip variant="outlined" label={props.user ? (props.user.hrMax + " " + "BPM MAX") : "--"} />
+          <Chip variant="outlined" label={props.user ? (props.user.vMax + " " + "ml/min") : "--"} />
+          <Chip variant="outlined" label={props.user ? props.user.gender : "--"} />
+          <XYPlot
             width={500}
             height={220}
             xType="time"
             yDomain={[0, 220]}
           >
             <HorizontalGridLines />
+            <VerticalGridLines />
             <LineSeries
               data={heartRate} />
             <XAxis />
             <YAxis title="BPM" />
           </XYPlot>
+          <XYPlot
+            width={500}
+            height={220}
+            xType="time"
+            yDomain={[0, 500]}
+          >
+            <HorizontalGridLines />
+            <VerticalGridLines />
+            <LineSeries
+              data={activity} />
+            <XAxis />
+            <YAxis title="nat" />
+          </XYPlot>
 
+          <XYPlot
+            width={500}
+            height={220}
+            xType="time"
+            yDomain={[-1, 1]}
+          >
+            <HorizontalGridLines />
+            <VerticalGridLines />
+            <LineSeries
+              data={accX}
+              color={colors.yellow} />
+            <LineSeries
+              data={accY}
+              color={colors.red} />
+            <LineSeries
+              data={accY}
+              color={colors.green} />
+            <XAxis />
+            <YAxis title="G" />
+            <DiscreteColorLegend
+              colors={[
+                colors.yellow,
+                colors.red,
+                colors.green
+              ]}
+              items={[
+                'Axis X',
+                'Axis Y',
+                'Axis Z',
+              ]}
+              orientation="horizontal"
+            />
+          </XYPlot>
+
+          <XYPlot
+            width={500}
+            height={220}
+            xType="time"
+            yDomain={[0, 45]}
+          >
+            <HorizontalGridLines />
+            <VerticalGridLines />
+            <LineSeries
+              data={tempSkin} />
+            <XAxis />
+            <YAxis title="°C" />
+          </XYPlot>
+
+          <XYPlot
+            width={500}
+            height={220}
+            xType="time"
+            yDomain={[0, 45]}
+          >
+            <HorizontalGridLines />
+            <VerticalGridLines />
+            <LineSeries
+              data={tempCloth} />
+            <XAxis />
+            <YAxis title="°C" />
+          </XYPlot>
+
+          <XYPlot
+            width={500}
+            height={220}
+            xType="time"
+            yDomain={[0, 100]}
+          >
+            <HorizontalGridLines />
+            <VerticalGridLines />
+            <LineSeries
+              data={humidity} />
+            <XAxis />
+            <YAxis title="%" />
+          </XYPlot>
 
         </DialogContent>
       </Dialog>
