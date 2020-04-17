@@ -56,7 +56,8 @@ class HistoryView extends React.Component {
     this.toggleEditDialog = this.toggleEditDialog.bind(this);
     this.openDetailDialog = this.openDetailDialog.bind(this);
     this.closeDetailDialog = this.closeDetailDialog.bind(this);
-
+    this.closeDetailDialog = this.closeDetailDialog.bind(this);
+    this.openCsvDialog = this.openCsvDialog.bind(this);
 
   }
 
@@ -120,13 +121,13 @@ class HistoryView extends React.Component {
     }))
   }
 
- openDetailDialog(devId) {
-    this.setState({ 
+  openDetailDialog(devId) {
+    this.setState({
       detailOpen: true,
-      selectedUser: this.state.activeRecord.team.members[devId-1],
-      devId 
+      selectedUser: this.state.activeRecord.team.members[devId - 1],
+      devId
     });
-    
+
     ipcRenderer.send("get-history", {
       from: new Date(this.state.from).getTime(),
       to: new Date(this.state.to).getTime(),
@@ -137,6 +138,23 @@ class HistoryView extends React.Component {
 
   closeDetailDialog() {
     this.setState({ detailOpen: false });
+  }
+
+  openCsvDialog() {
+    ipcRenderer.send("open-dialog");
+
+    ipcRenderer.once('csv-path-loaded', (event, arg) => {
+
+      let record = {
+        path: arg.path.toString(),
+        start: undefined,
+        end: undefined,
+        team: arg.team,
+        note: arg.path
+      }
+
+      this.setState({ activeRecord: record });
+    })
   }
 
   // What the actual component renders
@@ -234,18 +252,18 @@ class HistoryView extends React.Component {
                 iconProps: { style: { color: colors.secondary } },
                 tooltip: 'Read CSV file',
                 isFreeAction: true,
-                onClick: (event) => this.toggleAddUserDialog()
+                onClick: (event) => this.openCsvDialog()
               }
             ]}
           /> </Grid>
         </Grid>
         <HistoryDialog
-            openState={this.state.detailOpen}
-            open={this.openDetailDialog}
-            close={this.closeDetailDialog}
-            devId={this.state.devId}
-            user={this.state.selectedUser}
-          />
+          openState={this.state.detailOpen}
+          open={this.openDetailDialog}
+          close={this.closeDetailDialog}
+          devId={this.state.devId}
+          user={this.state.selectedUser}
+        />
 
         {this.state.showEditDialog && <EditRecordDialog item={this.state.selectedRow} handleDialog={this.toggleEditDialog} />}
         {this.state.showRemoveDialog && <RemoveRecordDialog item={this.state.selectedRow} handleDialog={this.toggleRemoveDialog} />}

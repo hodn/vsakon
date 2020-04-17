@@ -51,7 +51,7 @@ app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
 
         app.quit();
-        
+
     }
 });
 
@@ -87,7 +87,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     const PortHandler = require('./helpers/portHandler');
     const RecordHandler = require('./helpers/recordHandler');
     const DatabaseHandler = require('./helpers/databaseHandler');
-    
+
     // Init of the database
     const databaseHandler = new DatabaseHandler(app);
     databaseHandler.initDb();
@@ -262,9 +262,24 @@ ipcMain.on('clear-to-send', (event, arg) => {
     })
 
     app.on('window-all-closed', () => {
-        if(recordHandler.recording) recordHandler.setRecording();
+        if (recordHandler.recording) recordHandler.setRecording();
     })
 
+    ipcMain.on("open-dialog", (event, arg) => {
+
+        const { dialog } = require('electron');
+        const path = dialog.showOpenDialog({
+            filters: [
+                { name: 'Records', extensions: ['csv'] }],
+            properties: ['openFile']
+        });
+        const team = databaseHandler.getDefaultTeam();
+        team.name = "Custom load";
+        
+        if(path) event.reply("csv-path-loaded", {path, team});
+       
+
+    })
     // ON Register - EVENT from component - change the value in PacketHandler
 
 
