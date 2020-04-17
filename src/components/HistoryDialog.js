@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { FlexibleWidthXYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, LineSeries, DiscreteColorLegend } from 'react-vis';
 import colors from '../colors';
 
@@ -38,6 +39,14 @@ const useStyles = makeStyles(theme => ({
     borderColor: 'white',
     borderStyle: 'solid'
   },
+  paper: {
+    padding: 10
+  },
+
+  paperLarge: {
+    height: 300,
+    padding: 10
+  }
 
 }));
 
@@ -55,6 +64,7 @@ export default function HistoryDialog(props) {
   const [tempSkin, setTempSkin] = React.useState([]);
   const [tempCloth, setTempCloth] = React.useState([]);
   const [humidity, setHumidity] = React.useState([]);
+  const [showProgress, setProgress] = React.useState(true);
 
   React.useEffect(() => {
     ipcRenderer.on("history-parsed", (event, arg) => {
@@ -66,7 +76,9 @@ export default function HistoryDialog(props) {
       setAccZ(arg.accZ);
       setTempSkin(arg.tempSkin);
       setTempCloth(arg.tempCloth);
-      setHumidity(arg.humidity)
+      setHumidity(arg.humidity);
+
+      setProgress(false);
     })
 
     return () => {
@@ -87,7 +99,7 @@ export default function HistoryDialog(props) {
           </Toolbar>
         </AppBar>
         <DialogContent>
-          <Grid container spacing={1}>
+          <Grid container spacing={1} alignItems="center">
             <Grid item xs={12}>
               <Chip variant="outlined" label={props.user ? (props.user.age + " y.o.") : "--"} />
               <Chip variant="outlined" label={props.user ? (props.user.weight + " kg") : "--"} />
@@ -97,13 +109,14 @@ export default function HistoryDialog(props) {
               <Chip variant="outlined" label={props.user ? (props.user.hrMax + " BPM MAX") : "--"} />
               <Chip variant="outlined" label={props.user ? (props.user.vMax + " ml/min") : "--"} />
               <Chip variant="outlined" label={props.user ? props.user.gender : "--"} />
+              {showProgress && <LinearProgress style={{colorPrimary: colors.red}} />}
             </Grid>
 
             <Grid item xs={6}>
-              <Paper> 
+              <Paper className={classes.paper}>
                 <Typography variant="h6"> Heart rate </Typography>
                 <FlexibleWidthXYPlot
-                  
+
                   height={220}
                   xType="time"
                   yDomain={[0, 220]}
@@ -119,10 +132,10 @@ export default function HistoryDialog(props) {
             </Grid>
 
             <Grid item xs={6}>
-              <Paper>
+              <Paper className={classes.paper}>
                 <Typography variant="h6"> Activity </Typography>
                 <FlexibleWidthXYPlot
-                  
+
                   height={220}
                   xType="time"
                   yDomain={[0, 500]}
@@ -138,14 +151,28 @@ export default function HistoryDialog(props) {
             </Grid>
 
             <Grid item xs={6}>
-              <Paper>
+              <Paper className={classes.paperLarge}>
                 <Typography variant="h6"> Acceleration </Typography>
+
                 <FlexibleWidthXYPlot
-                  
-                  height={200}
+
+                  height={220}
                   xType="time"
                   yDomain={[-1, 1]}
                 >
+                  <DiscreteColorLegend
+                    colors={[
+                      colors.yellow,
+                      colors.red,
+                      colors.green
+                    ]}
+                    items={[
+                      'Axis X',
+                      'Axis Y',
+                      'Axis Z',
+                    ]}
+                    orientation="horizontal"
+                  />
                   <HorizontalGridLines />
                   <VerticalGridLines />
                   <LineSeries
@@ -160,24 +187,11 @@ export default function HistoryDialog(props) {
                   <XAxis />
                   <YAxis title="G" />
                 </FlexibleWidthXYPlot>
-                <DiscreteColorLegend
-                  colors={[
-                    colors.yellow,
-                    colors.red,
-                    colors.green
-                  ]}
-                  items={[
-                    'Axis X',
-                    'Axis Y',
-                    'Axis Z',
-                  ]}
-                  orientation="horizontal"
-                />
               </Paper>
             </Grid>
 
             <Grid item xs={6}>
-              <Paper>
+              <Paper className={classes.paperLarge}>
                 <Typography variant="h6"> Temperature - skin </Typography>
                 <FlexibleWidthXYPlot
                   height={220}
@@ -195,7 +209,7 @@ export default function HistoryDialog(props) {
             </Grid>
 
             <Grid item xs={6}>
-              <Paper>
+              <Paper className={classes.paper}>
                 <Typography variant="h6"> Temperature - environment </Typography>
                 <FlexibleWidthXYPlot
                   height={220}
@@ -213,10 +227,10 @@ export default function HistoryDialog(props) {
             </Grid>
 
             <Grid item xs={6}>
-              <Paper>
+              <Paper className={classes.paper}>
                 <Typography variant="h6"> Humidity </Typography>
                 <FlexibleWidthXYPlot
-                  
+
                   height={220}
                   xType="time"
                   yDomain={[0, 100]}
@@ -230,7 +244,7 @@ export default function HistoryDialog(props) {
                 </FlexibleWidthXYPlot>
               </Paper>
             </Grid>
-          
+
           </Grid>
         </DialogContent>
       </Dialog>
