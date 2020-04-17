@@ -166,8 +166,8 @@ class TopBar extends React.Component {
 
             <Tabs TabIndicatorProps={{ style: { background: colors.secondary } }} aria-label="tab" value={this.state.tabValue} onChange={this.changeTab}>
               <Tab style={{ minWidth: 100 }}icon={<ViewComfyIcon/>} />
-              <Tab style={{ minWidth: 100 }} icon={<MapIcon />} />
               <Tab style={{ minWidth: 100 }} icon={<TimelineIcon />} />
+              <Tab style={{ minWidth: 100 }} icon={<MapIcon />} />
               <Tab style={{ minWidth: 100 }} icon={<GroupIcon/>} />
               <Tab style={{ minWidth: 100 }} icon={<SettingsIcon />} />
             </Tabs>
@@ -193,9 +193,9 @@ class TopBar extends React.Component {
           </Toolbar>
         </AppBar>
 
-        {this.state.tabValue === 0 && <this.TabContainer> <HistoryView/> </this.TabContainer>}
-        {this.state.tabValue === 1 && <this.TabContainer> Map </this.TabContainer>}
-        {this.state.tabValue === 2 && <this.TabContainer> <HistoryView/> </this.TabContainer>}
+        {this.state.tabValue === 0 && <this.TabContainer> <MainView/> </this.TabContainer>}
+        {this.state.tabValue === 1 && <this.TabContainer> <HistoryView/> </this.TabContainer>}
+        {this.state.tabValue === 2 && <this.TabContainer> Map </this.TabContainer>}
         {this.state.tabValue === 3 && <this.TabContainer> <TeamView recording={this.state.recording} /> </this.TabContainer>}
         {this.state.tabValue === 4 && <this.TabContainer> <SettingsView/> </this.TabContainer>}
 

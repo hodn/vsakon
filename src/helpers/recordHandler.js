@@ -59,13 +59,15 @@ module.exports = class RecordHandler {
 
     writeToCsv(packet) {
         
-        if (packet.basicData.timestamp - this.test < 3000){
+        /* if (packet.basicData.timestamp - this.test < 3000){
             for (let index = 0; index < 4000; index++) {
                 packet.basicData.timestamp += 3000;
                 packet.basicData.heartRate = Math.floor(Math.random() * (80 - 75 + 1)) + 75;
                 this.writer.write(this.formatToCsv(packet))
             }
-        }
+        } */
+
+        this.writer.write(this.formatToCsv(packet));
 
     }
     // This will be called straight from electron-starter
@@ -91,7 +93,7 @@ module.exports = class RecordHandler {
 
     createHeaders() {
 
-        const basic = ["timestamp", "devId", "heartRate", "tempSkin", "tempCloth", "humidity", "activity", "accX", "accY", "accZ", "batteryVoltage", "batteryPercentage", "port", "deadMan"];
+        const basic = ["timestamp", "devId", "heartRate", "tempSkin", "tempCloth", "humidity", "activity", "accX", "accY", "accZ", "batteryVoltage", "batteryPercentage", "port", "deadMan", "event"];
         const performance = ["stehlik", "ee"];
         const location = ["latMins", "longMins", "fix", "sat", "dilution", "alt", "detected"];
         let node = [];

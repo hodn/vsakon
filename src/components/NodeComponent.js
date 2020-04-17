@@ -15,7 +15,7 @@ export default function NodeComponent(props) {
         <div>
             <Grid
                 container
-                direction="row"s
+                direction="row"
                 justify="center"
                 alignItems="center"
                 spacing={1}

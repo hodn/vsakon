@@ -1,11 +1,16 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
-import colors from '../colors';;
+import colors from '../colors';
+const { ipcRenderer } = window.require('electron');
 
 
 export default function DeviceControl(passedProps) {
   let props = passedProps.initProps;
+
+  const registerEvent = () => {
+    ipcRenderer.send("register-event", {event: "test", devId: props.devId})
+  }
 
   return (
     <div style={{marginLeft: "auto"}}>
@@ -14,7 +19,7 @@ export default function DeviceControl(passedProps) {
             Alarm off
         </Button>  <br/>
       
-          <Button variant="contained" size="large" style={{ margin: 3,backgroundColor: colors.secondary, color: "white" }}>
+          <Button variant="contained" size="large" style={{ margin: 3,backgroundColor: colors.secondary, color: "white" }} onClick={registerEvent}>
             Event 1
         </Button> 
         

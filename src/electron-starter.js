@@ -243,10 +243,10 @@ ipcMain.on('clear-to-send', (event, arg) => {
     ipcMain.on("update-settings", (event, arg) => {
 
         databaseHandler.updateSettings(arg);
-        if (arg.selectedTeam !== undefined) packetHandler.profiles = databaseHandler.getSelectedTeam(false).members;
+        if (arg.selectedTeam) packetHandler.profiles = databaseHandler.getSelectedTeam(false).members;
     })
 
-    //Load history
+    // Load history
     ipcMain.on("get-history", (event, arg) => {
 
         recordHandler.readFromCsv(arg.from, arg.to, arg.filePath, arg.devId, event)
@@ -282,7 +282,13 @@ ipcMain.on('clear-to-send', (event, arg) => {
     })
     // ON Register - EVENT from component - change the value in PacketHandler
 
+    ipcMain.on("register-event", (event, arg) => {
 
+        const devSlot = arg.devId - 1;
+        const eventName = arg.event;
+    
+        packetHandler.events[devSlot] = eventName;
+    })
 
 })
 

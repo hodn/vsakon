@@ -5,7 +5,8 @@ module.exports = class PacketHandler {
             this.profiles = db.getSelectedTeam(false).members,
             this.graphLength = db.getSettings().graphLength,
             this.activityGraphs = [],
-            this.heartRateGraphs = []
+            this.heartRateGraphs = [],
+            this.events = []
             // array of events - changing the value, if not null add to packet
     }
 
@@ -20,6 +21,12 @@ module.exports = class PacketHandler {
 
             // Sent from port
             packet.basicData.port = port;
+
+            // If there is event registered for the device
+            if(this.events[devSlot]){
+                packet.basicData.event = this.events[devSlot];
+                this.events[devSlot] = null;
+            }
 
             // Because 2 and 3 are special values for measuring state of the sensor
             let specialHeartRatePacket = packet;
