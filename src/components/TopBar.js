@@ -18,7 +18,7 @@ import GroupIcon from '@material-ui/icons/Group';
 import colors from '../colors';
 import ResetMenu from './ResetMenu';
 import { MainView } from '../views/MainView';
-import { SettingsView } from '../views/SettingsView';
+import SettingsView from '../views/SettingsView';
 import HistoryView from '../views/HistoryView';
 import { TeamView } from '../views/TeamView'
 
@@ -193,11 +193,11 @@ class TopBar extends React.Component {
           </Toolbar>
         </AppBar>
 
-        {this.state.tabValue === 0 && <this.TabContainer> <MainView/> </this.TabContainer>}
+        {this.state.tabValue === 4 && <this.TabContainer> <MainView/> </this.TabContainer>}
         {this.state.tabValue === 1 && <this.TabContainer> <HistoryView/> </this.TabContainer>}
         {this.state.tabValue === 2 && <this.TabContainer> Map </this.TabContainer>}
         {this.state.tabValue === 3 && <this.TabContainer> <TeamView recording={this.state.recording} /> </this.TabContainer>}
-        {this.state.tabValue === 4 && <this.TabContainer> <SettingsView/> </this.TabContainer>}
+        {this.state.tabValue === 0 && <this.TabContainer> <SettingsView/> </this.TabContainer>}
 
       </div>
 

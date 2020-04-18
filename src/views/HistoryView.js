@@ -141,7 +141,7 @@ class HistoryView extends React.Component {
   }
 
   openCsvDialog() {
-    ipcRenderer.send("open-dialog");
+    ipcRenderer.send("open-dialog", "openFile");
 
     ipcRenderer.once('csv-path-loaded', (event, arg) => {
 

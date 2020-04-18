@@ -26,7 +26,6 @@ export default function ChangeActiveTeam(props) {
   const [activeTeam, setActiveTeam] = React.useState(props.activeTeam);
 
   const handleSelect = (value) => {
-    console.log(props.recording)
     setActiveTeam(value);
   }
 

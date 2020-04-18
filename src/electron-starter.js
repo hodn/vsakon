@@ -275,12 +275,12 @@ ipcMain.on('clear-to-send', (event, arg) => {
     })
 
     ipcMain.on("open-dialog", (event, arg) => {
-
+        
         const { dialog } = require('electron');
         const path = dialog.showOpenDialog({
             filters: [
                 { name: 'Records', extensions: ['csv'] }],
-            properties: ['openFile']
+            properties: [arg]
         });
         const team = databaseHandler.getDefaultTeam();
         team.name = "Custom load";
