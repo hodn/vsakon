@@ -26,7 +26,7 @@ function Thermometer(props) {
     });
     const classes = useStyles();
 
-    const colorSwitch = (temp) => {
+    const colorSwitch = (temp, settings) => {
 
         if (temp > -30 && temp < +30) {
 

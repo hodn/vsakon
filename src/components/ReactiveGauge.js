@@ -6,8 +6,8 @@ function ReactiveGauge(props) {
 
     const colorSwitch = (hr, user) => {
 
-        const hrRest = user ? parseInt(user.hrRest) : 70;
-        const hrMax = user ? parseInt(user.hrMax) : 150;
+        const hrRest = user ? parseInt(user.hrRest, 10) : 70;
+        const hrMax = user ? parseInt(user.hrMax, 10) : 150;
         
         const lowerOptimum = (hrRest + 40) / 2;
         const upperOptimum = (hrMax + hrRest) / 2;

@@ -45,7 +45,7 @@ export default function DeviceView(passedProps) {
 
                 <Grid item>
                     <Paper className={classes.topRow} elevation={5}>
-                        <ReactiveGauge hr={props.packet === null ? null : props.packet.basicData.heartRate} height={250} width={250} left={0} top={40} margin={-20} />
+                        <ReactiveGauge hr={props.packet === null ? null : props.packet.basicData.heartRate} user={props.user} height={250} width={250} left={0} top={40} margin={-20} />
                     </Paper>
                 </Grid>
 
