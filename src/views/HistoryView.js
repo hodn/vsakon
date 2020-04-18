@@ -212,7 +212,14 @@ class HistoryView extends React.Component {
               { title: 'Note', field: 'note' },
               { title: 'Path', field: 'path' },
               {
-                title: 'Users', field: 'users', render: rowData => {
+                title: 'Users', field: 'users', searchable: true, customFilterAndSearch: (value, rowData) => {
+                  let surnames = [];
+                  for (let index = 0; index < rowData.team.members.length; index++) {
+
+                    surnames.push(rowData.team.members[index].surname);
+                  }
+                  return surnames.includes(value);
+               }, render: rowData => {
 
                   let surnames = [];
                   for (let index = 0; index < rowData.team.members.length; index++) {

@@ -132,12 +132,31 @@ export class TeamView extends React.Component {
             <MaterialTable
               columns={[
                 { title: 'Name', field: 'name' },
-                { title: 'Note', field: 'note' }
+                { title: 'Note', field: 'note' },
+                {
+                  title: 'Users', field: 'users', searchable: true, customFilterAndSearch: (value, rowData) => {
+                    let surnames = [];
+                    for (let index = 0; index < rowData.members.length; index++) {
+
+                      surnames.push(rowData.members[index].surname);
+                    }
+                    return surnames.includes(value);
+                 }, render: rowData => {
+
+                    let surnames = [];
+                    for (let index = 0; index < rowData.members.length; index++) {
+
+                      surnames.push(rowData.members[index].surname);
+                    }
+
+                    return surnames.toString();
+                  }
+                }
               ]}
               data={this.state.teams}
               title={this.state.activeTeam === null ? "Teams" : "Teams | " + this.state.activeTeam.name}
               options={
-                { searchFieldStyle: { width: 200 } }
+                { searchFieldStyle: { width: 200 }, search: true }
               }
 
               actions={[
