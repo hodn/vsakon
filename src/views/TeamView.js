@@ -73,41 +73,41 @@ export class TeamView extends React.Component {
 
   }
 
-  toggleAddUserDialog(){
-    
+  toggleAddUserDialog() {
+
     this._isMounted && this.setState((state, props) => ({
-     showAddUserDialog: !state.showAddUserDialog
+      showAddUserDialog: !state.showAddUserDialog
     }))
 
   }
 
-  toggleEditUserDialog(user){
-    
+  toggleEditUserDialog(user) {
+
     this._isMounted && this.setState((state, props) => ({
       showEditUserDialog: !state.showEditUserDialog,
-     selectedRow: user
+      selectedRow: user
     }))
 
   }
 
-  toggleDeleteDialog(item){
-    
+  toggleDeleteDialog(item) {
+
     this._isMounted && this.setState((state, props) => ({
       showDeleteDialog: !state.showDeleteDialog,
       selectedRow: item
-     }))
- 
+    }))
+
   }
 
-  toggleAddTeamDialog(){
-    
+  toggleAddTeamDialog() {
+
     this._isMounted && this.setState((state, props) => ({
       showAddTeamDialog: !state.showAddTeamDialog
-     }))
+    }))
   }
 
-  toggleEditTeamDialog(team){
-    
+  toggleEditTeamDialog(team) {
+
     this._isMounted && this.setState((state, props) => ({
       showEditTeamDialog: !state.showEditTeamDialog,
       selectedRow: team
@@ -115,7 +115,7 @@ export class TeamView extends React.Component {
 
   }
 
-  toggleChangeActiveTeamDialog(){
+  toggleChangeActiveTeamDialog() {
     this._isMounted && this.setState((state, props) => ({
       showChangeActiveTeamDialog: !state.showChangeActiveTeamDialog,
     }))
@@ -127,46 +127,7 @@ export class TeamView extends React.Component {
     return (
 
       <div>
-        
         <Grid spacing={2} container>
-          <Grid xs={12} item>
-            <MaterialTable
-              columns={[
-                { title: 'Name', field: 'name' },
-                { title: 'Surname', field: 'surname' },
-                { title: 'Note', field: 'note' },
-                { title: 'Weight', field: 'weight' },
-                { title: 'Height', field: 'height' },
-                { title: 'Age', field: 'age' }
-                
-              ]}
-              data={this.state.users}
-              title="Users"
-              options={
-                { searchFieldStyle: { width: 200 }}
-              }
-              actions={[
-                {
-                  icon: 'edit',
-                  tooltip: 'Edit user',
-                  onClick: (event, rowData) => this.toggleEditUserDialog(rowData)
-                },
-                {
-                  tooltip: 'Delete user',
-                  icon: 'delete',
-                  onClick: (evt, data) => this.toggleDeleteDialog(data)
-                },
-                {
-                  icon: 'add',
-                  iconProps: {style: {color: colors.secondary}},
-                  tooltip: 'Add user',
-                  isFreeAction: true,
-                  onClick: (event) => this.toggleAddUserDialog()
-                }
-              ]}
-            />
-          </Grid>
-
           <Grid xs={12} item>
             <MaterialTable
               columns={[
@@ -174,7 +135,7 @@ export class TeamView extends React.Component {
                 { title: 'Note', field: 'note' }
               ]}
               data={this.state.teams}
-              title={this.state.activeTeam === null ? "Teams" : "Teams | "+ this.state.activeTeam.name}
+              title={this.state.activeTeam === null ? "Teams" : "Teams | " + this.state.activeTeam.name}
               options={
                 { searchFieldStyle: { width: 200 } }
               }
@@ -192,14 +153,14 @@ export class TeamView extends React.Component {
                 },
                 {
                   icon: 'add',
-                  iconProps: {style: {color: colors.secondary}},
+                  iconProps: { style: { color: colors.secondary } },
                   tooltip: 'Add team',
                   isFreeAction: true,
                   onClick: (event) => this.toggleAddTeamDialog()
                 },
                 {
-                  icon: forwardRef((props, ref) => <Rotate90DegreesCcwIcon style={{color: colors.secondary}} {...props} ref={ref} />),
-                  iconProps: {style: {color: colors.secondary}},
+                  icon: forwardRef((props, ref) => <Rotate90DegreesCcwIcon style={{ color: colors.secondary }} {...props} ref={ref} />),
+                  iconProps: { style: { color: colors.secondary } },
                   tooltip: 'Change active team',
                   isFreeAction: true,
                   onClick: (event) => this.toggleChangeActiveTeamDialog()
@@ -207,19 +168,58 @@ export class TeamView extends React.Component {
               ]}
             />
           </Grid>
+
+          <Grid xs={12} item>
+            <MaterialTable
+              columns={[
+                { title: 'Name', field: 'name' },
+                { title: 'Surname', field: 'surname' },
+                { title: 'Note', field: 'note' },
+                { title: 'Weight', field: 'weight' },
+                { title: 'Height', field: 'height' },
+                { title: 'Age', field: 'age' }
+
+              ]}
+              data={this.state.users}
+              title="Users"
+              options={
+                { searchFieldStyle: { width: 200 } }
+              }
+              actions={[
+                {
+                  icon: 'edit',
+                  tooltip: 'Edit user',
+                  onClick: (event, rowData) => this.toggleEditUserDialog(rowData)
+                },
+                {
+                  tooltip: 'Delete user',
+                  icon: 'delete',
+                  onClick: (evt, data) => this.toggleDeleteDialog(data)
+                },
+                {
+                  icon: 'add',
+                  iconProps: { style: { color: colors.secondary } },
+                  tooltip: 'Add user',
+                  isFreeAction: true,
+                  onClick: (event) => this.toggleAddUserDialog()
+                }
+              ]}
+            />
+          </Grid>
+
         </Grid>
 
-        {this.state.showAddUserDialog && <AddUserDialog user={this.state.defUser} handleDialog={this.toggleAddUserDialog}/>}
-        {this.state.showEditUserDialog && <EditUserDialog user={this.state.selectedRow} handleDialog={this.toggleEditUserDialog}/>}
-        {this.state.showDeleteDialog && <DeleteDialog item={this.state.selectedRow} handleDialog={this.toggleDeleteDialog}/>}
-        {this.state.showAddTeamDialog && <AddTeamDialog team={this.state.defTeam} users={this.state.users} handleDialog={this.toggleAddTeamDialog}/>}
-        {this.state.showEditTeamDialog && <EditTeamDialog team={this.state.selectedRow} users={this.state.users} handleDialog={this.toggleEditTeamDialog}/>}
-        {this.state.showChangeActiveTeamDialog && <ChangeActiveTeamDialog 
-        recording={this.props.recording} 
-        teams={this.state.teams} 
-        activeTeam={this.state.activeTeam}
-        handleDialog={this.toggleChangeActiveTeamDialog}/>}
-     
+        {this.state.showAddUserDialog && <AddUserDialog user={this.state.defUser} handleDialog={this.toggleAddUserDialog} />}
+        {this.state.showEditUserDialog && <EditUserDialog user={this.state.selectedRow} handleDialog={this.toggleEditUserDialog} />}
+        {this.state.showDeleteDialog && <DeleteDialog item={this.state.selectedRow} handleDialog={this.toggleDeleteDialog} />}
+        {this.state.showAddTeamDialog && <AddTeamDialog team={this.state.defTeam} users={this.state.users} handleDialog={this.toggleAddTeamDialog} />}
+        {this.state.showEditTeamDialog && <EditTeamDialog team={this.state.selectedRow} users={this.state.users} handleDialog={this.toggleEditTeamDialog} />}
+        {this.state.showChangeActiveTeamDialog && <ChangeActiveTeamDialog
+          recording={this.props.recording}
+          teams={this.state.teams}
+          activeTeam={this.state.activeTeam}
+          handleDialog={this.toggleChangeActiveTeamDialog} />}
+
       </div>
 
     );

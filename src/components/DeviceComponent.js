@@ -139,7 +139,7 @@ class DeviceComponent extends React.Component {
               <DeviceStatus direction={"column"} devId={this.props.devId} connected={this.state.connected} packet={this.state.packet} />
             </Grid>
             <Grid item xs={6}>
-              <ReactiveGauge hr={this.state.packet === null ? null : this.state.packet.basicData.heartRate} height={150} width={160} top={40} left={10} margin={-8} />
+              <ReactiveGauge hr={this.state.packet === null ? null : this.state.packet.basicData.heartRate} user={this.state.user} height={150} width={160} top={40} left={10} margin={-8} />
             </Grid>
             <Grid item xs={2}>
               <PerformanceMeter icon activity={this.state.packet === null ? null : this.state.packet.basicData.activity} top={20} />

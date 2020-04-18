@@ -4,12 +4,18 @@ import colors from '../colors';
 
 function ReactiveGauge(props) {
 
-    const colorSwitch = (hr) => {
+    const colorSwitch = (hr, user) => {
 
-        if (hr >= 50 && hr <= 110) {
+        const hrRest = user ? parseInt(user.hrRest) : 70;
+        const hrMax = user ? parseInt(user.hrMax) : 150;
+        
+        const lowerOptimum = (hrRest + 40) / 2;
+        const upperOptimum = (hrMax + hrRest) / 2;
+        
+        if (hr >= lowerOptimum && hr <= upperOptimum) {
 
             return colors.green;
-        } else if (hr < 40 || hr > 160) {
+        } else if (hr < 40 || hr > hrMax) {
 
             return colors.red;
         } else {
@@ -31,7 +37,7 @@ function ReactiveGauge(props) {
 
 
         <div>
-            <Gauge value={parseHeartRate(props.hr)} max={220} width={props.width} height={props.height} color={colorSwitch(props.hr)} 
+            <Gauge value={parseHeartRate(props.hr)} max={220} width={props.width} height={props.height} color={colorSwitch(props.hr, props.user)} 
             left={props.left} top={props.top} margin={props.margin} valueFormatter={value => {
                 if (value === null) {
                   return '-';
