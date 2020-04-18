@@ -28,10 +28,13 @@ function Thermometer(props) {
 
     const colorSwitch = (temp, settings) => {
 
-        if (temp > -30 && temp < +30) {
+        const lowerOptimum = settings ? settings.optimalTemp[0] : 30;
+        const upperOptimum = settings ? settings.optimalTemp[1] : 35;
+        
+        if (temp < lowerOptimum) {
 
             return colors.blue;
-        } else if (temp >= +30 && temp < +35) {
+        } else if (temp >= lowerOptimum && temp <= upperOptimum) {
 
             return colors.green;
         } else {
@@ -54,7 +57,7 @@ function Thermometer(props) {
 
         <div>
           <Grid direction="column" alignItems="center" container>
-                <Grid item className={classes.bar}>  <SimpleMeter  percent={getTempDisplay(props.temp)} color={colorSwitch(props.temp)} height={props.height} width={props.width}/> </Grid>
+                <Grid item className={classes.bar}>  <SimpleMeter  percent={getTempDisplay(props.temp)} color={colorSwitch(props.temp, props.settings)} height={props.height} width={props.width}/> </Grid>
                 {props.showTemp && <Grid item> <Typography variant="subtitle1"> {props.temp === null ? "-" : props.temp} </Typography></Grid>}
                 {props.icon && <Grid item> <WhatshotIcon className={classes.icon}/> </Grid>}
             </Grid>
