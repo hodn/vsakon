@@ -244,6 +244,15 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         databaseHandler.updateSettings(arg);
         if (arg.selectedTeam) packetHandler.profiles = databaseHandler.getSelectedTeam(false).members;
+        if (arg.graphLength) packetHandler.graphLength = databaseHandler.getSettings().graphLength;
+        if (arg.csvDirectory) databaseHandler.directory = databaseHandler.getSettings().csvDirectory;
+        if (arg.csvComponents) databaseHandler.components = databaseHandler.getSettings().csvComponents;
+    })
+
+    ipcMain.on("get-settings", (event, arg) => {
+
+        const settings = databaseHandler.getSettings();
+        event.reply("settings-loaded", settings)
     })
 
     // Load history

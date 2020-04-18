@@ -40,7 +40,7 @@ class DeviceComponent extends React.Component {
       heartRateGraph: [],
       user: null,
       connected: false,
-      detailOpen: false
+      detailOpen: false,
       // Settings here (events, thermo, tepovka) - can load with profiles
     }
 
@@ -54,7 +54,6 @@ class DeviceComponent extends React.Component {
   componentDidMount() {
 
     this._isMounted = true;
-
     ipcRenderer.once(this.props.devId.toString() + "-profile", (event, arg) => {
 
       const user = arg;
@@ -159,6 +158,7 @@ class DeviceComponent extends React.Component {
           connected={this.state.connected}
           alarm={this.alarmOff}
           open={this.state.detailOpen}
+          settings={this.props.settings}
           close={this.closeDetail} />
       </div>
 

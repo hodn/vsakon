@@ -11,7 +11,8 @@ export class MainView extends React.Component {
     this._isMounted = false;
 
     this.state = {
-      devComponents: []
+      indexes: [],
+      settings: null
 
     }
   }
@@ -20,11 +21,18 @@ export class MainView extends React.Component {
 
     this._isMounted = true;
     ipcRenderer.send("main-view-mounted");
+    ipcRenderer.send("get-settings");
+
+    ipcRenderer.once("settings-loaded", (event, arg) => {
+
+      const settings = arg;
+      this._isMounted && this.setState({settings});
+    })
 
     for (let i = 1; i < 31; i++) {
 
       this._isMounted && this.setState((state, props) => ({
-        devComponents: [...state.devComponents, <Grid item xs={2} key={"comp" + i}><DeviceComponent devId={i} key={i} /> </Grid>]
+        indexes: [...state.indexes, i]
       }))
     }
   }
@@ -40,9 +48,9 @@ export class MainView extends React.Component {
 
       <div> 
         <Grid container>
-          {this.state.devComponents.map((component) => {
-            return component;
-          })}
+          {this.state.indexes.map((index) => {
+            return <Grid item xs={2} key={"comp" + index}><DeviceComponent settings={this.state.settings} devId={index} key={index} /> </Grid>
+          }, this)}
         </Grid>
 
       </div>
