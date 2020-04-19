@@ -4,18 +4,19 @@ const fs = require('fs');
 const csvWriter = require('csv-write-stream');
 const csvParser = require('csv-parser');
 const path = require('path');
+const { dialog } = require('electron');
 const HistoryGraphHandler = require('./historyGraphHandler');
 
 module.exports = class RecordHandler {
     constructor(db) {
         this.directory = db.getSettings().csvDirectory,
-        this.components = db.getSettings().csvComponents,
-        this.db = db,
-        this.writer = null,
-        this.filePath = null,
-        this.recordId = null,
-        this.recording = false,
-        this.graphHandler = new HistoryGraphHandler();
+            this.components = db.getSettings().csvComponents,
+            this.db = db,
+            this.writer = null,
+            this.filePath = null,
+            this.recordId = null,
+            this.recording = false,
+            this.graphHandler = new HistoryGraphHandler();
         this.test = null;
     }
 
@@ -58,7 +59,7 @@ module.exports = class RecordHandler {
     }
 
     writeToCsv(packet) {
-        
+
         /* if (packet.basicData.timestamp - this.test < 3000){
             for (let index = 0; index < 4000; index++) {
                 packet.basicData.timestamp += 3000;
@@ -73,22 +74,28 @@ module.exports = class RecordHandler {
     // This will be called straight from electron-starter
     readFromCsv(start, end, filePath, devId, event) {
 
-        let readStream = fs.createReadStream(filePath)
-            .pipe(csvParser({ separator: ';' }))
-            .on('data', (data) => {
+        if (fs.existsSync(filePath)) {
+            let readStream = fs.createReadStream(filePath)
+                .pipe(csvParser({ separator: ';' }))
+                .on('data', (data) => {
 
-                if (data.timestamp > end && data.devId === devId.toString()) {
-                    
+                    if (data.timestamp > end && data.devId === devId.toString()) {
+
+                        event.reply("history-parsed", this.graphHandler.getGraphs());
+                        readStream.destroy();
+
+                    } else if (data.timestamp <= end && data.timestamp >= start && data.devId === devId.toString()) {
+                        this.graphHandler.storeData(this.formatFromCsv(data));
+                    }
+                })
+                .on('end', () => {
                     event.reply("history-parsed", this.graphHandler.getGraphs());
-                    readStream.destroy();
+                });
+        } else {
+            dialog.showErrorBox("Record not loaded", "Invalid path or deleted CSV source file.");
+        }
 
-                } else if (data.timestamp <= end && data.timestamp >= start && data.devId === devId.toString()) {
-                    this.graphHandler.storeData(this.formatFromCsv(data));
-                }
-            })
-            .on('end', () => {
-                event.reply("history-parsed", this.graphHandler.getGraphs());
-            });
+
     }
 
     createHeaders() {
@@ -107,7 +114,7 @@ module.exports = class RecordHandler {
         if (this.components.performanceData === true) headers = headers.concat(performance);
         if (this.components.locationData === true) headers = headers.concat(location);
         if (this.components.nodeData === true) headers = headers.concat(node);
-       
+
         return headers;
     }
 
