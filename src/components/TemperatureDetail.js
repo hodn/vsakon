@@ -21,7 +21,7 @@ export default function TemperatureDetail(passedProps) {
                 <Grid xs={1} item><Thermometer icon settings={props.settings} temp={props.packet === null ? null : props.packet.basicData.tempSkin} height={130} width={18} top={35} /></Grid>
 
                 <Grid xs={3} item><NumericIndicator parameter={"Skin"} value={props.packet === null ? "--" : props.packet.basicData.tempSkin} unit="°C" />
-                    <NumericIndicator parameter={"Environment"} value={props.packet === null ? "--" : props.packet.basicData.tempCloth} unit="°C" />
+                    <NumericIndicator parameter={"Env"} value={props.packet === null ? "--" : props.packet.basicData.tempCloth} unit="°C" />
                     <NumericIndicator parameter={"Humidity"} value={props.packet === null ? "--" : props.packet.basicData.humidity} unit="%" />
                 </Grid>
 

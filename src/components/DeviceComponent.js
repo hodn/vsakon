@@ -45,6 +45,8 @@ class DeviceComponent extends React.Component {
       user: null,
       connected: false,
       detailOpen: false,
+      width: window.innerWidth/1920,
+      height: window.innerHeight/1080
       // Settings here (events, thermo, tepovka) - can load with profiles
     }
 
@@ -58,6 +60,7 @@ class DeviceComponent extends React.Component {
   componentDidMount() {
 
     this._isMounted = true;
+    
     ipcRenderer.once(this.props.devId.toString() + "-profile", (event, arg) => {
 
       const user = arg;
@@ -152,16 +155,16 @@ class DeviceComponent extends React.Component {
         <Paper onClick={this.openDetail} elevation={5} square>
           <Grid container>
             <Grid item xs={2}>
-              <DeviceStatus direction={"column"} devId={this.props.devId} connected={this.state.connected} packet={this.state.packet} />
+            <DeviceStatus direction={"column"} devId={this.props.devId} connected={this.state.connected} packet={this.state.packet} height={this.state.height} width={this.state.width}/>
             </Grid>
             <Grid item xs={6}>
-              <ReactiveGauge hr={this.state.packet === null ? null : this.state.packet.basicData.heartRate} user={this.state.user} height={150} width={160} top={40} left={10} margin={-8} />
+              <ReactiveGauge hr={this.state.packet === null ? null : this.state.packet.basicData.heartRate} user={this.state.user} height={150 * this.state.height} width={160 * this.state.width} top={40 * this.state.height} />
             </Grid>
             <Grid item xs={2}>
-              <PerformanceMeter icon activity={this.state.packet === null ? null : this.state.packet.basicData.activity} top={20} />
+              <PerformanceMeter icon activity={this.state.packet === null ? null : this.state.packet.basicData.activity} top={20} height={this.state.height * 100} width={this.state.width * 12}/>
             </Grid>
             <Grid item xs={2}>
-              <Thermometer showTemp temp={this.state.packet === null ? null : this.state.packet.basicData.tempSkin} settings={this.props.settings} top={20} />
+              <Thermometer showTemp temp={this.state.packet === null ? null : this.state.packet.basicData.tempSkin} settings={this.props.settings} top={20}  height={this.state.height * 100} width={this.state.width * 12}/>
             </Grid>
           </Grid>
         </Paper>

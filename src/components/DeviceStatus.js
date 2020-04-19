@@ -10,46 +10,45 @@ import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponen
 import Tooltip from '@material-ui/core/Tooltip';
 import colors from '../colors';
 
-
-const useStyles = makeStyles({
-
-    root: {
-
-        borderStyle: 'solid',
-    },
-    avatar: {
-        height: 30,
-        width: 30,
-        fontSize: 15,
-        fontWeight: 'bold',
-        margin: 8,
-        backgroundColor: 'transparent',
-        color: 'black',
-        borderColor: 'black',
-        borderStyle: 'solid'
-    },
-    icon: {
-        height: 20,
-        width: 20,
-        margin: 5,
-        color: "black"
-    },
-
-    battery: {
-        height: 30,
-        width: 30,
-        margin: 5,
-        color: "black"
-    },
-    name: {
-        color: "black",
-        marginLeft: 5
-    }
-});
-
-
 function DeviceStatus(props) {
 
+    
+    const useStyles = makeStyles({
+
+        root: {
+    
+            borderStyle: 'solid',
+        },
+        avatar: {
+            height: props.height? 30 * props.height : 30,
+            width: props.width? 30 * props.width : 30,
+            fontSize: props.width? 15 * props.width : 15,
+            fontWeight: 'bold',
+            margin: props.width? 8 * props.width : 8,
+            backgroundColor: 'transparent',
+            color: 'black',
+            borderColor: 'black',
+            borderStyle: 'solid'
+        },
+        icon: {
+            height: props.height? 20 * props.height : 20,
+            width: props.width? 20 * props.width : 20,
+            margin: props.width? 5 * props.width : 5,
+            color: "black"
+        },
+    
+        battery: {
+            height: props.height? 30 * props.height : 30,
+            width: props.width? 30 * props.width : 30,
+            margin: props.width? 5 * props.width : 5,
+            color: "black"
+        },
+        name: {
+            color: "black",
+            marginLeft: 5
+        }
+    });
+    
     const switchColor = (props) => {
 
         let connection = props.connected === true;
@@ -95,7 +94,7 @@ function DeviceStatus(props) {
     const classes = useStyles();
     return (
 
-        <div style={{ backgroundColor: switchColor(props) }}>
+        <div style={{ backgroundColor: switchColor(props)}}>
             <Grid direction={props.direction} alignItems="center" container>
                 <Grid item>
                     <Tooltip title={props.packet === null ? "No receiver" : props.packet.basicData.port}>
