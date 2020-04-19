@@ -44,10 +44,9 @@ export default function PerformanceDetail(passedProps) {
 
                     <FlexibleWidthXYPlot
 
-                        height={200}
+                        height={220}
                         xType="time"
-                        yDomain={[0, 500]}
-                        style={{ borderStyle: 'solid' }}
+                        yDomain={[0, 350]}
                     >
                         <HorizontalGridLines />
                         <VerticalGridLines />

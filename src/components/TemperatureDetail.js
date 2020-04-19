@@ -29,10 +29,9 @@ export default function TemperatureDetail(passedProps) {
 
                     <FlexibleWidthXYPlot
 
-                        height={200}
+                        height={220}
                         xType="time"
-                        yDomain={[0, 50]}
-                        style={{ borderStyle: 'solid' }}
+                        yDomain={[10, 50]}
                     >
                         <HorizontalGridLines />
                         <VerticalGridLines />

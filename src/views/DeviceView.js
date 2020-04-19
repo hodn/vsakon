@@ -52,10 +52,9 @@ export default function DeviceView(passedProps) {
 
                                 <FlexibleWidthXYPlot
 
-                                    height={200}
+                                    height={220}
                                     xType="time"
                                     yDomain={[0, 220]}
-                                    style={{ borderStyle: 'solid' }}
                                 >
                                     <HorizontalGridLines />
                                     <VerticalGridLines />
