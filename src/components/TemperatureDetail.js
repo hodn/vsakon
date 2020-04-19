@@ -2,6 +2,7 @@ import React from 'react';
 import NumericIndicator from '../components/basics/NumericIndicator';
 import Grid from '@material-ui/core/Grid';
 import Thermometer from './Thermometer';
+import { VerticalGridLines, XAxis, YAxis, HorizontalGridLines, LineSeries, FlexibleWidthXYPlot } from 'react-vis';
 
 
 export default function TemperatureDetail(passedProps) {
@@ -15,13 +16,32 @@ export default function TemperatureDetail(passedProps) {
                 direction="row"
                 justify="flex-start"
                 alignItems="center"
-                spacing={4}
+                spacing={1}
             >
-                <Grid item><Thermometer icon settings={props.settings} temp={props.packet === null ? null : props.packet.basicData.tempSkin} height={130} width={18} top={35}/></Grid>
-                
-                <Grid item><NumericIndicator parameter={"Skin"} value={props.packet === null ? "--" : props.packet.basicData.tempSkin} unit="°C" />
+                <Grid xs={1} item><Thermometer icon settings={props.settings} temp={props.packet === null ? null : props.packet.basicData.tempSkin} height={130} width={18} top={35} /></Grid>
+
+                <Grid xs={3} item><NumericIndicator parameter={"Skin"} value={props.packet === null ? "--" : props.packet.basicData.tempSkin} unit="°C" />
                     <NumericIndicator parameter={"Environment"} value={props.packet === null ? "--" : props.packet.basicData.tempCloth} unit="°C" />
                     <NumericIndicator parameter={"Humidity"} value={props.packet === null ? "--" : props.packet.basicData.humidity} unit="%" />
+                </Grid>
+
+                <Grid xs={8} item>
+
+                    <FlexibleWidthXYPlot
+
+                        height={200}
+                        xType="time"
+                        yDomain={[0, 220]}
+                        style={{ borderStyle: 'solid' }}
+                    >
+                        <HorizontalGridLines />
+                        <VerticalGridLines />
+                        <LineSeries
+                            data={null} />
+                        <XAxis />
+                        <YAxis title="BPM" />
+                    </FlexibleWidthXYPlot>
+
                 </Grid>
 
             </Grid>
