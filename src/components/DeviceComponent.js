@@ -68,6 +68,16 @@ class DeviceComponent extends React.Component {
 
     })
 
+    window.addEventListener('resize', () => {
+
+      this._isMounted && this.setState({ 
+        width: window.innerWidth/1920,
+        height: window.innerHeight/1080
+      });
+
+    });
+    
+
     // Listener for data for the exact device
     ipcRenderer.on(this.props.devId.toString(), (event, arg) => {
 

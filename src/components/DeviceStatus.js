@@ -22,13 +22,14 @@ function DeviceStatus(props) {
         avatar: {
             height: props.height? 30 * props.height : 30,
             width: props.width? 30 * props.width : 30,
-            fontSize: props.width? 15 * props.width : 15,
+            fontSize: props.width? 14 * props.width : 14,
             fontWeight: 'bold',
             margin: props.width? 8 * props.width : 8,
             backgroundColor: 'transparent',
             color: 'black',
             borderColor: 'black',
-            borderStyle: 'solid'
+            borderStyle: 'solid',
+            borderWidth: props.width? 3 * props.width : 3,
         },
         icon: {
             height: props.height? 20 * props.height : 20,
