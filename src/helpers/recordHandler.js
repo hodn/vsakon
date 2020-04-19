@@ -9,13 +9,13 @@ const HistoryGraphHandler = require('./historyGraphHandler');
 module.exports = class RecordHandler {
     constructor(db) {
         this.directory = db.getSettings().csvDirectory,
-            this.components = db.getSettings().csvComponents,
-            this.db = db,
-            this.writer = null,
-            this.filePath = null,
-            this.recordId = null,
-            this.recording = false,
-            this.graphHandler = new HistoryGraphHandler();
+        this.components = db.getSettings().csvComponents,
+        this.db = db,
+        this.writer = null,
+        this.filePath = null,
+        this.recordId = null,
+        this.recording = false,
+        this.graphHandler = new HistoryGraphHandler();
         this.test = null;
     }
 
@@ -107,7 +107,7 @@ module.exports = class RecordHandler {
         if (this.components.performanceData === true) headers = headers.concat(performance);
         if (this.components.locationData === true) headers = headers.concat(location);
         if (this.components.nodeData === true) headers = headers.concat(node);
-
+       
         return headers;
     }
 
