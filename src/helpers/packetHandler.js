@@ -101,8 +101,8 @@ module.exports = class PacketHandler {
             // If timeseries already available 
             let timeSeries = graphSet[devSlot];
 
-            // Removes the first item - timeseries window adjustment
-            if (timeSeries.length > 30) {
+            // Removes the first item - timeseries window adjustment - 20 packets per minute (settings are in minutes)
+            if (timeSeries.length > (this.graphLength * 20)) {
 
                 graphSet[devSlot].shift();
             }

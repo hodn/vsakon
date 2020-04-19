@@ -241,7 +241,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
     })
 
     ipcMain.on("update-settings", (event, arg) => {
-
         databaseHandler.updateSettings(arg);
         if (arg.selectedTeam) packetHandler.profiles = databaseHandler.getSelectedTeam(false).members;
         if (arg.graphLength) packetHandler.graphLength = databaseHandler.getSettings().graphLength;
