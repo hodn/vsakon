@@ -119,7 +119,8 @@ module.exports = class PacketHandler {
             // Removes the first item - timeseries window adjustment - 20 packets per minute (settings are in minutes)
             if (timeSeries.length > (this.graphLength * 20)) {
 
-                graphSet[devSlot].shift();
+                const removeCount = timeSeries.length - (this.graphLength * 20); // 20 packets per minute (settings are in minutes)
+                graphSet[devSlot].splice(0, removeCount);
             }
 
             // If the timeseries resolution is too low - data points too far away -> reset the timeseries
