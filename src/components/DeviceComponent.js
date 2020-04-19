@@ -38,6 +38,10 @@ class DeviceComponent extends React.Component {
       packet: null,
       activityGraph: [],
       heartRateGraph: [],
+      tempSkinGraph: [],
+      accXGraph: [],
+      accYGraph: [],
+      accZGraph: [],
       user: null,
       connected: false,
       detailOpen: false,
@@ -57,7 +61,7 @@ class DeviceComponent extends React.Component {
     ipcRenderer.once(this.props.devId.toString() + "-profile", (event, arg) => {
 
       const user = arg;
-      this._isMounted && this.setState({user});
+      this._isMounted && this.setState({ user });
 
     })
 
@@ -70,12 +74,20 @@ class DeviceComponent extends React.Component {
       const packet = arg.packet;
       const activityGraph = arg.activityGraph;
       const heartRateGraph = arg.heartRateGraph;
+      const tempSkinGraph = arg.tempSkinGraph;
+      const accXGraph = arg.accXGraph;
+      const accYGraph = arg.accYGraph;
+      const accZGraph = arg.accZGraph;
       const connected = true;
 
       this._isMounted && this.setState((state, props) => ({
         packet,
         activityGraph,
         heartRateGraph,
+        tempSkinGraph,
+        accXGraph,
+        accYGraph,
+        accZGraph,
         connected
       }))
 
@@ -101,7 +113,11 @@ class DeviceComponent extends React.Component {
           connected: false,
           packet: null,
           activityGraph: [],
-          heartRateGraph: []
+          heartRateGraph: [],
+          tempSkinGraph: [],
+          accXGraph: [],
+          accYGraph: [],
+          accZGraph: []
         }))
 
       }
@@ -154,6 +170,10 @@ class DeviceComponent extends React.Component {
           packet={this.state.packet}
           heartRateGraph={this.state.heartRateGraph}
           activityGraph={this.state.activityGraph}
+          tempSkinGraph={this.state.tempSkinGraph}
+          accXGraph={this.state.accXGraph}
+          accYGraph={this.state.accYGraph}
+          accZGraph={this.state.accZGraph}
           user={this.state.user}
           connected={this.state.connected}
           alarm={this.alarmOff}

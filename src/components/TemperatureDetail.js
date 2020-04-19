@@ -31,15 +31,15 @@ export default function TemperatureDetail(passedProps) {
 
                         height={200}
                         xType="time"
-                        yDomain={[0, 220]}
+                        yDomain={[0, 50]}
                         style={{ borderStyle: 'solid' }}
                     >
                         <HorizontalGridLines />
                         <VerticalGridLines />
                         <LineSeries
-                            data={null} />
+                            data={props.tempSkinGraph} />
                         <XAxis />
-                        <YAxis title="BPM" />
+                        <YAxis title="°C" />
                     </FlexibleWidthXYPlot>
 
                 </Grid>

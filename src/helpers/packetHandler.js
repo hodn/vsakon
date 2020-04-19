@@ -6,8 +6,11 @@ module.exports = class PacketHandler {
             this.graphLength = db.getSettings().graphLength,
             this.activityGraphs = [],
             this.heartRateGraphs = [],
+            this.tempSkinGraphs = [],
+            this.accXGraphs = [],
+            this.accYGraphs = [],
+            this.accZGraphs = [],
             this.events = []
-            // array of events - changing the value, if not null add to packet
     }
 
     // Storing the state and sending the data to Renderer
@@ -40,6 +43,10 @@ module.exports = class PacketHandler {
 
             this.appendToGraph(packet, this.activityGraphs, 'activity');
             this.appendToGraph(specialHeartRatePacket, this.heartRateGraphs, 'heartRate');
+            this.appendToGraph(packet, this.tempSkinGraphs, 'tempSkin');
+            this.appendToGraph(packet, this.accXGraphs, 'accX');
+            this.appendToGraph(packet, this.accYGraphs, 'accY');
+            this.appendToGraph(packet, this.accZGraphs, 'accZ');
 
             this.packets[devSlot] = packet;
 
@@ -60,11 +67,19 @@ module.exports = class PacketHandler {
         const packet = this.packets[devSlot];
         const activityGraph = this.activityGraphs[devSlot];
         const heartRateGraph = this.heartRateGraphs[devSlot];
+        const tempSkinGraph = this.tempSkinGraphs[devSlot];
+        const accXGraph = this.accXGraphs[devSlot];
+        const accYGraph = this.accYGraphs[devSlot];
+        const accZGraph = this.accZGraphs[devSlot];
 
         const data = {
             packet,
             activityGraph,
             heartRateGraph,
+            tempSkinGraph,
+            accXGraph,
+            accYGraph,
+            accZGraph
         };
 
         this.event.reply(devId.toString(), data);

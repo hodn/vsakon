@@ -46,15 +46,15 @@ export default function PerformanceDetail(passedProps) {
 
                         height={200}
                         xType="time"
-                        yDomain={[0, 220]}
+                        yDomain={[0, 500]}
                         style={{ borderStyle: 'solid' }}
                     >
                         <HorizontalGridLines />
                         <VerticalGridLines />
                         <LineSeries
-                            data={null} />
+                            data={props.activityGraph} />
                         <XAxis />
-                        <YAxis title="BPM" />
+                        <YAxis title="nat" />
                     </FlexibleWidthXYPlot>
 
                 </Grid>

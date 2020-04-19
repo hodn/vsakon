@@ -44,17 +44,23 @@ export default function AccelerationDetail(passedProps) {
 
                     <FlexibleWidthXYPlot
 
-                        height={200}
+                        height={220}
                         xType="time"
-                        yDomain={[0, 220]}
-                        style={{ borderStyle: 'solid' }}
+                        yDomain={[-1, 1]}
                     >
                         <HorizontalGridLines />
                         <VerticalGridLines />
                         <LineSeries
-                            data={null} />
+                            data={props.accXGraph}
+                            color={colors.yellow} />
+                        <LineSeries
+                            data={props.accYGraph}
+                            color={colors.red} />
+                        <LineSeries
+                            data={props.accZGraph}
+                            color={colors.green} />
                         <XAxis />
-                        <YAxis title="BPM" />
+                        <YAxis title="G" />
                     </FlexibleWidthXYPlot>
 
                 </Grid>

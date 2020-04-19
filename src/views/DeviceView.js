@@ -60,7 +60,7 @@ export default function DeviceView(passedProps) {
                                     <HorizontalGridLines />
                                     <VerticalGridLines />
                                     <LineSeries
-                                        data={null} />
+                                        data={props.heartRateGraph} />
                                     <XAxis />
                                     <YAxis title="BPM" />
                                 </FlexibleWidthXYPlot>
