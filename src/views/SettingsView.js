@@ -62,7 +62,8 @@ export default function SettingsView(props) {
 
   const handleCheckbox = name => event => {
     setCsvComponents({ ...csvComponents, [name]: event.target.checked });
-    updateSettings(); // Change immediately as the user can switch on recording from settings menu
+    const changedComponents = { ...csvComponents, [name]: event.target.checked };
+    ipcRenderer.send("update-settings", {csvComponents: changedComponents});// Change immediately as the user can switch on recording from settings menu
   };
 
   const handleDirectoryChange = () => {
@@ -70,8 +71,9 @@ export default function SettingsView(props) {
     
     ipcRenderer.once("csv-path-loaded", (event, arg) => {
       setCsvDirectory(arg.path.toString());
+      ipcRenderer.send("update-settings", {csvDirectory: arg.path.toString()});
     })
-    updateSettings(); // Change immediately as the user can switch on recording from settings menu
+     // Change immediately as the user can switch on recording from settings menu
   };
 
   const handleMin = (event, newValue) => {
