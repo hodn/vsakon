@@ -28,6 +28,7 @@ export default function NodeDetail(passedProps) {
 
     return (
         <div>
+
             <Grid
                 container
                 direction="row"
@@ -35,12 +36,12 @@ export default function NodeDetail(passedProps) {
                 alignItems="center"
                 spacing={2}
             >
-             {getNodes().map((component) => {
-                return component;
-            })}
+
+                {getNodes().map((component) => {
+                    return component;
+                })}
 
             </Grid>
-           
 
         </div>
     );

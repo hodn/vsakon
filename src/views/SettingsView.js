@@ -145,7 +145,7 @@ export default function SettingsView(props) {
           valueLabelDisplay="auto"
           value={graphLength}
           min={1}
-          max={30}
+          max={15}
           onChange={handleMin}
         />
       </Paper>

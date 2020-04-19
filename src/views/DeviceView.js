@@ -1,5 +1,6 @@
 import React from 'react';
 import PerformanceDetail from '../components/PerformanceDetail';
+import AccelerationDetail from '../components/AccelerationDetail';
 import TemperatureDetail from '../components/TemperatureDetail';
 import DeviceControl from '../components/DeviceControl';
 import ReactiveGauge from "../components/ReactiveGauge";
@@ -25,8 +26,7 @@ export default function DeviceView(passedProps) {
         },
 
         nodes: {
-            padding: 20,
-            widht: 1280
+            padding: 15
         },
 
     });
@@ -43,58 +43,30 @@ export default function DeviceView(passedProps) {
                 spacing={1}
             >
 
-                <Grid item>
+                <Grid xs={6} item>
                     <Paper className={classes.topRow} elevation={5}>
                         <ReactiveGauge hr={props.packet === null ? null : props.packet.basicData.heartRate} user={props.user} height={250} width={250} left={0} top={40} margin={-20} />
                     </Paper>
                 </Grid>
 
-                <Grid item>
+                <Grid xs={6} item>
                     <Paper className={classes.topRow} elevation={5}><PerformanceDetail initProps={props} /></Paper>
                 </Grid>
 
-                <Grid item>
+                <Grid xs={6} item>
+                    <Paper className={classes.topRow} elevation={5}><AccelerationDetail initProps={props} /></Paper>
+                </Grid>
+
+                <Grid xs={6} item>
                     <Paper className={classes.topRow} elevation={5}><TemperatureDetail initProps={props} /></Paper>
                 </Grid>
 
-                { <Grid item>
-                    <Paper><DeviceControl initProps={props} /> </Paper>
-                </Grid> }
-
-                <Grid xs ={12} item>
-                    <div className={classes.nodes} elevation={5}><NodeDetail initProps={props} /></div>
+                <Grid xs={12} item>
+                    <Paper className={classes.nodes} elevation={5}><NodeDetail initProps={props} /></Paper>
                 </Grid>
 
-                <Grid item>
-                    <XYPlot
-                        width={500}
-                        height={220}
-                        xType="time"
-                        yDomain={[0, 500]}
-                    >
-                        <HorizontalGridLines />
-                        <LineSeries
-                            fill={colors.secondary}
-                            data={props.activityGraph} />
-                        <XAxis />
-                        <YAxis title="nat" />
-                    </XYPlot>
-                </Grid>
-
-                <Grid item>
-                    <XYPlot
-                        width={500}
-                        height={220}
-                        xType="time"
-                        yDomain={[0, 220]}
-                    >
-                        <HorizontalGridLines />
-                        <LineSeries
-                            fill={colors.secondary}
-                            data={props.heartRateGraph} />
-                        <XAxis />
-                        <YAxis title="BPM" />
-                    </XYPlot>
+                <Grid xs={12} item>
+                    <DeviceControl initProps={props} />
                 </Grid>
 
             </Grid>

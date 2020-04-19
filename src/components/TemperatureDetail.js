@@ -13,7 +13,7 @@ export default function TemperatureDetail(passedProps) {
             <Grid
                 container
                 direction="row"
-                justify="center"
+                justify="flex-start"
                 alignItems="center"
                 spacing={4}
             >

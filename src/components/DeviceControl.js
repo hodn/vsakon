@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import NotificationsOffIcon from '@material-ui/icons/NotificationsOff';
 import colors from '../colors';
 const { ipcRenderer } = window.require('electron');
@@ -14,9 +15,9 @@ export default function DeviceControl(passedProps) {
 
   const showAlarmButton = (alarmState) => {
     if (alarmState) return (
-      <Button variant="contained" size="large" startIcon={<NotificationsOffIcon />} onClick={props.alarm} style={{ backgroundColor: colors.red }}>
+      <Grid item><Button variant="contained" size="large" startIcon={<NotificationsOffIcon />} onClick={props.alarm} style={{ backgroundColor: colors.red }}>
         Alarm off
-      </Button>
+      </Button></Grid>
     )
   }
 
@@ -27,9 +28,9 @@ export default function DeviceControl(passedProps) {
     if (props.settings) {
       for (let index = 0; index < props.settings.eventNames.length; index++) {
         buttons.push(
-          <Button key={index} variant="contained" size="large" style={{ margin: 3, backgroundColor: colors.secondary, color: "white" }} onClick={registerEvent(props.settings.eventNames[index])}>
+          <Grid item><Button key={index} variant="contained" size="large" style={{ margin: 3, backgroundColor: colors.secondary, color: "white" }} onClick={registerEvent(props.settings.eventNames[index])}>
             {props.settings.eventNames[index]}
-          </Button>
+          </Button></Grid>
         )
 
       }
@@ -39,15 +40,21 @@ export default function DeviceControl(passedProps) {
   }
 
   return (
-    <div style={{ marginLeft: "auto" }}>
+    <div>
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+      >
 
-      {showAlarmButton(props.packet ? props.packet.deadMan : false)}
+        {showAlarmButton(props.packet ? props.packet.deadMan : false)}
 
-      {getEventButtons(props.settings).map(button => {
-        return button;
+        {getEventButtons(props.settings).map(button => {
+          return button;
 
-      })}
-
+        })}
+      </Grid>
     </div>
   );
 }

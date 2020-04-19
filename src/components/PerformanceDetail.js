@@ -2,7 +2,6 @@ import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import PerformanceMeter from "../components/PerformanceMeter";
 import StehlikMeter from "../components/StehlikMeter";
-import AccelerationMeter from "../components/AccelerationMeter";
 import NumericIndicator from '../components/basics/NumericIndicator';
 import Grid from '@material-ui/core/Grid';
 
@@ -16,19 +15,19 @@ export default function PerformanceDetail(passedProps) {
             <Grid
                 container
                 direction="row"
-                justify="center"
+                justify="flex-start"
                 alignItems="center"
                 spacing={4}
             >
 
-                <Grid item> <PerformanceMeter icon activity={props.packet === null ? null : props.packet.basicData.activity} height={130} width={18} top={10} /> </Grid>
+                <Grid item> <PerformanceMeter icon activity={props.packet === null ? null : props.packet.basicData.activity} height={130} width={18} top={30} /> </Grid>
                 <Grid item>
                     <StehlikMeter
                         icon
                         stehlik={performanceDataAvailable ? props.packet.performanceData.stehlik : null}
                         height={130}
                         width={18}
-                        top={10} />
+                        top={30} />
                 </Grid>
 
                 <Grid item>
@@ -38,12 +37,6 @@ export default function PerformanceDetail(passedProps) {
                     <Chip label={props.user !== null ? props.user.weight + " kg" : null } variant="outlined" size="small" />
                     <Chip label={props.user !== null ? props.user.age + " y.o." : null } variant="outlined" size="small" />
                     <Chip label={props.user !== null ? (props.user.vMax / props.user.weight).toFixed(0) + " ml/min/kg" : null } variant="outlined" size="small" />
-                </Grid>
-
-                <Grid item>
-                    <AccelerationMeter axis="X" leftLabel="back" rightLabel="front" data={props.packet === null ? "-" : props.packet.basicData.accY} />
-                    <AccelerationMeter axis="Y" leftLabel="left" rightLabel="right" data={props.packet === null ? "-" : props.packet.basicData.accY} />
-                    <AccelerationMeter axis="Z" leftLabel="foot" rightLabel="head" data={props.packet === null ? "-" : props.packet.basicData.accZ} />
                 </Grid>
 
             </Grid>

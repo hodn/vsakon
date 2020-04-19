@@ -193,11 +193,11 @@ class TopBar extends React.Component {
           </Toolbar>
         </AppBar>
 
-        {this.state.tabValue === 4 && <this.TabContainer> <MainView/> </this.TabContainer>}
+        {this.state.tabValue === 0 && <this.TabContainer> <MainView/> </this.TabContainer>}
         {this.state.tabValue === 1 && <this.TabContainer> <HistoryView/> </this.TabContainer>}
         {this.state.tabValue === 2 && <this.TabContainer> Map </this.TabContainer>}
         {this.state.tabValue === 3 && <this.TabContainer> <TeamView recording={this.state.recording} /> </this.TabContainer>}
-        {this.state.tabValue === 0 && <this.TabContainer> <SettingsView/> </this.TabContainer>}
+        {this.state.tabValue === 4 && <this.TabContainer> <SettingsView/> </this.TabContainer>}
 
       </div>
 
