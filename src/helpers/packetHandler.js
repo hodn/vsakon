@@ -28,8 +28,9 @@ module.exports = class PacketHandler {
             // If there is event registered for the device
             if(this.events[devSlot]){
                 packet.basicData.event = this.events[devSlot];
-                this.events[devSlot] = null;
             }
+
+            this.events[devSlot] = null;
 
             // Because 2 and 3 are special values for measuring state of the sensor
             let specialHeartRatePacket = packet;

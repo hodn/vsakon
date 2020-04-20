@@ -11,6 +11,7 @@ export default function DeviceControl(passedProps) {
 
   const registerEvent = (eventName) => {
     ipcRenderer.send("register-event", { event: eventName, devId: props.devId })
+    console.log(eventName)
   }
 
   const showAlarmButton = (alarmState) => {
@@ -28,8 +29,8 @@ export default function DeviceControl(passedProps) {
     if (props.settings) {
       for (let index = 0; index < props.settings.eventNames.length; index++) {
         buttons.push(
-          <Grid key={index} item><Button variant="contained" size="large" style={{ margin: 3, backgroundColor: colors.secondary, color: "white" }} onClick={registerEvent(props.settings.eventNames[index])}>
-            {props.settings.eventNames[index]}
+          <Grid key={index} item><Button variant="contained" size="large" style={{ margin: 3, backgroundColor: colors.secondary, color: "white" }} onClick={() => registerEvent(settings.eventNames[index])}>
+            {settings.eventNames[index]}
           </Button></Grid>
         )
 
