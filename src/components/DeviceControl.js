@@ -16,7 +16,7 @@ export default function DeviceControl(passedProps) {
 
   const showAlarmButton = (alarmState) => {
     if (alarmState) return (
-      <Grid item><Button variant="contained" size="large" startIcon={<NotificationsOffIcon />} onClick={props.alarm} style={{ backgroundColor: colors.red }}>
+      <Grid item><Button variant="contained" size="large" startIcon={<NotificationsOffIcon />} onClick={props.alarm} style={{ backgroundColor: colors.red, marginRight: 5 }}>
         Alarm off
       </Button></Grid>
     )

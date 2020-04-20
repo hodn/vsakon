@@ -65,12 +65,10 @@ app.on('activate', function () {
 
 process.on('unhandledRejection', error => {
     // Will print "unhandledRejection err is not defined"
-    //electron.dialog.showErrorBox(error.message, error.message + ". Please, check if the settings are correct.");
-    console.log(error);
+    electron.dialog.showErrorBox("Error", error);
 })
 process.on('uncaughtException', error => {
-    //electron.dialog.showErrorBox(error.message, "App has encountered an error - " + error.message);
-    console.log(error);
+    electron.dialog.showErrorBox("Error", error);
 })
 
 //////////////////////////////////////// Parsing data from COM port ////////////////////////////////////////
@@ -156,6 +154,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
                                 } catch (error) {
                                     console.log(error);
                                 }
+                            }else{
+                                
+                                electron.dialog.showErrorBox("Error", error);
                             }
 
                         }
@@ -254,7 +255,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
-    app.on('window-all-closed', () => {
+    app.on('before-quit', () => {
         if (recordHandler.recording) recordHandler.setRecording();
     })
 

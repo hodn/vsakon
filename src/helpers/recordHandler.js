@@ -68,7 +68,16 @@ module.exports = class RecordHandler {
             }
         } */
 
-        this.writer.write(this.formatToCsv(packet));
+        if (!fs.existsSync(this.filePath)) throw "Source CSV removed. Please restart the recording."
+
+        try {
+            this.writer.write(this.formatToCsv(packet));
+        } catch{
+            throw "Writing error. Please restart the recording."
+        }
+
+
+
 
     }
     // This will be called straight from electron-starter
@@ -92,7 +101,7 @@ module.exports = class RecordHandler {
                     event.reply("history-parsed", this.graphHandler.getGraphs());
                 });
         } else {
-            dialog.showErrorBox("Record not loaded", "Invalid path or deleted CSV source file.");
+            throw "Invalid path or deleted CSV source file.";
         }
 
 
