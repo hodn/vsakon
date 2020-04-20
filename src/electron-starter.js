@@ -121,7 +121,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
             for (let index = 0; index < selectedPorts.length; index++) {
                 const port = selectedPorts[index];
                 const portHandler = new PortHandler(port, event);
-                portHandlers.push(portHandler);
+                portHandlers.push(portHandler); // for further user actions with different listneres than connect-ports (alarm, sync)
 
                 // Get data from port - init parser, connect and data
                 portHandler.getParser().then(parser => {
@@ -142,7 +142,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             const storedPacket = packetHandler.storeAndSendState(parsedPacket, portHandler.com);
                             // Packet from receiver is new and stored - recording is ON
                             if (storedPacket && recordHandler.recording) recordHandler.writeToCsv(storedPacket);
-
+            
                         } catch (error) {
                             console.log(error.message)
 
@@ -286,9 +286,12 @@ ipcMain.on('clear-to-send', (event, arg) => {
     ipcMain.on("remove-alarm", (event, arg) => {
 
         try {
-            portHandlers.forEach(portHandler => {
-                portHandler.removeAlarm(arg);
-            });
+
+            for (let index = 0; index < portHandlers.length; index++) {
+                const alarmOff = () => portHandlers[index].removeAlarm(arg);
+                const delay = index * 50;
+                setTimeout(alarmOff, delay);
+            }
 
         } catch (error) {
             console.log(error);
@@ -297,12 +300,13 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     ipcMain.on("sync-devices", (event, arg) => {
 
-        const delay = index * 50; // one after another - against sync collision
-        const userForcedSync = true; // not because of invalid packet detection
-
-        portHandlers.forEach(portHandler => {
-            portHandler.sendSync(userForcedSync, delay);
-        });
+        const userForcedSync = true; // not because of automatic invalid packet detection
+        
+        for (let index = 0; index < portHandlers.length; index++) {
+            const delay = index * 50; // avoiding collision of broadcast
+            portHandlers[index].sendSync(userForcedSync, delay);
+            
+        }
 
     })
 

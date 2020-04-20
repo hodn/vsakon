@@ -133,7 +133,7 @@ module.exports = class PortHandler {
             }
         })
 
-        // If there are 3 invalid packets in the row - sync devices & reconnect the port
+        // If there are 3 invalid packets in the row or user-force sync -> sync devices & reconnect the port
         if (this.invalidDataCount >= 3 || forced) {
 
             this.invalidDataCount = 0;
