@@ -68,12 +68,11 @@ module.exports = class RecordHandler {
             }
         } */
 
-        if (!fs.existsSync(this.filePath)) throw "Source CSV removed. Please restart the recording."
-
+        if (!fs.existsSync(this.filePath)) throw {type: "writeToCsv", message:"Source CSV removed. Please restart the recording."}
         try {
             this.writer.write(this.formatToCsv(packet));
         } catch{
-            throw "Writing error. Please restart the recording."
+            throw {type: "writeToCsv", message:"Writing error. Please restart the recording."};
         }
 
 
@@ -101,7 +100,7 @@ module.exports = class RecordHandler {
                     event.reply("history-parsed", this.graphHandler.getGraphs());
                 });
         } else {
-            throw "Invalid path or deleted CSV source file.";
+            throw new Error ("Invalid path or deleted CSV source file.");
         }
 
 

@@ -94,7 +94,7 @@ module.exports = class PortHandler {
 
             if (err) {
 
-                throw Error(port + " not stopped")
+                console.error(port + " not stopped")
 
             } else {
                 // Stop packet written
@@ -102,7 +102,7 @@ module.exports = class PortHandler {
                 port.flush(function (err) {
                     if (err) {
 
-                        throw Error(port + " not flushed")
+                        console.error(port + " not flushed")
 
                     } else {
                         setTimeout(function() {
@@ -118,7 +118,7 @@ module.exports = class PortHandler {
 
             if (err) {
 
-                throw Error(port + " not synced")
+                console.error(port + " not synced")
 
             } else {
                 // Sync packet written
@@ -126,7 +126,7 @@ module.exports = class PortHandler {
                 port.flush(function (err) {
                     if (err) {
 
-                        throw Error(port + " not flushed")
+                        console.error(port + " not flushed")
 
                     }
                 })
@@ -154,7 +154,7 @@ module.exports = class PortHandler {
 
             if (err) {
 
-                throw Error(devId + " alarm not removed")
+                console.error(devId + " alarm not removed")
 
             } else {
                 // Alarm off packet written
@@ -162,7 +162,7 @@ module.exports = class PortHandler {
                 port.drain(function (err) {
                     if (err) {
 
-                        throw Error(port + " not drained")
+                        console.error(port + " not drained")
 
                     }
                 })

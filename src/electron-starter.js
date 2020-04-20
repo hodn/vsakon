@@ -65,10 +65,10 @@ app.on('activate', function () {
 
 process.on('unhandledRejection', error => {
     // Will print "unhandledRejection err is not defined"
-    electron.dialog.showErrorBox("Error", error);
+    electron.dialog.showErrorBox("Error", error.message);
 })
 process.on('uncaughtException', error => {
-    electron.dialog.showErrorBox("Error", error);
+    electron.dialog.showErrorBox("Error", error.message);
 })
 
 //////////////////////////////////////// Parsing data from COM port ////////////////////////////////////////
@@ -156,7 +156,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
                                 }
                             }else{
                                 
-                                electron.dialog.showErrorBox("Error", error);
+                                electron.dialog.showErrorBox("Data handling error", error.message);
+
+                                if(error.type === "writeToCsv") recordHandler.recording = false;
                             }
 
                         }
