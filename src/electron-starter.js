@@ -92,6 +92,8 @@ ipcMain.on('clear-to-send', (event, arg) => {
     const databaseHandler = new DatabaseHandler(app);
     databaseHandler.initDb();
 
+    const portHandlers = [];
+
     // State management init
     const packetHandler = new PacketHandler(event, databaseHandler);
     const recordHandler = new RecordHandler(databaseHandler);
@@ -119,19 +121,13 @@ ipcMain.on('clear-to-send', (event, arg) => {
             for (let index = 0; index < selectedPorts.length; index++) {
                 const port = selectedPorts[index];
                 const portHandler = new PortHandler(port, event);
+                portHandlers.push(portHandler);
 
                 // Get data from port - init parser, connect and data
                 portHandler.getParser().then(parser => {
 
                     // Connecting (opening) port after the parser was configured
                     portHandler.connect();
-
-                    ipcMain.on("sync-devices", (event, arg) => {
-
-                        const delay = index * 50; // one after another - against sync collision
-                        const userForcedSync = true; // not because of invalid packet detection
-                        portHandler.sendSync(userForcedSync, delay);
-                    })
 
                     // Listener for data from port
                     parser.on('data', function (data) {
@@ -168,17 +164,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
                 });
 
-                // User turns off the alarm (arg = deviceId)
-                ipcMain.on("remove-alarm", (event, arg) => {
-
-                    try {
-
-                        portHandler.removeAlarm(arg);
-
-                    } catch (error) {
-                        console.log(error);
-                    }
-                })
 
 
 
@@ -274,7 +259,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     })
 
     ipcMain.on("open-dialog", (event, arg) => {
-        
+
         const { dialog } = require('electron');
         const path = dialog.showOpenDialog({
             filters: [
@@ -283,19 +268,42 @@ ipcMain.on('clear-to-send', (event, arg) => {
         });
         const team = databaseHandler.getDefaultTeam();
         team.name = "Custom load";
-        
-        if(path) event.reply("csv-path-loaded", {path, team});
-       
+
+        if (path) event.reply("csv-path-loaded", { path, team });
+
 
     })
-    // ON Register - EVENT from component - change the value in PacketHandler
 
     ipcMain.on("register-event", (event, arg) => {
 
         const devSlot = arg.devId - 1;
         const eventName = arg.event;
-    
+
         packetHandler.events[devSlot] = eventName;
+    })
+
+    // User turns off the alarm (arg = deviceId)
+    ipcMain.on("remove-alarm", (event, arg) => {
+
+        try {
+            portHandlers.forEach(portHandler => {
+                portHandler.removeAlarm(arg);
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+    })
+
+    ipcMain.on("sync-devices", (event, arg) => {
+
+        const delay = index * 50; // one after another - against sync collision
+        const userForcedSync = true; // not because of invalid packet detection
+
+        portHandlers.forEach(portHandler => {
+            portHandler.sendSync(userForcedSync, delay);
+        });
+
     })
 
 })
