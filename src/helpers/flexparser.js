@@ -103,7 +103,7 @@ function parseLocationData(rawLocationArray) {
             longMins: convertLocationMins(rawLongMins, longSecs),
             fix: convertFixSat(fixSat).fix,
             sat: convertFixSat(fixSat).sat,
-            dilution: convertLocationMetric(rawLocationArray[11]),
+            dilution: convertLocationMetric(rawLocationArray[12]),
             alt: convertLocationMetric(alt),
             detected: isLocationDetected(convertLocationMins(rawLatMins, latSecs), convertLocationMins(rawLongMins, longSecs))
         }

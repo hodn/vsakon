@@ -49,10 +49,12 @@ export default function MapView(props) {
     newMarkers[devId - 1] = (<Marker position={position} icon={getIcon(devId)}>
       <Popup>
         <h5>{user.name} {user.surname} </h5>
-        Lat: {packet.locationData.latMins} <br/>
-        Long: {packet.locationData.longMins} <br/>
-        Fix: {packet.locationData.fix} <br/>
-        Sat: {packet.locationData.sat} <br/>
+         Lat: {packet.locationData.latMins} <br/>
+        Long: {packet.locationData.longMins}<br/>
+         Fix: {packet.locationData.fix}<br/>
+         Sat: {packet.locationData.sat}<br/>
+         H: {packet.locationData.alt}<br/>
+         HDOP: {packet.locationData.dilution}<br/>
       </Popup>
     </Marker>)
 
@@ -70,12 +72,12 @@ export default function MapView(props) {
 
   const removeMarker = (devId) => {
     let newMarkers = [...markers];
-    newMarkers[devId-1] = null;
+    newMarkers[devId - 1] = null;
     setMarkers(newMarkers);
   }
 
   const focusOnDevice = (packet) => {
-    if(packet && packet.locationData && packet.locationData.detected){
+    if (packet && packet.locationData && packet.locationData.detected) {
       const position = [packet.locationData.latMins, packet.locationData.longMins];
       setCenter(position);
       setZoom(30);
