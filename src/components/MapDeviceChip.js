@@ -25,10 +25,12 @@ class MapDeviceChip extends React.Component {
   componentDidMount() {
 
     this._isMounted = true;
-    const user = this.props.team ? this.props.team.members[this.props.devId - 1] : null;
+
     // Listener for data for the exact device
     ipcRenderer.on(this.props.devId.toString(), (event, arg) => {
 
+      const user = this.props.team ? this.props.team.members[this.props.devId - 1] : null;
+      
       // Connection checker
       setTimeout(this.checkDeviceConnection, 6000);
 

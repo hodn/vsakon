@@ -10,12 +10,6 @@ const { ipcRenderer } = window.require('electron');
 
 delete L.Icon.Default.prototype._getIconUrl;
 
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
-});
-
 const useStyles = makeStyles(theme => ({
 
   paper: {
@@ -46,15 +40,37 @@ export default function MapView(props) {
   }, [])
 
   const setMarker = (packet, user) => {
+    console.log(user)
+    let newMarkers = [...markers];
+    const devId = packet.basicData.devId;
+    const position = [packet.locationData.latMins, packet.locationData.longMins];
 
+    newMarkers[devId - 1] = (<Marker position={position} icon={getIcon(devId)}>
+      <Popup>
+        {packet.locationData.toString()}
+      </Popup>
+    </Marker>)
+
+    setMarkers(newMarkers);
+  }
+
+  const getIcon = (devId) => {
+
+    return new L.Icon({
+      iconUrl: require('../markerIcons/number_' + devId.toString() + '.png'),
+      iconRetinaUrl: require('../markerIcons/number_' + devId.toString() + '.png'),
+      iconSize: new L.Point(32, 37),
+    })
   }
 
   const removeMarker = (devId) => {
-    console.log(devId)
+    let newMarkers = [...markers];
+    newMarkers[devId-1] = null;
+    setMarkers(newMarkers);
   }
 
   const focusOnDevice = (packet) => {
-    console.log(packet.deadMan)
+    
   }
 
   const getDeviceChips = () => {
@@ -77,16 +93,16 @@ export default function MapView(props) {
   return (
     <div>
       <Paper style={{ marginBottom: 10 }}>
-        <Map style={{ width: '100%', height: 740 * (window.innerHeight/1080) }} center={center} zoom={10}>
+        <Map style={{ width: '100%', height: 740 * (window.innerHeight / 1080) }} center={center} zoom={10}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
-          <Marker position={center}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-          </Marker>
+
+          {markers.map((marker) => {
+            return marker;
+          })}
+
         </Map>
       </Paper>
 
@@ -106,6 +122,6 @@ export default function MapView(props) {
       </Paper>
 
 
-    </div>
+    </div >
   );
 }
