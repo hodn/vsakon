@@ -32,6 +32,18 @@ export default function MapView(props) {
   const [activeTeam, setActiveTeam] = React.useState(null);
   const [markers, setMarkers] = React.useState([]);
 
+  React.useEffect(() => {
+    
+    ipcRenderer.send("get-active-team");
+    ipcRenderer.on("active-team-loaded", (event, arg) => {
+      setActiveTeam(arg);
+    })
+    
+    return () => {
+      ipcRenderer.removeAllListeners();
+    }
+  }, [])
+  
   const setMarker = (packet, user) => {
     console.log("MARKE")
   }
@@ -43,19 +55,6 @@ export default function MapView(props) {
   const focusOnDevice = (packet) => {
     console.log(packet.deadMan)
   }
-
-  React.useEffect(() => {
-    
-    ipcRenderer.send("get-active-team");
-    ipcRenderer.on("active-team-loaded", (event, arg) => {
-      
-      setActiveTeam(arg);
-    })
-    
-    return () => {
-      ipcRenderer.removeAllListeners();
-    }
-  }, [])
 
 
   return (
