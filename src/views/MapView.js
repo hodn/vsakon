@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -30,7 +29,8 @@ export default function MapView(props) {
     const devId = packet.basicData.devId;
     const position = [packet.locationData.latMins, packet.locationData.longMins];
 
-    newMarkers[devId - 1] = (<Marker position={position} icon={getIcon(devId)}>
+    newMarkers[devId - 1] = (
+    <Marker key={devId-1} position={position} icon={getIcon(devId)}>
       <Popup>
         <h3>{user.name} {user.surname} </h3>
          Lat: {packet.locationData.latMins} <br/>
@@ -40,7 +40,8 @@ export default function MapView(props) {
          H: {packet.locationData.alt}<br/>
          HDOP: {packet.locationData.dilution}<br/>
       </Popup>
-    </Marker>)
+    </Marker>
+    )
 
     setMarkers(newMarkers);
   }
