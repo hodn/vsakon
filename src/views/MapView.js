@@ -33,7 +33,7 @@ export default function MapView(props) {
   const [markers, setMarkers] = React.useState([]);
 
   const setMarker = (packet, user) => {
-    return null;
+    console.log("MARKE")
   }
 
   const removeMarker = (devId) => {

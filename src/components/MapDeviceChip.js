@@ -108,7 +108,7 @@ class MapDeviceChip extends React.Component {
       <div>
         <Chip variant="outlined" 
         avatar={<Avatar style={{ backgroundColor: this.colorSwitch(this.state.packet, this.state.connected), color: "black", fontWeight: "bold" }}> {this.props.devId} </Avatar>}
-        label={user ? user.name + " " + user.surname : "User not loaded"} 
+        label={this.state.user ? this.state.user.name + " " + this.state.user.surname : "User not loaded"} 
         onClick={() => this.props.focusOnDevice(this.state.packet)} />
       </div>
 
