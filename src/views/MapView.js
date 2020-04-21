@@ -24,6 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function MapView(props) {
   const [center, setCenter] = React.useState([50.06986, 14.42462]);
+  const [zoom, setZoom] = React.useState(10);
   const [activeTeam, setActiveTeam] = React.useState(null);
   const [markers, setMarkers] = React.useState([]);
 
@@ -47,7 +48,11 @@ export default function MapView(props) {
 
     newMarkers[devId - 1] = (<Marker position={position} icon={getIcon(devId)}>
       <Popup>
-        {packet.locationData.toString()}
+        <h5>{user.name} {user.surname} </h5>
+        Lat: {packet.locationData.latMins} <br/>
+        Long: {packet.locationData.longMins} <br/>
+        Fix: {packet.locationData.fix} <br/>
+        Sat: {packet.locationData.sat} <br/>
       </Popup>
     </Marker>)
 
@@ -70,7 +75,11 @@ export default function MapView(props) {
   }
 
   const focusOnDevice = (packet) => {
-    
+    if(packet && packet.locationData && packet.locationData.detected){
+      const position = [packet.locationData.latMins, packet.locationData.longMins];
+      setCenter(position);
+      setZoom(30);
+    }
   }
 
   const getDeviceChips = () => {
@@ -93,7 +102,7 @@ export default function MapView(props) {
   return (
     <div>
       <Paper style={{ marginBottom: 10 }}>
-        <Map style={{ width: '100%', height: 740 * (window.innerHeight / 1080) }} center={center} zoom={10}>
+        <Map style={{ width: '100%', height: 740 * (window.innerHeight / 1080) }} center={center} zoom={zoom}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
