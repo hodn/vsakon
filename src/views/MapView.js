@@ -1,8 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Map, Marker, Tooltip, TileLayer } from 'react-leaflet';
+import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import Paper from '@material-ui/core/Paper';
-import DeviceMapChip from '../components/DeviceMapChip';
+import MapDeviceChip from '../components/MapDeviceChip';
 import L from 'leaflet';
 import colors from '../colors';
 const { ipcRenderer } = window.require('electron');
@@ -30,6 +30,19 @@ const useStyles = makeStyles(theme => ({
 export default function MapView(props) {
   const [center, setCenter] = React.useState([50.06986, 14.42462]);
   const [activeTeam, setActiveTeam] = React.useState(null);
+  const [markers, setMarkers] = React.useState([]);
+
+  const setMarker = (packet, user) => {
+    return null;
+  }
+
+  const removeMarker = (devId) => {
+    console.log(devId)
+  }
+
+  const focusOnDevice = (packet) => {
+    console.log(packet.deadMan)
+  }
 
   React.useEffect(() => {
     
@@ -53,10 +66,15 @@ export default function MapView(props) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
+          <Marker position={center}>
+          <Popup>
+            A pretty CSS3 popup. <br /> Easily customizable.
+          </Popup>
+        </Marker>
         </Map>
       </Paper>
 
-      <DeviceMapChip devId={29} team={activeTeam}/>
+      <MapDeviceChip devId={29} team={activeTeam} setMarker={setMarker} removeMarker={removeMarker} focusOnDevice={focusOnDevice}/>
     </div>
   );
 }
