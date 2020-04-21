@@ -48,7 +48,7 @@ export default function MapView(props) {
 
     newMarkers[devId - 1] = (<Marker position={position} icon={getIcon(devId)}>
       <Popup>
-        <h5>{user.name} {user.surname} </h5>
+        <h3>{user.name} {user.surname} </h3>
          Lat: {packet.locationData.latMins} <br/>
         Long: {packet.locationData.longMins}<br/>
          Fix: {packet.locationData.fix}<br/>
