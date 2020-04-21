@@ -41,7 +41,6 @@ export default function MapView(props) {
   }, [])
 
   const setMarker = (packet, user) => {
-    console.log(user)
     let newMarkers = [...markers];
     const devId = packet.basicData.devId;
     const position = [packet.locationData.latMins, packet.locationData.longMins];

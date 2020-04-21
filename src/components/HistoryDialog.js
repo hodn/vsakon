@@ -86,6 +86,21 @@ export default function HistoryDialog(props) {
     }
   }, [])
 
+  const resetAndClose = () => {
+    props.close();
+
+    setHeartRate([]);
+    setActivity([]);
+    setAccX([]);
+    setAccY([]);
+    setAccZ([]);
+    setTempSkin([]);
+    setTempCloth([]);
+    setHumidity([]);
+    setProgress(true);
+
+  }
+
   return (
     <div>
       <Dialog style={{ padding: 10 }} fullScreen open={props.openState} TransitionComponent={Transition}>
@@ -93,7 +108,7 @@ export default function HistoryDialog(props) {
           <Toolbar>
             <Avatar className={classes.avatar}>{props.devId}</Avatar>
             <Typography variant="h6"> {props.user ? props.user.name : "--"} {props.user ? props.user.surname : "--"} </Typography>
-            <IconButton color="inherit" onClick={props.close} className={classes.closeButton} aria-label="close">
+            <IconButton color="inherit" onClick={() => resetAndClose()} className={classes.closeButton} aria-label="close">
               <CloseIcon />
             </IconButton>
           </Toolbar>
@@ -109,7 +124,7 @@ export default function HistoryDialog(props) {
               <Chip variant="outlined" label={props.user ? (props.user.hrMax + " BPM MAX") : "--"} />
               <Chip variant="outlined" label={props.user ? (props.user.vMax + " ml/min") : "--"} />
               <Chip variant="outlined" label={props.user ? props.user.gender : "--"} />
-              {showProgress && <LinearProgress style={{colorPrimary: colors.red}} />}
+              {showProgress && <LinearProgress style={{ colorPrimary: colors.red }} />}
             </Grid>
 
             <Grid item xs={6}>

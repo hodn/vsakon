@@ -11,7 +11,6 @@ export default function DeviceControl(passedProps) {
 
   const registerEvent = (eventName) => {
     ipcRenderer.send("register-event", { event: eventName, devId: props.devId })
-    console.log(eventName)
   }
 
   const showAlarmButton = (alarmState) => {

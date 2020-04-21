@@ -91,8 +91,6 @@ class TopBarRouter extends React.Component {
         ports[arg.port] = arg.state;
         return { ports };
       })
-
-      console.log(this.state.ports);
     })
 
 
