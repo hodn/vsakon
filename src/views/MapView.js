@@ -5,22 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import MapDeviceChip from '../components/MapDeviceChip';
 import L from 'leaflet';
-import colors from '../colors';
 const { ipcRenderer } = window.require('electron');
-
-delete L.Icon.Default.prototype._getIconUrl;
-
-const useStyles = makeStyles(theme => ({
-
-  paper: {
-    padding: 20,
-    marginBottom: 15
-  },
-  heading: {
-    marginBottom: 10
-  }
-
-}));
 
 export default function MapView(props) {
   const [center, setCenter] = React.useState([50.06986, 14.42462]);
