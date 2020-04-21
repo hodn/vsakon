@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import MapDeviceChip from '../components/MapDeviceChip';
 import L from 'leaflet';
 import colors from '../colors';
@@ -33,19 +34,19 @@ export default function MapView(props) {
   const [markers, setMarkers] = React.useState([]);
 
   React.useEffect(() => {
-    
+
     ipcRenderer.send("get-active-team");
     ipcRenderer.on("active-team-loaded", (event, arg) => {
       setActiveTeam(arg);
     })
-    
+
     return () => {
       ipcRenderer.removeAllListeners();
     }
   }, [])
-  
+
   const setMarker = (packet, user) => {
-    console.log("MARKE")
+
   }
 
   const removeMarker = (devId) => {
@@ -56,24 +57,55 @@ export default function MapView(props) {
     console.log(packet.deadMan)
   }
 
+  const getDeviceChips = () => {
+
+    let chips = [];
+
+    for (let i = 0; i < 30; i++) {
+
+      chips.push(
+        <Grid xs={2} key={"item" + i} item>
+          <MapDeviceChip devId={i + 1} team={activeTeam} setMarker={setMarker} removeMarker={removeMarker} focusOnDevice={focusOnDevice} />
+        </Grid>
+      );
+    }
+
+    return chips;
+  }
+
 
   return (
     <div>
-      <Paper style={{ padding: 10 }}>
-        <Map style={{ width: '100%', height: '600px' }} center={center} zoom={10}>
+      <Paper style={{ marginBottom: 10 }}>
+        <Map style={{ width: '100%', height: 740 * (window.innerHeight/1080) }} center={center} zoom={10}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
           <Marker position={center}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
+            <Popup>
+              A pretty CSS3 popup. <br /> Easily customizable.
           </Popup>
-        </Marker>
+          </Marker>
         </Map>
       </Paper>
 
-      <MapDeviceChip devId={29} team={activeTeam} setMarker={setMarker} removeMarker={removeMarker} focusOnDevice={focusOnDevice}/>
+      <Paper elevation={3} style={{ padding: 15 }}>
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          spacing={1}
+        >
+          {getDeviceChips().map((component) => {
+            return component;
+          })}
+
+        </Grid>
+      </Paper>
+
+
     </div>
   );
 }
