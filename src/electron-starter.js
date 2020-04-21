@@ -156,7 +156,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                                 }
                             }else{
                                 
-                                electron.dialog.showErrorBox("Data handling error", error.message);
+                                if (error.message !== "Object has been destroyed") electron.dialog.showErrorBox("Data handling error", error.message);
 
                                 if(error.type === "writeToCsv") recordHandler.recording = false;
                             }
@@ -202,6 +202,14 @@ ipcMain.on('clear-to-send', (event, arg) => {
         const data = { teams, users, defTeam, defUser, activeTeam }
 
         event.reply("teams-loaded", data)
+
+    })
+
+    ipcMain.on("get-active-team", (event, arg) => {
+
+        const activeTeam = databaseHandler.getSelectedTeam(false);
+
+        event.reply("active-team-loaded", activeTeam)
 
     })
 

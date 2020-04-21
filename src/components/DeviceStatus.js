@@ -12,36 +12,36 @@ import colors from '../colors';
 
 function DeviceStatus(props) {
 
-    
+
     const useStyles = makeStyles({
 
         root: {
-    
+
             borderStyle: 'solid',
         },
         avatar: {
-            height: props.height? 30 * props.height : 30,
-            width: props.width? 30 * props.width : 30,
-            fontSize: props.width? 14 * props.width : 14,
+            height: props.height ? 30 * props.height : 30,
+            width: props.width ? 30 * props.width : 30,
+            fontSize: props.width ? 14 * props.width : 14,
             fontWeight: 'bold',
-            margin: props.width? 8 * props.width : 8,
+            margin: props.width ? 8 * props.width : 8,
             backgroundColor: 'transparent',
             color: 'black',
             borderColor: 'black',
             borderStyle: 'solid',
-            borderWidth: props.width? 3 * props.width : 3,
+            borderWidth: props.width ? 3 * props.width : 3,
         },
         icon: {
-            height: props.height? 20 * props.height : 20,
-            width: props.width? 20 * props.width : 20,
-            margin: props.width? 5 * props.width : 5,
+            height: props.height ? 20 * props.height : 20,
+            width: props.width ? 20 * props.width : 20,
+            margin: props.width ? 5 * props.width : 5,
             color: "black"
         },
-    
+
         battery: {
-            height: props.height? 30 * props.height : 30,
-            width: props.width? 30 * props.width : 30,
-            margin: props.width? 5 * props.width : 5,
+            height: props.height ? 30 * props.height : 30,
+            width: props.width ? 30 * props.width : 30,
+            margin: props.width ? 5 * props.width : 5,
             color: "black"
         },
         name: {
@@ -49,7 +49,7 @@ function DeviceStatus(props) {
             marginLeft: 5
         }
     });
-    
+
     const switchColor = (props) => {
 
         let connection = props.connected === true;
@@ -95,14 +95,18 @@ function DeviceStatus(props) {
     const classes = useStyles();
     return (
 
-        <div style={{ backgroundColor: switchColor(props)}}>
+        <div style={{ backgroundColor: switchColor(props) }}>
             <Grid direction={props.direction} alignItems="center" container>
                 <Grid item>
                     <Tooltip title={props.packet === null ? "No receiver" : props.packet.basicData.port}>
                         <Avatar className={classes.avatar}>{props.devId}</Avatar>
                     </Tooltip>
                 </Grid>
-                <Grid item>  <BatteryIndicator className={classes.battery} batteryPercentage={getBatteryPercentage(props)} /> </Grid>
+                <Grid item>
+                    <Tooltip title={props.packet === null ? "No battery" : (props.packet.basicData.batteryVoltage + " mV - " + props.packet.basicData.batteryPercentage + " %")}>
+                       <div> <BatteryIndicator className={classes.battery} batteryPercentage={getBatteryPercentage(props)} /> </div>
+                    </Tooltip>
+                </Grid>
                 <Grid item>   {getGpsIcon(props)}  </Grid>
                 <Grid item>  <SettingsInputComponentIcon className={classes.icon} style={{ visibility: checkNodes(props) }} /> </Grid>
                 {props.name && <Grid item>  <Typography className={classes.name} variant="h6" >{" | " + props.name}</Typography> </Grid>}
