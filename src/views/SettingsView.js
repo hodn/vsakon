@@ -82,7 +82,7 @@ export default function SettingsView(props) {
     // Change immediately as the user can switch on recording from settings menu
   };
 
-  const handleMin = (event, newValue) => {
+  const handleMinutes = (event, newValue) => {
     setGraphLength(newValue)
   }
 
@@ -154,7 +154,7 @@ export default function SettingsView(props) {
           value={graphLength}
           min={1}
           max={15}
-          onChange={handleMin}
+          onChange={handleMinutes}
         />
       </Paper>
 
