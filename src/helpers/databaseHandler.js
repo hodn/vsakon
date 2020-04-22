@@ -29,7 +29,11 @@ module.exports = class DatabaseHandler {
 
         this.db = db;
 
-        //db.get("records").remove().write()
+        /*db.get("settings").remove().write();
+        db.get('settings')
+            .assign(this.getDefaultSettings())
+            .write() */
+
     }
 
     getDefaultUser() {
@@ -77,6 +81,7 @@ module.exports = class DatabaseHandler {
             csvComponents: { basicData: true, locationData: true, nodeData: true, performanceData: true },
             graphLength: 40,
             optimalTemp: [30, 35],
+            metersMax : {temp: 50, stehlik: 180, acc: 10, activity: 100},
             eventNames: ["Event 1", "Event 2", "Event 3", "Event 4"]
         }
 
