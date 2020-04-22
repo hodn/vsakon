@@ -153,7 +153,7 @@ export default function HistoryDialog(props) {
 
                   height={220}
                   xType="time"
-                  yDomain={[0, 500]}
+                  yDomain={[0, props.settings? props.settings.metersMax.activity * 3 : 500]}
                 >
                   <HorizontalGridLines />
                   <VerticalGridLines />
@@ -173,7 +173,7 @@ export default function HistoryDialog(props) {
 
                   height={220}
                   xType="time"
-                  yDomain={[-1, 1]}
+                  yDomain={props.settings? [-props.settings.metersMax.acc, +props.settings.metersMax.acc] : [-1,1]}
                 >
                   <DiscreteColorLegend
                     colors={[
@@ -211,7 +211,7 @@ export default function HistoryDialog(props) {
                 <FlexibleWidthXYPlot
                   height={220}
                   xType="time"
-                  yDomain={[0, 45]}
+                  yDomain={[0, props.settings ? props.settings.metersMax.temp : 50]}
                 >
                   <HorizontalGridLines />
                   <VerticalGridLines />
@@ -229,7 +229,7 @@ export default function HistoryDialog(props) {
                 <FlexibleWidthXYPlot
                   height={220}
                   xType="time"
-                  yDomain={[0, 45]}
+                  yDomain={[0, props.settings ? props.settings.metersMax.temp * 2 : 100]}
                 >
                   <HorizontalGridLines />
                   <VerticalGridLines />

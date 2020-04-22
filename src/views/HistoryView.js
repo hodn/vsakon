@@ -45,7 +45,8 @@ class HistoryView extends React.Component {
       selectedRow: null,
       selectedUser: null,
       devId: null,
-      detailOpen: false
+      detailOpen: false,
+      settings: null
 
     }
 
@@ -77,6 +78,14 @@ class HistoryView extends React.Component {
         from: records[records.length - 1].start,
         to: records[records.length - 1].end ? records[records.length - 1].end : new Date(),
       }))
+    })
+
+    ipcRenderer.send("get-settings");
+
+    ipcRenderer.once("settings-loaded", (event, arg) => {
+
+      const settings = arg;
+      this._isMounted && this.setState({settings});
     })
   }
 
@@ -270,6 +279,7 @@ class HistoryView extends React.Component {
           close={this.closeDetailDialog}
           devId={this.state.devId}
           user={this.state.selectedUser}
+          settings={this.state.settings}
         />
 
         {this.state.showEditDialog && <EditRecordDialog item={this.state.selectedRow} handleDialog={this.toggleEditDialog} />}
