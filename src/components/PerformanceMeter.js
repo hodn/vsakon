@@ -25,9 +25,9 @@ function PerformanceMeter(props) {
     });
     const classes = useStyles();
 
-    const getActivityDisplay = (activity) => {
+    const getActivityDisplay = (activity, settings) => {
         
-        const maxScale = 100;
+        const maxScale = settings ? settings.metersMax.activity : 100;
 
         if (activity !== null) {
             if (activity >= maxScale) return 1; // maximum scale 
@@ -39,7 +39,7 @@ function PerformanceMeter(props) {
 
         <div>
           <Grid direction="column" alignItems="center" container>
-                <Grid item className={classes.bar}>  <SimpleMeter percent={getActivityDisplay(props.activity)} height={props.height} width={props.width} color={colors.green}/> </Grid>
+                <Grid item className={classes.bar}>  <SimpleMeter percent={getActivityDisplay(props.activity, props.settings)} height={props.height} width={props.width} color={colors.green}/> </Grid>
                 {props.icon && <Grid item> <AccessibilityIcon className={classes.icon}/> </Grid>}
             </Grid>
         </div>

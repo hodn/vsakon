@@ -31,7 +31,7 @@ export default function TemperatureDetail(passedProps) {
 
                         height={220}
                         xType="time"
-                        yDomain={[10, 50]}
+                        yDomain={[0, props.settings ? props.settings.metersMax.temp : 50]}
                     >
                         <HorizontalGridLines />
                         <VerticalGridLines />

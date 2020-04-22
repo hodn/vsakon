@@ -43,9 +43,9 @@ function Thermometer(props) {
 
     }
 
-    const getTempDisplay = (temp) => {
+    const getTempDisplay = (temp, settings) => {
         let percent = 0; // thermometer tops at 50 celsius
-        const maxScale = 50;
+        const maxScale = settings ? settings.metersMax.temp : 50;
 
         if (temp !== null && temp >= maxScale) percent = 1;
         if (temp !== null && temp < maxScale && temp > 0) percent = temp / maxScale;
@@ -57,8 +57,8 @@ function Thermometer(props) {
 
         <div>
           <Grid direction="column" alignItems="center" container>
-                <Grid item className={classes.bar}>  <SimpleMeter  percent={getTempDisplay(props.temp)} color={colorSwitch(props.temp, props.settings)} height={props.height} width={props.width}/> </Grid>
-                {props.showTemp && <Grid item> <Typography variant="subtitle1"> {props.temp === null ? "-" : props.temp} </Typography></Grid>}
+                <Grid item className={classes.bar}>  <SimpleMeter  percent={getTempDisplay(props.temp, props.settings)} color={colorSwitch(props.temp, props.settings)} height={props.height} width={props.width}/> </Grid>
+                {props.showTemp && <Grid item> <Typography> {props.temp === null ? "-" : props.temp} </Typography></Grid>}
                 {props.icon && <Grid item> <WhatshotIcon className={classes.icon}/> </Grid>}
             </Grid>
         </div>

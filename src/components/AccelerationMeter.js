@@ -24,9 +24,9 @@ function AccelerationMeter(props) {
     const classes = useStyles();
     
     
-    const getNegativeDisplay = (acceleration) => {
+    const getNegativeDisplay = (acceleration, settings) => {
 
-        const maxScale = -10;
+        const maxScale = settings ? (settings.metersMax.acc * -1) : (-10);
         
         if(acceleration < 0){
             if (acceleration <= maxScale) return 1; // maximum scale 
@@ -35,9 +35,9 @@ function AccelerationMeter(props) {
 
     }
 
-    const getPositiveDisplay = (acceleration) => {
+    const getPositiveDisplay = (acceleration, settings) => {
 
-        const maxScale = 10;
+        const maxScale = settings ? settings.metersMax.acc : 10;
         
         if(acceleration >= 0){
             if (acceleration >= maxScale) return 1; // maximum scale 
@@ -53,8 +53,8 @@ function AccelerationMeter(props) {
             <NumericIndicator align={"center"} parameter={props.axis} value={props.data} unit="G"/>
             <Typography variant="body2" style={{color: colors.secondary, textAlign: "center"}}>{props.leftLabel}  |  {props.rightLabel} </Typography>
             <Grid justify="center" direction="row" alignItems="center" container>
-                <Grid item className={classes.bar}>  <SegmentedMeter percent={getNegativeDisplay(props.data)} color={colors.secondary} rotation={180} /> </Grid>
-                <Grid item className={classes.bar}>  <SegmentedMeter percent={getPositiveDisplay(props.data)} color={colors.secondary} /> </Grid>
+                <Grid item className={classes.bar}>  <SegmentedMeter percent={getNegativeDisplay(props.data, props.settings)} color={colors.secondary} rotation={180} /> </Grid>
+                <Grid item className={classes.bar}>  <SegmentedMeter percent={getPositiveDisplay(props.data, props.settings)} color={colors.secondary} /> </Grid>
             </Grid>
             
         </div>

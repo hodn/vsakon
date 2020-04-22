@@ -19,9 +19,9 @@ export default function AccelerationDetail(passedProps) {
 
 
                 <Grid xs={4} item>
-                    <AccelerationMeter axis="X" leftLabel="back" rightLabel="front" data={props.packet === null ? "-" : props.packet.basicData.accY} />
-                    <AccelerationMeter axis="Y" leftLabel="left" rightLabel="right" data={props.packet === null ? "-" : props.packet.basicData.accY} />
-                    <AccelerationMeter axis="Z" leftLabel="foot" rightLabel="head" data={props.packet === null ? "-" : props.packet.basicData.accZ} />
+                    <AccelerationMeter settings={props.settings} axis="X" leftLabel="back" rightLabel="front" data={props.packet === null ? "-" : props.packet.basicData.accY} />
+                    <AccelerationMeter settings={props.settings} axis="Y" leftLabel="left" rightLabel="right" data={props.packet === null ? "-" : props.packet.basicData.accY} />
+                    <AccelerationMeter settings={props.settings} axis="Z" leftLabel="foot" rightLabel="head" data={props.packet === null ? "-" : props.packet.basicData.accZ} />
                 </Grid>
 
                 <Grid item xs={1}>
@@ -46,7 +46,7 @@ export default function AccelerationDetail(passedProps) {
 
                         height={220}
                         xType="time"
-                        yDomain={[-1, 1]}
+                        yDomain={props.settings? [-props.settings.metersMax.acc, +props.settings.metersMax.acc] : [-1,1]}
                     >
                         <HorizontalGridLines />
                         <VerticalGridLines />

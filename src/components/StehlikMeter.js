@@ -25,9 +25,9 @@ function StehlikMeter(props) {
     });
     const classes = useStyles();
 
-    const getStehlikDisplay = (stehlik) => {
+    const getStehlikDisplay = (stehlik, settings) => {
 
-        const maxScale = 180;
+        const maxScale = settings ? settings.metersMax.stehlik : 180;;
 
         if (stehlik !== null) {
             if (stehlik >= maxScale) return 1; // maximum scale 
@@ -49,7 +49,7 @@ function StehlikMeter(props) {
         <div>
             <Grid direction="column" alignItems="center" container>
                 <Grid item className={classes.bar}>
-                    <SimpleMeter percent={getStehlikDisplay(props.stehlik)} height={props.height} width={props.width} color={colorSwitch(props.stehlik)} />
+                    <SimpleMeter percent={getStehlikDisplay(props.stehlik, props.settings)} height={props.height} width={props.width} color={colorSwitch(props.stehlik)} />
                 </Grid>
                 {props.icon && <Grid item> <FlashOnIcon className={classes.icon} /> </Grid>}
             </Grid>

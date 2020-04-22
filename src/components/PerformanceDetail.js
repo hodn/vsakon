@@ -21,11 +21,12 @@ export default function PerformanceDetail(passedProps) {
                 spacing={1}
             >
 
-                <Grid xs={1} item> <PerformanceMeter icon activity={props.packet === null ? null : props.packet.basicData.activity} height={130} width={18} top={30} /> </Grid>
+                <Grid xs={1} item> <PerformanceMeter icon activity={props.packet === null ? null : props.packet.basicData.activity} settings={props.settings} height={130} width={18} top={30} /> </Grid>
                 <Grid xs={1} item>
                     <StehlikMeter
                         icon
                         stehlik={performanceDataAvailable ? props.packet.performanceData.stehlik : null}
+                        settings={props.settings}
                         height={130}
                         width={18}
                         top={30} />
@@ -46,7 +47,7 @@ export default function PerformanceDetail(passedProps) {
 
                         height={220}
                         xType="time"
-                        yDomain={[0, 350]}
+                        yDomain={[0, props.settings? props.settings.metersMax.activity * 3 : 500]}
                     >
                         <HorizontalGridLines />
                         <VerticalGridLines />
