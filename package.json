@@ -49,7 +49,7 @@
     "install": "electron-rebuild",
     "pack": "electron-builder --dir",
     "postinstall": "electron-builder install-app-deps",
-    "dist": "electron-builder"
+    "dist": "electron-builder -mwl"
   },
   "build": {
     "appId": "cz.albertov.flexiguard",
@@ -62,10 +62,14 @@
       "./src/helpers/*",
       "./src/markerIcons/*"
     ],
+    "linux": {
+      "target": "AppImage"
+    }, 
     "win": {
       "requestedExecutionLevel": "highestAvailable",
       "target": "nsis"
-    }
+    },
+    "mac":{}
   },
   "browserslist": [
     ">0.2%",
