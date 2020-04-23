@@ -71,14 +71,14 @@ class HistoryView extends React.Component {
     ipcRenderer.on('records-loaded', (event, arg) => {
 
       const records = arg;
-      const recordsNotEmpty = records === [];
-
+      const lastRecord = records[records.length - 1];
+      
       this._isMounted && this.setState((state, props) => ({
         records,
-        activeRecord: records[records.length - 1],
-        from: recordsNotEmpty ? records[records.length - 1].start : new Date(),
-        to: recordsNotEmpty ? (records[records.length - 1].end ? records[records.length - 1].end : new Date()) : new Date(),
-      }))
+        activeRecord: lastRecord,
+        from: lastRecord ? lastRecord.start : new Date(),
+        to: lastRecord ? (lastRecord.end ? lastRecord.end : new Date()) : new Date()
+      })) 
     })
 
     ipcRenderer.send("get-settings");
@@ -133,12 +133,12 @@ class HistoryView extends React.Component {
 
   openDetailDialog(devId) {
     this.setState({
-      detailOpen: true,
-      selectedUser: this.state.activeRecord.team.members[devId - 1],
+      detailOpen: this.state.activeRecord ? true : false,
+      selectedUser: this.state.activeRecord ? this.state.activeRecord.team.members[devId - 1] : null,
       devId
     });
 
-    ipcRenderer.send("get-history", {
+    this.state.activeRecord && ipcRenderer.send("get-history", {
       from: new Date(this.state.from).getTime(),
       to: new Date(this.state.to).getTime(),
       devId: devId,
@@ -171,6 +171,7 @@ class HistoryView extends React.Component {
   render() {
 
     const { classes } = this.props;
+    
     return (
 
       <div>

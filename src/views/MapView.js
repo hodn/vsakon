@@ -17,7 +17,6 @@ export default function MapView(props) {
     ipcRenderer.send("get-active-team");
     ipcRenderer.on("active-team-loaded", (event, arg) => {
       setActiveTeam(arg);
-      console.log(arg)
     })
 
     return () => {
