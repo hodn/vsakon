@@ -208,6 +208,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     ipcMain.on("get-active-team", (event, arg) => {
 
         const activeTeam = databaseHandler.getSelectedTeam(false);
+        console.log(activeTeam)
         event.reply("active-team-loaded", activeTeam);
         
     })

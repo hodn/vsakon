@@ -26,7 +26,7 @@ module.exports = class DatabaseHandler {
         */
 
         // Init of new database - if no db json is present
-        db.defaults({ settings: this.getDefaultSettings(), teams: [this.getDefaultTeam()], users: [this.getDefaultUser()], records: [] })
+        db.defaults({ settings: this.getDefaultSettings(), teams: [this.getDefaultTeam(true)], users: [this.getDefaultUser()], records: [] })
             .write();
 
         this.db = db;
@@ -139,7 +139,7 @@ module.exports = class DatabaseHandler {
         let teams = this.db.get('teams').cloneDeep()
             .value()
 
-        if (!onlyMembersId) {
+        if (onlyMembersId) {
             return teams;
         } else {
 
