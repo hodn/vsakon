@@ -52,12 +52,15 @@
     "dist": "electron-builder"
   },
   "build": {
-    "appId": "cz.albertov.tester",
+    "appId": "cz.albertov.flexiguard",
     "extends": null,
     "asar": false,
     "files": [
       "./build/**/*",
-      "./src/electron-starter.js"
+      "./src/electron-starter.js",
+      "./src/colors.js",
+      "./src/helpers/*",
+      "./src/markerIcons/*"
     ],
     "win": {
       "requestedExecutionLevel": "highestAvailable",

@@ -3,7 +3,7 @@ const electron = require('electron');
 // Module for file paths
 const path = require('path');
 // Module for hot reload 
-require('electron-reload')(__dirname, { electron: require('${__dirname}/../../node_modules/electron') });
+//require('electron-reload')(__dirname, { electron: require('${__dirname}/../../node_modules/electron') });
 // Module to control application life.
 const app = electron.app;
 // Module to create native browser window.
@@ -23,9 +23,9 @@ function createWindow() {
     //mainWindow.setFullScreen(true);
     mainWindow.maximize();
     // and load the index.html of the app.
-    //mainWindow.loadURL(`file://${path.join(__dirname, '../build/index.html')}`);
+    mainWindow.loadURL(`file://${path.join(__dirname, '../build/index.html')}`);
     mainWindow.setMenuBarVisibility(false)
-    mainWindow.loadURL('http://localhost:3000');
+    //mainWindow.loadURL('http://localhost:3000');
 
     // Open the DevTools.
     //mainWindow.webContents.openDevTools();
