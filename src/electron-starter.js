@@ -198,6 +198,8 @@ ipcMain.on('clear-to-send', (event, arg) => {
         const activeTeam = databaseHandler.getSelectedTeam(true);
         const defUser = databaseHandler.getDefaultUser();
 
+        packetHandler.profiles = databaseHandler.getSelectedTeam(false).members;
+
         const data = { teams, users, defTeam, defUser, activeTeam }
         
         event.reply("teams-loaded", data)
@@ -225,7 +227,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
             databaseHandler.updateItem(arg.data.id, data, arg.collection)
         }
         else databaseHandler.updateItem(arg.data.id, arg.data, arg.collection)
-
+        
     })
 
     ipcMain.on("delete-item", (event, arg) => {
@@ -240,6 +242,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
         if (arg.graphLength) packetHandler.graphLength = databaseHandler.getSettings().graphLength;
         if (arg.csvDirectory) recordHandler.directory = databaseHandler.getSettings().csvDirectory;
         if (arg.csvComponents) recordHandler.components = databaseHandler.getSettings().csvComponents;
+    
     })
 
     ipcMain.on("get-settings", (event, arg) => {

@@ -96,7 +96,6 @@ module.exports = class PacketHandler {
                 this.sendData(packet.basicData.devId);
 
             }
-
         });
     }
 

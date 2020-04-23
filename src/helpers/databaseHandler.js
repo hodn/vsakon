@@ -98,7 +98,7 @@ module.exports = class DatabaseHandler {
     getSelectedTeam(onlyMembersId = false) {
         const selectedTeamId = this.getSettings().selectedTeam;
         let team = this.db.get("teams").cloneDeep().find({ id: selectedTeamId }).value();
-
+  
         if (onlyMembersId === true) {
             return team; // Only with member IDs
         }
