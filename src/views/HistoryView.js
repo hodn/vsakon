@@ -71,12 +71,13 @@ class HistoryView extends React.Component {
     ipcRenderer.on('records-loaded', (event, arg) => {
 
       const records = arg;
+      const recordsNotEmpty = records === [];
 
       this._isMounted && this.setState((state, props) => ({
         records,
         activeRecord: records[records.length - 1],
-        from: records[records.length - 1].start,
-        to: records[records.length - 1].end ? records[records.length - 1].end : new Date(),
+        from: recordsNotEmpty ? records[records.length - 1].start : new Date(),
+        to: recordsNotEmpty ? (records[records.length - 1].end ? records[records.length - 1].end : new Date()) : new Date(),
       }))
     })
 
