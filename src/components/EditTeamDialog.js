@@ -43,6 +43,7 @@ export default function EditTeamDialog(props) {
     };
 
     ipcRenderer.send("update-item", {collection: "teams", data: teamWithIDsOnly});
+    ipcRenderer.send("update-settings", {selectedTeam: team.id});
     ipcRenderer.send("get-teams");
   }
 

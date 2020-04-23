@@ -188,7 +188,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         packetHandler.sendState();
         packetHandler.sendUserProfiles();
-
     })
 
     ipcMain.on("get-teams", (event, arg) => {
@@ -208,7 +207,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
     ipcMain.on("get-active-team", (event, arg) => {
 
         const activeTeam = databaseHandler.getSelectedTeam(false);
-        console.log(activeTeam)
         event.reply("active-team-loaded", activeTeam);
         
     })
