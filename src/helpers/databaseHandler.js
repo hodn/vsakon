@@ -1,5 +1,6 @@
 // Library init
 const low = require('lowdb');
+const path = require('path');
 const FileSync = require('lowdb/adapters/FileSync'); // Synchronous
 const shortid = require('shortid'); // Maker of unique IDs
 
@@ -12,8 +13,9 @@ module.exports = class DatabaseHandler {
     // DB initialization
     initDb() {
 
-        const userDataPath = this.app.getPath('desktop');
-        const adapter = new FileSync(userDataPath + '/db.json');
+        const appDataPath = path.join(this.app.getPath('userData'), 'db.json');
+        const adapter = new FileSync(appDataPath);
+        console.log(appDataPath);
         const db = low(adapter);
 
         /*
@@ -24,7 +26,7 @@ module.exports = class DatabaseHandler {
         */
 
         // Init of new database - if no db json is present
-        db.defaults({ teams: [this.getDefaultTeam()], users: [this.getDefaultUser()], records: [], settings: this.getDefaultSettings() })
+        db.defaults({ settings: this.getDefaultSettings(), teams: [this.getDefaultTeam()], users: [this.getDefaultUser()], records: [] })
             .write();
 
         this.db = db;
@@ -64,11 +66,11 @@ module.exports = class DatabaseHandler {
             note: "To be edited",
             members: []
         }
-        
+
         // Filling the defaultTeam
         for (let index = 0; index < 30; index++) {
-           if(onlyMembersId) defaultTeam.members.push(defaultUser.id);
-           else defaultTeam.members.push(defaultUser);
+            if (onlyMembersId) defaultTeam.members.push(defaultUser.id);
+            else defaultTeam.members.push(defaultUser);
         }
 
         return defaultTeam;
@@ -81,7 +83,7 @@ module.exports = class DatabaseHandler {
             csvComponents: { basicData: true, locationData: true, nodeData: true, performanceData: true },
             graphLength: 40,
             optimalTemp: [30, 35],
-            metersMax : {temp: 50, stehlik: 180, acc: 10, activity: 100},
+            metersMax: { temp: 50, stehlik: 180, acc: 10, activity: 100 },
             eventNames: ["Event 1", "Event 2", "Event 3", "Event 4"]
         }
 
@@ -137,10 +139,10 @@ module.exports = class DatabaseHandler {
         let teams = this.db.get('teams').cloneDeep()
             .value()
 
-        if (onlyMembersId) {
+        if (!onlyMembersId) {
             return teams;
         } else {
-            
+
             teams.forEach(team => {
 
                 let members = [];
@@ -192,7 +194,7 @@ module.exports = class DatabaseHandler {
             .write()
     }
 
-    updateSettings(parameter){
+    updateSettings(parameter) {
 
         this.db.get('settings')
             .assign(parameter)
