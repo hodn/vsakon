@@ -13,7 +13,7 @@ module.exports = class DatabaseHandler {
     // DB initialization
     initDb() {
 
-        const appDataPath = path.join(this.app.getPath('desktop'), 'db.json');
+        const appDataPath = path.join(this.app.getPath('appData'), 'db.json');
         const adapter = new FileSync(appDataPath);
         console.log(appDataPath);
         const db = low(adapter);
