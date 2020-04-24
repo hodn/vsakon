@@ -13,7 +13,7 @@ module.exports = class DatabaseHandler {
     // DB initialization
     initDb() {
 
-        const appDataPath = path.join(this.app.getPath('appData'), 'db.json');
+        const appDataPath = path.join(this.app.getPath('userData'), 'db.json');
         const adapter = new FileSync(appDataPath);
         console.log(appDataPath);
         const db = low(adapter);
@@ -81,7 +81,7 @@ module.exports = class DatabaseHandler {
             selectedTeam: "0",
             csvDirectory: this.app.getPath('desktop'),
             csvComponents: { basicData: true, locationData: true, nodeData: true, performanceData: true },
-            graphLength: 40,
+            graphLength: 5,
             optimalTemp: [30, 35],
             metersMax: { temp: 50, stehlik: 180, acc: 10, activity: 100 },
             eventNames: ["Event 1", "Event 2", "Event 3", "Event 4"]
