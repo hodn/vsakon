@@ -217,7 +217,7 @@ class HistoryView extends React.Component {
           <Grid item xs={9}> <HistoryUsersDetail record={this.state.activeRecord} openDetail={this.openDetailDialog} /> </Grid>
           <Grid item xs={12}><MaterialTable
             columns={[
-              { title: 'Start', field: 'start', type: "datetime", defaultSort: "desc", render: rowData => new Date(rowData.start).toLocaleString() },
+              { title: 'Start', field: 'start', defaultSort: "desc", render: rowData => new Date(rowData.start).toLocaleString(), customSort: (a, b) => new Date(a.start) - new Date(b.start)},
               { title: 'End', field: 'end', type: "datetime", render: rowData => rowData.end ? new Date(rowData.end).toLocaleString() : "Recording..." },
               { title: 'Team', field: 'team.name' },
               { title: 'Note', field: 'note' },
@@ -246,7 +246,7 @@ class HistoryView extends React.Component {
             data={this.state.records}
             title="Records"
             options={
-              { searchFieldStyle: { width: 200 } }
+              { searchFieldStyle: { width: 200 }, sorting: true }
             }
             actions={[
               {
