@@ -2,7 +2,7 @@
                 /*for (let i = 0; i < 30; i++) {
 
                     const sender = () => {
-                        event.reply(i.toString(), parsedPacket);
+                        event.sender.send(i.toString(), parsedPacket);
                     }
             
                     setTimeout(sender, 30);
@@ -14,7 +14,7 @@
     for (let i = 0; i < 30; i++) {
 
         const sender = () => {
-            event.reply(i.toString(), parsedPacket);
+            event.sender.send(i.toString(), parsedPacket);
         }
 
         setTimeout(sender, 30);

@@ -89,7 +89,7 @@ module.exports = class RecordHandler {
 
                     if (data.timestamp > end && data.devId === devId.toString()) {
 
-                        event.reply("history-parsed", this.graphHandler.getGraphs());
+                        event.sender.send("history-parsed", this.graphHandler.getGraphs());
                         readStream.destroy();
 
                     } else if (data.timestamp <= end && data.timestamp >= start && data.devId === devId.toString()) {
@@ -97,7 +97,7 @@ module.exports = class RecordHandler {
                     }
                 })
                 .on('end', () => {
-                    event.reply("history-parsed", this.graphHandler.getGraphs());
+                    event.sender.send("history-parsed", this.graphHandler.getGraphs());
                 });
         } else {
             throw new Error ("Invalid path or deleted CSV source file.");

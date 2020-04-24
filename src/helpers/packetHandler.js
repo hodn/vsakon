@@ -83,7 +83,7 @@ module.exports = class PacketHandler {
             accZGraph
         };
 
-        this.event.reply(devId.toString(), data);
+        this.event.sender.send(devId.toString(), data);
     }
 
     // Resending the state to components that unmounted - MainView
@@ -159,7 +159,7 @@ module.exports = class PacketHandler {
 
         for (let index = 0; index < this.profiles.length; index++) {
 
-            this.event.reply((index + 1).toString() + "-profile", this.profiles[index]);
+            this.event.sender.send((index + 1).toString() + "-profile", this.profiles[index]);
         }
     }
 }

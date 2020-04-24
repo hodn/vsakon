@@ -109,7 +109,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                 }
             })
 
-            event.reply('ports-found', flexiGuardPorts);
+            event.sender.send('ports-found', flexiGuardPorts);
             return flexiGuardPorts;
         },
             err => console.error(err),
@@ -202,14 +202,14 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         const data = { teams, users, defTeam, defUser, activeTeam }
         
-        event.reply("teams-loaded", data)
+        event.sender.send("teams-loaded", data)
 
     })
 
     ipcMain.on("get-active-team", (event, arg) => {
 
         const activeTeam = databaseHandler.getSelectedTeam(false);
-        event.reply("active-team-loaded", activeTeam);
+        event.sender.send("active-team-loaded", activeTeam);
         
     })
 
@@ -248,7 +248,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     ipcMain.on("get-settings", (event, arg) => {
 
         const settings = databaseHandler.getSettings();
-        event.reply("settings-loaded", settings)
+        event.sender.send("settings-loaded", settings)
     })
 
     // Load history
@@ -262,7 +262,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         const data = databaseHandler.getAllRecords();
 
-        event.reply("records-loaded", data)
+        event.sender.send("records-loaded", data)
 
     })
 
@@ -281,7 +281,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
         const team = databaseHandler.getDefaultTeam();
         team.name = "Custom load";
 
-        if (path) event.reply("csv-path-loaded", { path, team });
+        if (path) event.sender.send("csv-path-loaded", { path, team });
 
 
     })

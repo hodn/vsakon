@@ -50,14 +50,14 @@ module.exports = class PortHandler {
         this.port.on('open', function () {
             console.log("Connected " + com); 
             let portState = {port: com, state: "opened"};
-            event.reply('port-state', portState); // Send the state to Renderer
+            event.sender.send('port-state', portState); // Send the state to Renderer
         });
 
         // If closed - inform Renderer
         this.port.on('close', function () {
             console.log("Disconnected " + com); 
             let portState = {port: com, state: "closed"};
-            event.reply('port-state', portState); // Send the state to Renderer
+            event.sender.send('port-state', portState); // Send the state to Renderer
             setTimeout(open, delay);
         });
 
