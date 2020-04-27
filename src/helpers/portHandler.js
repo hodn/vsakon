@@ -46,10 +46,13 @@ module.exports = class PortHandler {
 
         open();
 
+        const helperPort = this.port;
+
         // If open - inform Renderer
         this.port.on('open', function () {
             console.log("Connected " + com); 
             let portState = {port: com, state: "opened"};
+            helperPort.read();
             event.sender.send('port-state', portState); // Send the state to Renderer
         });
 
