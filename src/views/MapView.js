@@ -29,6 +29,8 @@ export default function MapView(props) {
     const devId = packet.basicData.devId;
     const position = [packet.locationData.latMins, packet.locationData.longMins];
 
+    if (newMarkers.length < 1) setCenter(position);
+
     newMarkers[devId - 1] = (
     <Marker key={devId-1} position={position} icon={getIcon(devId)}>
       <Popup>
