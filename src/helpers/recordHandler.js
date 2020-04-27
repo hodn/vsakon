@@ -70,7 +70,11 @@ module.exports = class RecordHandler {
 
         if (!fs.existsSync(this.filePath)) throw {type: "writeToCsv", message:"Source CSV removed. Please restart the recording."}
         try {
+            
+            if (packet.deadMan === false) packet.deadMan = "";
+            
             this.writer.write(this.formatToCsv(packet));
+
         } catch{
             throw {type: "writeToCsv", message:"Writing error. Please restart the recording."};
         }
@@ -169,8 +173,8 @@ module.exports = class RecordHandler {
             ee: convert(packet.ee)
         } : null;
 
-        const deadMan = packet.deadMan;
-
+        const deadMan = packet.deadMan === "true" ? true : false;
+    
         const locationData = packet.detected ? {
             latMins: convert(packet.latMins),
             longMins: convert(packet.longMins),
