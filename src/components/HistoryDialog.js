@@ -16,6 +16,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { FlexibleWidthXYPlot, XAxis, YAxis, HorizontalGridLines, VerticalGridLines, LineSeries, DiscreteColorLegend } from 'react-vis';
 import colors from '../colors';
 
+
 const { ipcRenderer } = window.require('electron');
 const useStyles = makeStyles(theme => ({
 
@@ -44,7 +45,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   paperLarge: {
-    height: 300 * window.innerHeight/1080,
+    height: 300 * window.innerHeight / 1080,
     padding: 10
   }
 
@@ -134,7 +135,7 @@ export default function HistoryDialog(props) {
                 <Typography variant="h6"> Heart rate </Typography>
                 <FlexibleWidthXYPlot
 
-                  height={200 * window.innerHeight/1080}
+                  height={230 * window.innerHeight / 1080}
                   xType="time"
                   yDomain={[0, 220]}
                 >
@@ -153,9 +154,9 @@ export default function HistoryDialog(props) {
                 <Typography variant="h6"> Activity </Typography>
                 <FlexibleWidthXYPlot
 
-                  height={200 * window.innerHeight/1080}
+                  height={230 * window.innerHeight / 1080}
                   xType="time"
-                  yDomain={[0, props.settings? props.settings.metersMax.activity * 3 : 500]}
+                  yDomain={[0, props.settings ? props.settings.metersMax.activity * 3 : 500]}
                 >
                   <HorizontalGridLines />
                   <VerticalGridLines />
@@ -169,15 +170,9 @@ export default function HistoryDialog(props) {
 
             <Grid item xs={6}>
               <Paper className={classes.paperLarge}>
-                <Typography variant="h6"> Acceleration </Typography>
-
-                <FlexibleWidthXYPlot
-
-                  height={200 * window.innerHeight/1080}
-                  xType="time"
-                  yDomain={props.settings? [-props.settings.metersMax.acc, +props.settings.metersMax.acc] : [-1,1]}
-                >
-                  <DiscreteColorLegend
+                <Grid container>
+                  <Grid item xs={5}><Typography variant="h6"> Acceleration </Typography> </Grid>
+                  <Grid item><DiscreteColorLegend
                     colors={[
                       colors.yellow,
                       colors.red,
@@ -189,7 +184,15 @@ export default function HistoryDialog(props) {
                       'Axis Z',
                     ]}
                     orientation="horizontal"
-                  />
+                  /></Grid>
+                </Grid>
+
+                <FlexibleWidthXYPlot
+
+                  height={230 * window.innerHeight / 1080}
+                  xType="time"
+                  yDomain={props.settings ? [-props.settings.metersMax.acc, +props.settings.metersMax.acc] : [-1, 1]}
+                >
                   <HorizontalGridLines />
                   <VerticalGridLines />
                   <LineSeries
@@ -211,7 +214,7 @@ export default function HistoryDialog(props) {
               <Paper className={classes.paperLarge}>
                 <Typography variant="h6"> Temperature - skin </Typography>
                 <FlexibleWidthXYPlot
-                  height={200 * window.innerHeight/1080}
+                  height={250 * window.innerHeight / 1080}
                   xType="time"
                   yDomain={[0, props.settings ? props.settings.metersMax.temp : 50]}
                 >
@@ -229,7 +232,7 @@ export default function HistoryDialog(props) {
               <Paper className={classes.paper}>
                 <Typography variant="h6"> Temperature - environment </Typography>
                 <FlexibleWidthXYPlot
-                  height={200 * window.innerHeight/1080}
+                  height={230 * window.innerHeight / 1080}
                   xType="time"
                   yDomain={[0, props.settings ? props.settings.metersMax.temp * 2 : 100]}
                 >
@@ -248,7 +251,7 @@ export default function HistoryDialog(props) {
                 <Typography variant="h6"> Humidity </Typography>
                 <FlexibleWidthXYPlot
 
-                  height={200 * window.innerHeight/1080}
+                  height={230 * window.innerHeight / 1080}
                   xType="time"
                   yDomain={[0, 100]}
                 >
@@ -265,6 +268,6 @@ export default function HistoryDialog(props) {
           </Grid>
         </DialogContent>
       </Dialog>
-    </div>
+    </div >
   );
 }
