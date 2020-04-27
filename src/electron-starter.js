@@ -23,9 +23,9 @@ function createWindow() {
     //mainWindow.setFullScreen(true);
     mainWindow.maximize();
     // and load the index.html of the app.
-    mainWindow.loadURL(`file://${path.join(__dirname, '../build/index.html')}`);
+    //mainWindow.loadURL(`file://${path.join(__dirname, '../build/index.html')}`);
     mainWindow.setMenuBarVisibility(false)
-    //mainWindow.loadURL('http://localhost:3000');
+    mainWindow.loadURL('http://localhost:3000');
 
     // Open the DevTools.
     //mainWindow.webContents.openDevTools();
@@ -43,17 +43,6 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
-
-// Quit when all windows are closed.
-app.on('window-all-closed', function () {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-
-        app.quit();
-
-    }
-});
 
 app.on('activate', function () {
     // On OS X it's common to re-create a window in the app when the
@@ -140,7 +129,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                             const storedPacket = packetHandler.storeAndSendState(parsedPacket, portHandler.com);
                             // Packet from receiver is new and stored - recording is ON
                             if (storedPacket && recordHandler.recording) recordHandler.writeToCsv(storedPacket);
-            
+
                         } catch (error) {
                             console.log(error.message)
 
@@ -154,11 +143,11 @@ ipcMain.on('clear-to-send', (event, arg) => {
                                 } catch (error) {
                                     console.log(error);
                                 }
-                            }else{
-                                
+                            } else {
+
                                 if (error.message !== "Object has been destroyed") electron.dialog.showErrorBox("Data handling error", error.message);
 
-                                if(error.type === "writeToCsv") recordHandler.recording = false;
+                                if (error.type === "writeToCsv") recordHandler.recording = false;
                             }
 
                         }
@@ -177,6 +166,20 @@ ipcMain.on('clear-to-send', (event, arg) => {
         })
 
     })
+
+    // Quit when all windows are closed.
+    app.on('window-all-closed', function () {
+        
+        if (recordHandler.recording) recordHandler.setRecording();
+        
+        // On OS X it is common for applications and their menu bar
+        // to stay active until the user quits explicitly with Cmd + Q
+        if (process.platform !== 'darwin') {
+
+            app.quit();
+
+        }
+    });
 
     ipcMain.on("set-recording", (event, arg) => {
 
@@ -201,7 +204,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
         packetHandler.profiles = databaseHandler.getSelectedTeam(false).members;
 
         const data = { teams, users, defTeam, defUser, activeTeam }
-        
+
         event.sender.send("teams-loaded", data)
 
     })
@@ -210,7 +213,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         const activeTeam = databaseHandler.getSelectedTeam(false);
         event.sender.send("active-team-loaded", activeTeam);
-        
+
     })
 
     ipcMain.on("add-teams", (event, arg) => {
@@ -227,7 +230,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
             databaseHandler.updateItem(arg.data.id, data, arg.collection)
         }
         else databaseHandler.updateItem(arg.data.id, arg.data, arg.collection)
-        
+
     })
 
     ipcMain.on("delete-item", (event, arg) => {
@@ -242,7 +245,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
         if (arg.graphLength) packetHandler.graphLength = databaseHandler.getSettings().graphLength;
         if (arg.csvDirectory) recordHandler.directory = databaseHandler.getSettings().csvDirectory;
         if (arg.csvComponents) recordHandler.components = databaseHandler.getSettings().csvComponents;
-    
+
     })
 
     ipcMain.on("get-settings", (event, arg) => {
@@ -264,10 +267,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         event.sender.send("records-loaded", data)
 
-    })
-
-    app.on('before-quit', () => {
-        if (recordHandler.recording) recordHandler.setRecording();
     })
 
     ipcMain.on("open-dialog", (event, arg) => {
@@ -313,11 +312,11 @@ ipcMain.on('clear-to-send', (event, arg) => {
     ipcMain.on("sync-devices", (event, arg) => {
 
         const userForcedSync = true; // not because of automatic invalid packet detection
-        
+
         for (let index = 0; index < portHandlers.length; index++) {
             const delay = index * 50; // avoiding collision of broadcast
             portHandlers[index].sendSync(userForcedSync, delay);
-            
+
         }
 
     })
