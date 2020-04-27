@@ -23,9 +23,9 @@ function createWindow() {
     //mainWindow.setFullScreen(true);
     mainWindow.maximize();
     // and load the index.html of the app.
-    //mainWindow.loadURL(`file://${path.join(__dirname, '../build/index.html')}`);
+    mainWindow.loadURL(`file://${path.join(__dirname, '../build/index.html')}`);
     mainWindow.setMenuBarVisibility(false)
-    mainWindow.loadURL('http://localhost:3000');
+    //mainWindow.loadURL('http://localhost:3000');
 
     // Open the DevTools.
     //mainWindow.webContents.openDevTools();
@@ -169,16 +169,10 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     // Quit when all windows are closed.
     app.on('window-all-closed', function () {
-        
+
         if (recordHandler.recording) recordHandler.setRecording();
-        
-        // On OS X it is common for applications and their menu bar
-        // to stay active until the user quits explicitly with Cmd + Q
-        if (process.platform !== 'darwin') {
+        app.quit();
 
-            app.quit();
-
-        }
     });
 
     ipcMain.on("set-recording", (event, arg) => {

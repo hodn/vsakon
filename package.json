@@ -49,7 +49,7 @@
     "install": "electron-rebuild",
     "pack": "electron-builder --dir",
     "postinstall": "electron-builder install-app-deps",
-    "dist": "electron-builder -mwl"
+    "dist": "electron-builder -m"
   },
   "build": {
     "appId": "cz.albertov.flexiguard",
@@ -69,7 +69,10 @@
       "requestedExecutionLevel": "highestAvailable",
       "target": "nsis"
     },
-    "mac":{}
+    "mac":{
+      "identity": null,
+      "target": "pkg"
+    }
   },
   "browserslist": [
     ">0.2%",
