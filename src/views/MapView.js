@@ -87,7 +87,7 @@ export default function MapView(props) {
   return (
     <div>
       <Paper style={{ marginBottom: 10 }}>
-        <Map style={{ width: '100%', height: 740 * (window.innerHeight / 1080) }} center={center} zoom={zoom}>
+        <Map style={{ width: '100%', height: 720 * (window.innerHeight / 1080) }} center={center} zoom={zoom}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"

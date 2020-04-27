@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   paperLarge: {
-    height: 300,
+    height: 300 * window.innerHeight/1080,
     padding: 10
   }
 
@@ -134,7 +134,7 @@ export default function HistoryDialog(props) {
                 <Typography variant="h6"> Heart rate </Typography>
                 <FlexibleWidthXYPlot
 
-                  height={220}
+                  height={200 * window.innerHeight/1080}
                   xType="time"
                   yDomain={[0, 220]}
                 >
@@ -153,7 +153,7 @@ export default function HistoryDialog(props) {
                 <Typography variant="h6"> Activity </Typography>
                 <FlexibleWidthXYPlot
 
-                  height={220}
+                  height={200 * window.innerHeight/1080}
                   xType="time"
                   yDomain={[0, props.settings? props.settings.metersMax.activity * 3 : 500]}
                 >
@@ -173,7 +173,7 @@ export default function HistoryDialog(props) {
 
                 <FlexibleWidthXYPlot
 
-                  height={220}
+                  height={200 * window.innerHeight/1080}
                   xType="time"
                   yDomain={props.settings? [-props.settings.metersMax.acc, +props.settings.metersMax.acc] : [-1,1]}
                 >
@@ -211,7 +211,7 @@ export default function HistoryDialog(props) {
               <Paper className={classes.paperLarge}>
                 <Typography variant="h6"> Temperature - skin </Typography>
                 <FlexibleWidthXYPlot
-                  height={220}
+                  height={200 * window.innerHeight/1080}
                   xType="time"
                   yDomain={[0, props.settings ? props.settings.metersMax.temp : 50]}
                 >
@@ -229,7 +229,7 @@ export default function HistoryDialog(props) {
               <Paper className={classes.paper}>
                 <Typography variant="h6"> Temperature - environment </Typography>
                 <FlexibleWidthXYPlot
-                  height={220}
+                  height={200 * window.innerHeight/1080}
                   xType="time"
                   yDomain={[0, props.settings ? props.settings.metersMax.temp * 2 : 100]}
                 >
@@ -248,7 +248,7 @@ export default function HistoryDialog(props) {
                 <Typography variant="h6"> Humidity </Typography>
                 <FlexibleWidthXYPlot
 
-                  height={220}
+                  height={200 * window.innerHeight/1080}
                   xType="time"
                   yDomain={[0, 100]}
                 >
