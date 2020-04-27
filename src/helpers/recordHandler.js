@@ -4,7 +4,8 @@ const fs = require('fs');
 const csvWriter = require('csv-write-stream');
 const csvParser = require('csv-parser');
 const path = require('path');
-const { dialog } = require('electron');
+const electron = require('electron');
+const ipcMain = electron.ipcMain;
 const HistoryGraphHandler = require('./historyGraphHandler');
 
 module.exports = class RecordHandler {
@@ -103,6 +104,13 @@ module.exports = class RecordHandler {
                 .on('end', () => {
                     event.sender.send("history-parsed", this.graphHandler.getGraphs());
                 });
+
+                ipcMain.on('stop-history-read', (event, arg) => {
+
+                    readStream.destroy();
+
+                });
+
         } else {
             throw new Error ("Invalid path or deleted CSV source file.");
         }
@@ -175,14 +183,13 @@ module.exports = class RecordHandler {
 
         const deadMan = packet.deadMan === "true" ? true : false;
     
-        const locationData = packet.detected ? {
+        const locationData = convert(packet.latMins) ? {
             latMins: convert(packet.latMins),
             longMins: convert(packet.longMins),
             fix: convert(packet.fix),
             sat: convert(packet.sat),
             hdop: convert(packet.hdop),
             hgh: convert(packet.hgh),
-            detected: packet.detected
         } : null;
 
         let nodeData = {};
@@ -216,8 +223,9 @@ module.exports = class RecordHandler {
     }
 
     commaToDot(value) {
-        let convertedValue = parseFloat(value.replace(',', '.').replace(' ', ''));
+                
+        let convertedValue = value ? parseFloat(value.replace(',', '.').replace(' ', '')) : 0;
 
-        return convertedValue ? convertedValue : 0;
+        return convertedValue;
     }
 }

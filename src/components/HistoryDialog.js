@@ -89,6 +89,8 @@ export default function HistoryDialog(props) {
   const resetAndClose = () => {
     props.close();
 
+    ipcRenderer.send("stop-history-read");
+
     setHeartRate([]);
     setActivity([]);
     setAccX([]);
