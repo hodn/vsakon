@@ -149,13 +149,13 @@ function parseNodeData(rawNodeArray) {
             nodeJSON["motionZ_" + i.toString()] = moZ;
             nodeJSON["activity_" + i.toString()] = activity;
         } else {
-            nodeJSON["tempSkin_" + i.toString()] = "-";
-            nodeJSON["tempCloth_" + i.toString()] = "-";
-            nodeJSON["humidity_" + i.toString()] = "-";
-            nodeJSON["motionX_" + i.toString()] = "-";
-            nodeJSON["motionY_" + i.toString()] = "-";
-            nodeJSON["motionZ_" + i.toString()] = "-";
-            nodeJSON["activity_" + i.toString()] = "-";
+            nodeJSON["tempSkin_" + i.toString()] = "";
+            nodeJSON["tempCloth_" + i.toString()] = "";
+            nodeJSON["humidity_" + i.toString()] = "";
+            nodeJSON["motionX_" + i.toString()] = "";
+            nodeJSON["motionY_" + i.toString()] = "";
+            nodeJSON["motionZ_" + i.toString()] = "";
+            nodeJSON["activity_" + i.toString()] = "";
         }
     }
 

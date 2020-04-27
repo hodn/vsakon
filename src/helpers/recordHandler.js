@@ -110,11 +110,11 @@ module.exports = class RecordHandler {
 
         const basic = ["timestamp", "devId", "heartRate", "tempSkin", "tempCloth", "humidity", "activity", "accX", "accY", "accZ", "batteryVoltage", "batteryPercentage", "port", "deadMan", "event"];
         const performance = ["stehlik", "ee"];
-        const location = ["latMins", "longMins", "fix", "sat", "hdop", "hgh", "detected"];
+        const location = ["latMins", "longMins", "fix", "sat", "hdop", "hgh"];
         let node = [];
 
         for (let index = 0; index < 9; index++) {
-            const unit = ["connected_" + index.toString(), "tempSkin_" + index.toString(), "humidity_" + index.toString(), "tempCloth_" + index.toString(), "motionX_" + index.toString(), "motionY_" + index.toString(), "motionZ_" + index.toString(), "activity_" + index.toString()];
+            const unit = ["tempSkin_" + index.toString(), "humidity_" + index.toString(), "tempCloth_" + index.toString(), "motionX_" + index.toString(), "motionY_" + index.toString(), "motionZ_" + index.toString(), "activity_" + index.toString()];
             node = node.concat(unit);
         }
 
@@ -183,7 +183,7 @@ module.exports = class RecordHandler {
 
         let nodeData = {};
 
-        if (packet["connected_3"]) {
+        if (packet["tempSkin_1"]) {
             for (let i = 0; i < 9; i++) {
                 nodeData["connected_" + i.toString()] = packet["connected_" + i.toString()];
                 nodeData["tempSkin_" + i.toString()] = convert(packet["tempSkin_" + i.toString()]);
