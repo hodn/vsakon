@@ -23,10 +23,9 @@ function createWindow() {
     //mainWindow.setFullScreen(true);
     mainWindow.maximize();
     // and load the index.html of the app.
-    //mainWindow.loadURL(`file://${path.join(__dirname, '../build/index.html')}`);
+    mainWindow.loadURL(`file://${path.join(__dirname, '../build/index.html')}`);
     mainWindow.setMenuBarVisibility(false)
-    mainWindow.loadURL('http://localhost:3000');
-
+    //mainWindow.loadURL('http://localhost:3000');
     // Open the DevTools.
     //mainWindow.webContents.openDevTools();
 

@@ -11,8 +11,8 @@
   "private": true,
   "homepage": "./",
   "devDependencies": {
-    "electron": "latest",
-    "electron-builder": "^20.44.4",
+    "electron": "8.0.0",
+    "electron-builder": "latest",
     "electron-packager": "^13.1.1",
     "electron-rebuild": "^1.10.1",
     "react": "^16.13.1",
@@ -54,7 +54,7 @@
     "install": "electron-rebuild",
     "pack": "electron-builder --dir",
     "postinstall": "electron-builder install-app-deps",
-    "dist": "electron-builder -l"
+    "dist": "electron-builder -m"
   },
   "build": {
     "appId": "cz.albertov.flexiguard",
