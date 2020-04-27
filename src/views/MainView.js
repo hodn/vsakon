@@ -20,7 +20,7 @@ export class MainView extends React.Component {
   componentDidMount() {
 
     this._isMounted = true;
-    ipcRenderer.send("main-view-mounted");
+    ipcRenderer.send("online-view-mounted");
     ipcRenderer.send("get-settings");
 
     ipcRenderer.once("settings-loaded", (event, arg) => {

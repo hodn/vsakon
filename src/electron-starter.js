@@ -187,7 +187,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
-    ipcMain.on("main-view-mounted", (event, arg) => {
+    ipcMain.on("online-view-mounted", (event, arg) => {
 
         packetHandler.sendState();
         packetHandler.sendUserProfiles();
@@ -206,13 +206,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
         const data = { teams, users, defTeam, defUser, activeTeam }
 
         event.sender.send("teams-loaded", data)
-
-    })
-
-    ipcMain.on("get-active-team", (event, arg) => {
-
-        const activeTeam = databaseHandler.getSelectedTeam(false);
-        event.sender.send("active-team-loaded", activeTeam);
 
     })
 

@@ -26,10 +26,15 @@ class MapDeviceChip extends React.Component {
 
     this._isMounted = true;
 
+    ipcRenderer.once(this.props.devId.toString() + "-profile", (event, arg) => {
+
+      const user = arg;
+      this._isMounted && this.setState({ user });
+
+    })
+    
     // Listener for data for the exact device
     ipcRenderer.on(this.props.devId.toString(), (event, arg) => {
-
-      const user = this.props.team ? this.props.team.members[this.props.devId - 1] : null;
       
       // Connection checker
       setTimeout(this.checkDeviceConnection, 6000);
@@ -42,7 +47,7 @@ class MapDeviceChip extends React.Component {
         connected
       }))
 
-      if(packet.locationData && packet.locationData.detected) this.props.setMarker(packet, user);
+      if(packet.locationData && packet.locationData.detected) this.props.setMarker(packet, this.state.user);
 
     })
 
@@ -97,8 +102,6 @@ class MapDeviceChip extends React.Component {
 
   // What the actual component renders
   render() {
-
-    const user = this.props.team ? this.props.team.members[this.props.devId - 1] : null;
     
     return (
       
@@ -106,7 +109,7 @@ class MapDeviceChip extends React.Component {
         <Chip 
         variant="outlined" 
         avatar={<Avatar style={{ backgroundColor: this.colorSwitch(this.state.packet, this.state.connected), color: "black", fontWeight: "bold" }}> {this.props.devId} </Avatar>}
-        label={user ? user.name + " " + user.surname : "User not loaded"} 
+        label={this.state.user ? this.state.user.name + " " + this.state.user.surname : "User not loaded"} 
         onClick={() => this.props.focusOnDevice(this.state.packet)} />
       </div>
 

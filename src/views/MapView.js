@@ -9,15 +9,11 @@ const { ipcRenderer } = window.require('electron');
 export default function MapView(props) {
   const [center, setCenter] = React.useState([50.06986, 14.42462]);
   const [zoom, setZoom] = React.useState(10);
-  const [activeTeam, setActiveTeam] = React.useState(null);
   const [markers, setMarkers] = React.useState([]);
 
   React.useEffect(() => {
 
-    ipcRenderer.send("get-active-team");
-    ipcRenderer.on("active-team-loaded", (event, arg) => {
-      setActiveTeam(arg);
-    })
+    ipcRenderer.send("online-view-mounted");
 
     return () => {
       ipcRenderer.removeAllListeners();
@@ -34,7 +30,7 @@ export default function MapView(props) {
     newMarkers[devId - 1] = (
     <Marker key={devId-1} position={position} icon={getIcon(devId)}>
       <Popup>
-        <h3>{user.name} {user.surname} </h3>
+        <h3>{user ? user.name : "-"} {user ? user.surname : "-"} </h3>
          Lat: {packet.locationData.latMins} <br/>
         Long: {packet.locationData.longMins}<br/>
          Fix: {packet.locationData.fix}<br/>
@@ -79,7 +75,7 @@ export default function MapView(props) {
 
       chips.push(
         <Grid xs={2} key={"item" + i} item>
-          <MapDeviceChip devId={i + 1} team={activeTeam} setMarker={setMarker} removeMarker={removeMarker} focusOnDevice={focusOnDevice} />
+          <MapDeviceChip devId={i + 1} setMarker={setMarker} removeMarker={removeMarker} focusOnDevice={focusOnDevice} />
         </Grid>
       );
     }
