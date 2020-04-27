@@ -93,7 +93,7 @@ function parseLocationData(rawLocationArray) {
     const rawLongMins = rawLocationArray[5];
     const longSecs = parseEZ24(rawLocationArray[6], rawLocationArray[7], rawLocationArray[8], rawLocationArray[9]);
     const fixSat = rawLocationArray[10];
-    const alt = parseEZ24(rawLocationArray[12], rawLocationArray[13], rawLocationArray[14], rawLocationArray[15]);
+    const hgh = parseEZ24(rawLocationArray[12], rawLocationArray[13], rawLocationArray[14], rawLocationArray[15]);
 
     if(isLocationDetected(convertLocationMins(rawLatMins, latSecs), convertLocationMins(rawLongMins, longSecs))){
 
@@ -103,20 +103,20 @@ function parseLocationData(rawLocationArray) {
             longMins: convertLocationMins(rawLongMins, longSecs),
             fix: convertFixSat(fixSat).fix,
             sat: convertFixSat(fixSat).sat,
-            dilution: convertLocationMetric(rawLocationArray[12]),
-            alt: convertLocationMetric(alt),
+            hdop: convertLocationMetric(rawLocationArray[12]),
+            hgh: convertLocationMetric(hgh),
             detected: isLocationDetected(convertLocationMins(rawLatMins, latSecs), convertLocationMins(rawLongMins, longSecs))
         }
     } else {
         
         return locationJSON = {
 
-            latMins: "-",
-            longMins: "-",
-            fix: "-",
-            sat: "-",
-            dilution: "-",
-            alt: "-",
+            latMins: "",
+            longMins: "",
+            fix: "",
+            sat: "",
+            hdop: "",
+            hgh: "",
             detected: isLocationDetected(convertLocationMins(rawLatMins, latSecs), convertLocationMins(rawLongMins, longSecs))
         }
     }

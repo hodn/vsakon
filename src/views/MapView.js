@@ -39,8 +39,8 @@ export default function MapView(props) {
         Long: {packet.locationData.longMins}<br/>
          Fix: {packet.locationData.fix}<br/>
          Sat: {packet.locationData.sat}<br/>
-         H: {packet.locationData.alt}<br/>
-         HDOP: {packet.locationData.dilution}<br/>
+         H: {packet.locationData.hgh}<br/>
+         HDOP: {packet.locationData.hdop}<br/>
       </Popup>
     </Marker>
     )

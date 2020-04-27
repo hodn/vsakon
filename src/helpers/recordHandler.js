@@ -110,7 +110,7 @@ module.exports = class RecordHandler {
 
         const basic = ["timestamp", "devId", "heartRate", "tempSkin", "tempCloth", "humidity", "activity", "accX", "accY", "accZ", "batteryVoltage", "batteryPercentage", "port", "deadMan", "event"];
         const performance = ["stehlik", "ee"];
-        const location = ["latMins", "longMins", "fix", "sat", "dilution", "alt", "detected"];
+        const location = ["latMins", "longMins", "fix", "sat", "hdop", "hgh", "detected"];
         let node = [];
 
         for (let index = 0; index < 9; index++) {
@@ -176,8 +176,8 @@ module.exports = class RecordHandler {
             longMins: convert(packet.longMins),
             fix: convert(packet.fix),
             sat: convert(packet.sat),
-            dilution: convert(packet.dilution),
-            alt: convert(packet.alt),
+            hdop: convert(packet.hdop),
+            hgh: convert(packet.hgh),
             detected: packet.detected
         } : null;
 
