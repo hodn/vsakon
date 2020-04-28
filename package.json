@@ -11,10 +11,10 @@
   "private": true,
   "homepage": "./",
   "devDependencies": {
-    "electron": "8.0.0",
+    "electron": "latest",
     "electron-builder": "latest",
     "electron-packager": "^13.1.1",
-    "electron-rebuild": "^1.10.1",
+    "electron-rebuild": "latest",
     "react": "^16.13.1",
     "react-scripts": "1.0.0"
   },
@@ -39,7 +39,7 @@
     "react-router-dom": "^5.1.2",
     "react-svg-gauge": "^1.0.10",
     "react-vis": "^1.11.7",
-    "serialport": "^8.0.4",
+    "serialport": "8.0.4",
     "shortid": "^2.2.15",
     "simplify-js": "^1.2.4",
     "typeface-roboto": "0.0.75"
@@ -54,21 +54,22 @@
     "install": "electron-rebuild",
     "pack": "electron-builder --dir",
     "postinstall": "electron-builder install-app-deps",
-    "dist": "electron-builder -m"
+    "dist": "electron-builder -l"
   },
   "build": {
     "appId": "cz.albertov.flexiguard",
     "extends": null,
+    "npmRebuild": false,
     "asar": false,
     "files": [
       "./build/**/*",
       "./src/electron-starter.js",
       "./src/colors.js",
-      "./src/helpers/*",
+      "./src/helpers/*.js",
       "./src/markerIcons/*"
     ],
     "linux": {
-      "target": "deb"
+      "target": "appImage"
     },
     "win": {
       "requestedExecutionLevel": "highestAvailable",
