@@ -11,7 +11,7 @@
   "private": true,
   "homepage": "./",
   "devDependencies": {
-    "electron": "latest",
+    "electron": "7.2.3",
     "electron-builder": "latest",
     "electron-packager": "^13.1.1",
     "electron-rebuild": "latest",
@@ -59,7 +59,6 @@
   "build": {
     "appId": "cz.albertov.flexiguard",
     "extends": null,
-    "npmRebuild": false,
     "asar": false,
     "files": [
       "./build/**/*",
@@ -69,7 +68,7 @@
       "./src/markerIcons/*"
     ],
     "linux": {
-      "target": "appImage"
+      "target": "deb"
     },
     "win": {
       "requestedExecutionLevel": "highestAvailable",
