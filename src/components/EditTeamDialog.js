@@ -38,13 +38,14 @@ export default function EditTeamDialog(props) {
   const submitForm = () => {
     props.handleDialog();
     let teamWithIDsOnly = Object.assign({}, team); // later for refactor
+    
+    // Get only the member ids
     for (let index = 0; index < teamWithIDsOnly.members.length; index++) {
       teamWithIDsOnly.members[index] = teamWithIDsOnly.members[index].id;
     };
 
-    ipcRenderer.send("update-item", {collection: "teams", data: teamWithIDsOnly});
-    ipcRenderer.send("update-settings", {selectedTeam: team.id});
-    ipcRenderer.send("get-teams");
+    ipcRenderer.send("update-item", {collection: "teams", data: teamWithIDsOnly}); //Save to DB
+    ipcRenderer.send("get-teams"); // Refresh the table
   }
 
   const getUnits = () => {

@@ -9,10 +9,12 @@ const { ipcRenderer } = window.require('electron');
 export default function DeviceControl(passedProps) {
   let props = passedProps.initProps;
 
+  // Sends the registered event to be written to CSV
   const registerEvent = (eventName) => {
-    ipcRenderer.send("register-event", { event: eventName, devId: props.devId })
+    ipcRenderer.send("register-event", { event: eventName, devId: props.devId }) 
   }
 
+  // If alarm is on - show Turn off button
   const showAlarmButton = (alarmState) => {
     if (alarmState) return (
       <Grid item><Button variant="contained" size="large" startIcon={<NotificationsOffIcon />} onClick={props.alarm} style={{ backgroundColor: colors.red, marginRight: 5 }}>
@@ -21,6 +23,7 @@ export default function DeviceControl(passedProps) {
     )
   }
 
+  // Dynamically generate event buttons from DB
   const getEventButtons = (settings) => {
 
     const buttons = [];

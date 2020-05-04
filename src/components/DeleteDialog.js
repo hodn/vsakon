@@ -11,9 +11,9 @@ export default function DeleteDialog(props) {
   
   const submitForm = () => {
     props.handleDialog();
-    const collection = props.item.weight === undefined ? "teams" : "users"
-    ipcRenderer.send("delete-item", {collection, id: props.item.id});
-    ipcRenderer.send("get-teams");
+    const collection = props.item.weight === undefined ? "teams" : "users" // is it a team or a user to be deleted
+    ipcRenderer.send("delete-item", {collection, id: props.item.id}); // Remove from DB
+    ipcRenderer.send("get-teams"); // Refresh the table
   }
 
   return (

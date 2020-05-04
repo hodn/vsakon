@@ -39,7 +39,7 @@
     "react-router-dom": "^5.1.2",
     "react-svg-gauge": "^1.0.10",
     "react-vis": "^1.11.7",
-    "serialport": "8.0.4",
+    "serialport": "8.0.7",
     "shortid": "^2.2.15",
     "simplify-js": "^1.2.4",
     "typeface-roboto": "0.0.75"

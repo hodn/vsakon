@@ -29,13 +29,13 @@ export default function AddUserDialog(props) {
   const [values, setValues] = React.useState(props.user);
   
   const handleChange = name => event => {
-    setValues({ ...values, [name]: event.target.value });
+    setValues({ ...values, [name]: event.target.value }); // Changing the values (state)
   };
 
   const submitForm = () => {
     props.handleDialog();
-    ipcRenderer.send("add-teams", {collection: "users", data: values});
-    ipcRenderer.send("get-teams");
+    ipcRenderer.send("add-teams", {collection: "users", data: values}); // save to DB
+    ipcRenderer.send("get-teams"); // Refresh the table
   }
   return (
     <div>

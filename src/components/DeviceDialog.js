@@ -23,9 +23,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+// Detailed online view of device unit
 export default function DeviceDialog(props) {
   const classes = useStyles();
 
+  // Color switching for the main upper dialog panel
   const switchColor = (props) => {
 
     let connection = props.connected === true;

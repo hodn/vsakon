@@ -26,14 +26,15 @@ const useStyles = makeStyles(theme => ({
 export default function EditRecordDialog(props) {
   const classes = useStyles();
   const [values, setValues] = React.useState(props.item);
+  
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
   };
 
   const submitForm = () => {
     props.handleDialog();
-    ipcRenderer.send("update-item", {collection: "records", data: values});
-    ipcRenderer.send("get-records");
+    ipcRenderer.send("update-item", {collection: "records", data: values}); // Save to DB
+    ipcRenderer.send("get-records"); // Refresh the table
   }
 
   return (

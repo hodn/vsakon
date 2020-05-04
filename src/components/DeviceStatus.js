@@ -10,6 +10,7 @@ import SettingsInputComponentIcon from '@material-ui/icons/SettingsInputComponen
 import Tooltip from '@material-ui/core/Tooltip';
 import colors from '../colors';
 
+// Status bar of device unit - with icons and color indication
 function DeviceStatus(props) {
 
 
@@ -50,6 +51,7 @@ function DeviceStatus(props) {
         }
     });
 
+    // Colors swithing for the status bar of device unit
     const switchColor = (props) => {
 
         let connection = props.connected === true;
@@ -78,12 +80,14 @@ function DeviceStatus(props) {
         } else return null;
     }
 
+    // Are additional nodes connected?
     const checkNodes = (props) => {
         if (props.packet !== null && props.packet.nodeData !== null) {
             return "visible";
         } else return "hidden";
     }
 
+    // Is GPS available? Is GPS location detected or still searching?
     const getGpsIcon = (props) => {
         if (props.packet !== null && props.packet.locationData !== null) {
 

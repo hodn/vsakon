@@ -23,7 +23,7 @@ function AccelerationMeter(props) {
     
     const classes = useStyles();
     
-    
+    // Helper functions for calculating the fill of the meter
     const getNegativeDisplay = (acceleration, settings) => {
 
         const maxScale = settings ? (settings.metersMax.acc * -1) : (-10);
@@ -31,7 +31,7 @@ function AccelerationMeter(props) {
         if(acceleration < 0){
             if (acceleration <= maxScale) return 1; // maximum scale 
             if (acceleration > maxScale) return acceleration / maxScale; // into percent
-        }else return 0;
+        } else return 0;
 
     }
 
@@ -42,7 +42,7 @@ function AccelerationMeter(props) {
         if(acceleration >= 0){
             if (acceleration >= maxScale) return 1; // maximum scale 
             if (acceleration < maxScale) return acceleration / maxScale; // into percent
-        }else return 0;
+        } else return 0;
     }
 
     

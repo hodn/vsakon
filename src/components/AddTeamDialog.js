@@ -25,10 +25,12 @@ export default function AddTeamDialog(props) {
   const classes = useStyles();
   const [team, setTeam] = React.useState(props.team);
 
+  // Setting team name or team note
   const handleChange = name => event => {
     setTeam({ ...team, [name]: event.target.value });
   };
 
+  // Assigned user to device (unit) in the team
   const handleSelect = (value, index) => {
     let newMembers = [...team.members]; // to be refactored
     newMembers[index] = value;
@@ -38,14 +40,17 @@ export default function AddTeamDialog(props) {
   const submitForm = () => {
     props.handleDialog();
     let teamWithIDsOnly = Object.assign({}, team); // to be refactored
+    
+    // Saving only member IDs
     for (let index = 0; index < teamWithIDsOnly.members.length; index++) {
       teamWithIDsOnly.members[index] = teamWithIDsOnly.members[index].id;
     };
 
-    ipcRenderer.send("add-teams", {collection: "teams", data: teamWithIDsOnly});
-    ipcRenderer.send("get-teams");
+    ipcRenderer.send("add-teams", {collection: "teams", data: teamWithIDsOnly}); // Save to DB
+    ipcRenderer.send("get-teams"); // Refresh the table
   }
 
+  // Return select and autocomplete component for each device (unit)
   const getUnits = () => {
     
     const units = [];
@@ -53,7 +58,7 @@ export default function AddTeamDialog(props) {
     for (let index = 0; index < 30; index++) {
       
       const topValue = props.users.find(element => { 
-        if(team.members[index] !== null && team.members[index] !== undefined ) return element.id === team.members[index].id;
+        if(team.members[index] !== null && team.members[index] !== undefined ) return element.id === team.members[index].id; // If default user for that unit exists
         else return null;
       });
       

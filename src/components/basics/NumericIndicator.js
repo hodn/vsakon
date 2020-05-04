@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import colors from '../../colors';
 
 export default function NumericIndicator(props) {
+    // Component for displaying numeric data
 
     return (
         <div>

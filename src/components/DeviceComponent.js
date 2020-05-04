@@ -16,18 +16,11 @@ const styles = {
   root: {
 
     margin: 6,
-  },
-  icon: {
-    height: '25px',
-    width: '25px',
-    fontSize: '100%',
-    margin: '3px 0px 3px 3px',
-    padding: '3px',
-    float: 'left'
   }
 
 };
 
+// Component for online visualization in MainView - unique for each device unit
 class DeviceComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -44,10 +37,9 @@ class DeviceComponent extends React.Component {
       accZGraph: [],
       user: null,
       connected: false,
-      detailOpen: false,
-      width: window.innerWidth/1920,
-      height: window.innerHeight/1080
-      // Settings here (events, thermo, tepovka) - can load with profiles
+      detailOpen: false, 
+      width: window.innerWidth/1920, // Adaptive size
+      height: window.innerHeight/1080 
     }
 
     this.alarmOff = this.alarmOff.bind(this);
@@ -61,6 +53,7 @@ class DeviceComponent extends React.Component {
 
     this._isMounted = true;
     
+    // Loading the information about the user assigned to the device unit
     ipcRenderer.once(this.props.devId.toString() + "-profile", (event, arg) => {
 
       const user = arg;
@@ -68,6 +61,7 @@ class DeviceComponent extends React.Component {
 
     })
 
+    // Resize the component on viewport change
     window.addEventListener('resize', () => {
 
       this._isMounted && this.setState({ 
@@ -78,10 +72,10 @@ class DeviceComponent extends React.Component {
     });
     
 
-    // Listener for data for the exact device
+    // Listener for online data for the exact device
     ipcRenderer.on(this.props.devId.toString(), (event, arg) => {
 
-      // Connection checker
+      // Connection checker (6 seconds interval)
       setTimeout(this.checkDeviceConnection, 6000);
 
       const packet = arg.packet;
@@ -109,7 +103,7 @@ class DeviceComponent extends React.Component {
   }
 
   componentWillUnmount() {
-    ipcRenderer.removeAllListeners();
+    ipcRenderer.removeAllListeners(); 
   }
 
   checkDeviceConnection() {
@@ -145,8 +139,9 @@ class DeviceComponent extends React.Component {
     ipcRenderer.send("remove-alarm", this.props.devId);
   }
 
+  // Opening/closing the detailed view of the device unit (DeviceDialog) - seperated for reliability
   openDetail() {
-    this._isMounted && this.setState({ detailOpen: true });
+    this._isMounted && this.setState({ detailOpen: true }); 
   }
 
   closeDetail() {

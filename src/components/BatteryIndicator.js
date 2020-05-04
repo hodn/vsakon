@@ -12,13 +12,14 @@ function BatteryIndicator(props) {
     if(props.batteryPercentage !== null){
         let battery = props.batteryPercentage;
         
+        // Change the icon with state of battery
         if (battery > 90) return <BatteryFull className={props.className}/> ;
         if (battery > 50 && battery <= 90) return <Battery80 className={props.className}/> ;
         if (battery > 30 && battery <= 50) return <Battery50 className={props.className}/> ;
         if (battery > 20 && battery <= 30) return <Battery30 className={props.className}/> ;
         if (battery > 13 && battery <= 20) return <Battery20 className={props.className}/> ;
         if (battery <= 13) return <BatteryAlert className={props.className}/> ;
-    }else return <BatteryAlert className={props.className} style={ {visibility: 'hidden'}}/>;
+    }else return <BatteryAlert className={props.className} style={ {visibility: 'hidden'}}/>; // No battery info or no device - hide
    
 }
 export default BatteryIndicator;
