@@ -11,8 +11,8 @@ export default function RemoveRecordDialog(props) {
   
   const submitForm = () => {
     props.handleDialog();
-    ipcRenderer.send("delete-item", {collection: "records", id: props.item.id});
-    ipcRenderer.send("get-records");
+    ipcRenderer.send("delete-item", {collection: "records", id: props.item.id}); // Save to DB
+    ipcRenderer.send("get-records"); // Refresh table
   }
 
   return (

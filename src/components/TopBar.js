@@ -23,7 +23,7 @@ import MapView from '../views/MapView';
 import HistoryView from '../views/HistoryView';
 import { TeamView } from '../views/TeamView'
 
-
+// Highest component in order - mounts Views and keeps state of recording and ports
 const { ipcRenderer } = window.require('electron');
 
 const styles = {

@@ -25,9 +25,10 @@ function StehlikMeter(props) {
     });
     const classes = useStyles();
 
+    // Calculates the meter fill with parameters from settings
     const getStehlikDisplay = (stehlik, settings) => {
 
-        const maxScale = settings ? settings.metersMax.stehlik : 180;;
+        const maxScale = settings ? settings.metersMax.stehlik : 180; // where the meter maxes out
 
         if (stehlik !== null) {
             if (stehlik >= maxScale) return 1; // maximum scale 
@@ -35,6 +36,7 @@ function StehlikMeter(props) {
         } else return 0;
     }
 
+    // Change the color indication upon performance
     const colorSwitch = (stehlik) => {
 
         if (stehlik < 100) return colors.blue;

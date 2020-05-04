@@ -141,7 +141,7 @@ module.exports = class PacketHandler {
 
     calculatePerformaceData(packet) {
 
-        const user = this.profiles[packet.basicData.devId - 1];
+        const user = this.profiles[packet.basicData.devId - 1]; // Selects the user profile to calculate for
         const vRest = (9.99 * parseInt(user.weight) + 6.25 * parseInt(user.height) + 4.92 * parseInt(user.age) + 5) * 0.144762299;
         let ee = (packet.basicData.heartRate - parseInt(user.hrRest)) / (parseInt(user.hrMax) - parseInt(user.hrRest)) * (parseInt(user.vMax) - vRest);
         ee = (((ee + vRest) * 0.35) / user.weight).toFixed(1);
@@ -154,7 +154,7 @@ module.exports = class PacketHandler {
 
         return performanceData;
     }
-
+    
     sendUserProfiles() {
 
         for (let index = 0; index < this.profiles.length; index++) {

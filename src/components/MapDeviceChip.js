@@ -5,6 +5,7 @@ import colors from "../colors"
 
 const { ipcRenderer } = window.require('electron');
 
+// Unique component for each device unit in the MapView - centers on the device after click
 class MapDeviceChip extends React.Component {
   constructor(props) {
     super(props);
@@ -26,6 +27,7 @@ class MapDeviceChip extends React.Component {
 
     this._isMounted = true;
 
+    // Loads user for the device unit
     ipcRenderer.once(this.props.devId.toString() + "-profile", (event, arg) => {
 
       const user = arg;
@@ -81,6 +83,7 @@ class MapDeviceChip extends React.Component {
 
   }
 
+  // Change the color of avatar - gps and alarm
   colorSwitch(packet, connected){
     if (!packet) return colors.grey;
 
@@ -95,7 +98,7 @@ class MapDeviceChip extends React.Component {
         else if (packet.locationData.detected) {
             return colors.green;
         }
-        else return colors.yellow;
+        else return colors.yellow; // is GPS unit but location not yet detected
     }
     else return colors.grey;
 }

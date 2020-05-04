@@ -140,7 +140,7 @@ export class TeamView extends React.Component {
 
                       surnames.push(rowData.members[index].surname);
                     }
-                    return surnames.includes(value);
+                    return surnames.includes(value); // Searching the team members with their surname
                  }, render: rowData => {
 
                     let surnames = [];
@@ -149,7 +149,7 @@ export class TeamView extends React.Component {
                       surnames.push(rowData.members[index].surname);
                     }
 
-                    return surnames.toString();
+                    return surnames.toString(); // All members' surnames in the team
                   }
                 }
               ]}

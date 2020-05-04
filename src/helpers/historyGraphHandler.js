@@ -46,6 +46,7 @@ module.exports = class HistoryGraphHandler {
     getGraphs() {
 
         // Simplify (dataset, the tolerance in the data units(i.e. heartRate - 3BPM tolerance), higher precision - slower)
+        // Special library for simplyfiying extensive datasets for visualization
 
         const graphs = {
             heartRate: simplify(this.heartRate, 3, false),

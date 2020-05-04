@@ -13,6 +13,7 @@ export default function NodeDetail(passedProps) {
         } else return null;
     }
 
+    // Render every available node
     const getNodes = () => {
 
         let nodes = [];

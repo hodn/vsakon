@@ -26,6 +26,7 @@ function Thermometer(props) {
     });
     const classes = useStyles();
 
+     // Switches the color with parameters from settings
     const colorSwitch = (temp, settings) => {
 
         const lowerOptimum = settings ? settings.optimalTemp[0] : 30;
@@ -43,9 +44,10 @@ function Thermometer(props) {
 
     }
 
+    // Calculates meter fill with parameters from settings
     const getTempDisplay = (temp, settings) => {
-        let percent = 0; // thermometer tops at 50 celsius
-        const maxScale = settings ? settings.metersMax.temp : 50;
+        let percent = 0; 
+        const maxScale = settings ? settings.metersMax.temp : 50; // where the meter maxes out
 
         if (temp !== null && temp >= maxScale) percent = 1;
         if (temp !== null && temp < maxScale && temp > 0) percent = temp / maxScale;

@@ -55,6 +55,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+// Loads historical graphs for specified device unit
 export default function HistoryDialog(props) {
   const classes = useStyles();
   const [heartRate, setHeartRate] = React.useState([]);
@@ -68,6 +69,8 @@ export default function HistoryDialog(props) {
   const [showProgress, setProgress] = React.useState(true);
 
   React.useEffect(() => {
+    
+    // Data loaded from CSV record
     ipcRenderer.on("history-parsed", (event, arg) => {
 
       setHeartRate(arg.heartRate);
@@ -87,6 +90,7 @@ export default function HistoryDialog(props) {
     }
   }, [])
 
+  // Stop the CSV parsing and reset the graphs - dialog closed
   const resetAndClose = () => {
     props.close();
 

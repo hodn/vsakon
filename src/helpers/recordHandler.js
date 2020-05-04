@@ -21,7 +21,7 @@ module.exports = class RecordHandler {
         this.test = null;
     }
 
-    // Loads user settings file if exists or creates new one with default values
+    // Loads user settings file if exists or creates new one with default values - CSV write init
     createCsvWriter(recordingStart) {
 
         const date = recordingStart.toISOString().split("T");
@@ -35,7 +35,7 @@ module.exports = class RecordHandler {
             headers: this.createHeaders()
         })
 
-        this.writer.sendHeaders = fs.existsSync(this.filePath) ? false : true;
+        this.writer.sendHeaders = fs.existsSync(this.filePath) ? false : true; // Dont create headers if file already created
 
         this.writer.pipe(fs.createWriteStream(this.filePath, { flags: 'a' }));
     }
@@ -61,18 +61,11 @@ module.exports = class RecordHandler {
 
     writeToCsv(packet) {
 
-        /* if (packet.basicData.timestamp - this.test < 3000){
-            for (let index = 0; index < 4000; index++) {
-                packet.basicData.timestamp += 3000;
-                packet.basicData.heartRate = Math.floor(Math.random() * (80 - 75 + 1)) + 75;
-                this.writer.write(this.formatToCsv(packet))
-            }
-        } */
 
         if (!fs.existsSync(this.filePath)) throw {type: "writeToCsv", message:"Source CSV removed. Please restart the recording."}
         try {
             
-            if (packet.deadMan === false) packet.deadMan = "";
+            if (packet.deadMan === false) packet.deadMan = ""; // Display empty instead of false
             
             this.writer.write(this.formatToCsv(packet));
 
@@ -81,10 +74,9 @@ module.exports = class RecordHandler {
         }
 
 
-
-
     }
-    // This will be called straight from electron-starter
+    
+    // Reading the data from CSV upon request from HistoryView
     readFromCsv(start, end, filePath, devId, event) {
 
         if (fs.existsSync(filePath)) {
@@ -92,19 +84,21 @@ module.exports = class RecordHandler {
                 .pipe(csvParser({ separator: ';' }))
                 .on('data', (data) => {
 
+                    // The data is newer than needed - stop the read and send data
                     if (data.timestamp > end && data.devId === devId.toString()) {
 
-                        event.sender.send("history-parsed", this.graphHandler.getGraphs());
-                        readStream.destroy();
+                        event.sender.send("history-parsed", this.graphHandler.getGraphs()); 
+                        readStream.destroy(); 
 
                     } else if (data.timestamp <= end && data.timestamp >= start && data.devId === devId.toString()) {
                         this.graphHandler.storeData(this.formatFromCsv(data));
                     }
                 })
                 .on('end', () => {
-                    event.sender.send("history-parsed", this.graphHandler.getGraphs());
+                    event.sender.send("history-parsed", this.graphHandler.getGraphs()); // Reached the file end - send data
                 });
 
+                // If user closes the device detail while reading - stop reading
                 ipcMain.on('stop-history-read', (event, arg) => {
 
                     readStream.destroy();
@@ -118,6 +112,7 @@ module.exports = class RecordHandler {
 
     }
 
+    // Creating header for new CSV with user settings
     createHeaders() {
 
         const basic = ["timestamp", "devId", "heartRate", "tempSkin", "tempCloth", "humidity", "activity", "accX", "accY", "accZ", "batteryVoltage", "batteryPercentage", "port", "deadMan", "event"];
@@ -125,11 +120,13 @@ module.exports = class RecordHandler {
         const location = ["latMins", "longMins", "fix", "sat", "hdop", "hgh"];
         let node = [];
 
+        // Nodes
         for (let index = 0; index < 9; index++) {
             const unit = ["tempSkin_" + index.toString(), "humidity_" + index.toString(), "tempCloth_" + index.toString(), "motionX_" + index.toString(), "motionY_" + index.toString(), "motionZ_" + index.toString(), "activity_" + index.toString()];
             node = node.concat(unit);
         }
 
+        // User settings - which to add
         let headers = basic;
         if (this.components.performanceData === true) headers = headers.concat(performance);
         if (this.components.locationData === true) headers = headers.concat(location);
@@ -138,6 +135,7 @@ module.exports = class RecordHandler {
         return headers;
     }
 
+    // Flattening the JSON
     formatToCsv(packet) {
 
         const convert = (value) => this.dotToComma(value);
@@ -155,6 +153,7 @@ module.exports = class RecordHandler {
         return csvWriteString;
     }
 
+    // Categorizing the data - nesting JSON
     formatFromCsv(packet) {
 
         const convert = (value) => this.commaToDot(value);
@@ -218,10 +217,12 @@ module.exports = class RecordHandler {
         return parsedData;
     }
 
+    // to Czech locale
     dotToComma(value) {
         return value.toString().replace(/\./g, ',');
     }
 
+    // from Czech locale
     commaToDot(value) {
                 
         let convertedValue = value ? parseFloat(value.replace(',', '.').replace(' ', '')) : 0;

@@ -4,6 +4,7 @@ import colors from '../colors';
 
 function ReactiveGauge(props) {
 
+    // Changing color according to Stehlik
     const colorSwitch = (hr, user) => {
 
         const hrRest = user ? parseInt(user.hrRest, 10) : 70;

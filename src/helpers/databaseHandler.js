@@ -140,7 +140,7 @@ module.exports = class DatabaseHandler {
             .value()
 
         if (onlyMembersId) {
-            return teams;
+            return teams; // Only IDs
         } else {
 
             teams.forEach(team => {

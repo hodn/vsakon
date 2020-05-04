@@ -5,6 +5,7 @@ import Chip from '@material-ui/core/Chip';
 import Thermometer from './Thermometer';
 import PerformanceMeter from "./PerformanceMeter";
 
+// Unique component for each additional node of device unit
 export default function NodeComponent(props) {
 
     const nodeId = props.nodeId.toString();

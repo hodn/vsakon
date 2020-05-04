@@ -25,9 +25,10 @@ function PerformanceMeter(props) {
     });
     const classes = useStyles();
 
+    // Calculates the fill of the meter with parameters from settings
     const getActivityDisplay = (activity, settings) => {
         
-        const maxScale = settings ? settings.metersMax.activity : 100;
+        const maxScale = settings ? settings.metersMax.activity : 100; // where the meter maxes out
 
         if (activity !== null) {
             if (activity >= maxScale) return 1; // maximum scale 

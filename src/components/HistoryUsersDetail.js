@@ -5,10 +5,12 @@ import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import colors from "../colors"
 
+// Component for each device unit in HistoryView - opens HistoryDialog
 export default function HistoryDetail(props) {
     
     const members = props.record ? props.record.team.members : null;
     
+    // Get user for each device unit and render
     const getUsers = () => {
 
         let users = [];

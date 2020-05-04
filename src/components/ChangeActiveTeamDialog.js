@@ -31,10 +31,11 @@ export default function ChangeActiveTeam(props) {
 
   const submitForm = () => {
     props.handleDialog();
-    ipcRenderer.send("update-settings", {selectedTeam: activeTeam.id});
-    ipcRenderer.send("get-teams");
+    ipcRenderer.send("update-settings", {selectedTeam: activeTeam.id}); // Save to DB
+    ipcRenderer.send("get-teams"); // Refresh table
   }
 
+  // Autocomplete/select from all available teams
   const getSelect = () => {
 
     const topValue = props.teams.find(element => {

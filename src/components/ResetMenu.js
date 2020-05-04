@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 const { ipcRenderer } = window.require('electron');
 
+// Menu for user - syncing devices or resetting receivers
 export default function ResetMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -15,8 +16,8 @@ export default function ResetMenu() {
     const handleClose = (event) => {
         setAnchorEl(null);
 
-        if(event === 'devices') ipcRenderer.send("sync-devices");
-        if(event === 'receivers') ipcRenderer.send("connect-ports");
+        if(event === 'devices') ipcRenderer.send("sync-devices"); // Sends the signal for device sync
+        if(event === 'receivers') ipcRenderer.send("connect-ports"); // Reconnects all receivers
     };
 
     return (

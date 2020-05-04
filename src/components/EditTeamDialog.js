@@ -48,6 +48,7 @@ export default function EditTeamDialog(props) {
     ipcRenderer.send("get-teams"); // Refresh the table
   }
 
+  // Generates autocomplete for each device unit
   const getUnits = () => {
     
     const units = [];
@@ -55,7 +56,7 @@ export default function EditTeamDialog(props) {
     for (let index = 0; index < 30; index++) {
       
       const topValue = props.users.find(element => { 
-        if(team.members[index] !== null && team.members[index] !== undefined ) return element.id === team.members[index].id;
+        if(team.members[index] !== null && team.members[index] !== undefined ) return element.id === team.members[index].id; // If there is user assigned to the device unit
         else return null;
       });
       

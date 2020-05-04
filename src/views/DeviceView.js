@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import NodeDetail from '../components/NodeDetail';
 import { VerticalGridLines, XAxis, YAxis, HorizontalGridLines, LineSeries, FlexibleWidthXYPlot } from 'react-vis';
 
+// Detailed online data of device unit
 export default function DeviceView(passedProps) {
     let props = passedProps.initProps;
 

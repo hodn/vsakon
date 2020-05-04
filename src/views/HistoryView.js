@@ -66,7 +66,7 @@ class HistoryView extends React.Component {
 
     this._isMounted = true;
 
-    ipcRenderer.send("get-records");
+    ipcRenderer.send("get-records"); // Gets all records from DB
 
     ipcRenderer.on('records-loaded', (event, arg) => {
 
@@ -75,13 +75,13 @@ class HistoryView extends React.Component {
       
       this._isMounted && this.setState((state, props) => ({
         records,
-        activeRecord: lastRecord,
+        activeRecord: lastRecord, // Set default record (in focus) - the latest one
         from: lastRecord ? lastRecord.start : new Date(),
         to: lastRecord ? (lastRecord.end ? lastRecord.end : new Date()) : new Date()
       })) 
     })
 
-    ipcRenderer.send("get-settings");
+    ipcRenderer.send("get-settings"); // Gets settings from DB
 
     ipcRenderer.once("settings-loaded", (event, arg) => {
 
@@ -96,6 +96,7 @@ class HistoryView extends React.Component {
 
   }
 
+  // Time boundaries change
   onFromChange(time) {
     this._isMounted && this.setState((state, props) => ({
       from: new Date(time)
@@ -108,6 +109,7 @@ class HistoryView extends React.Component {
     }))
   }
 
+  // Change the default record - in focus
   setActiveRecord(rowData) {
 
     this._isMounted && this.setState((state, props) => ({
@@ -131,6 +133,7 @@ class HistoryView extends React.Component {
     }))
   }
 
+  // Opening the HistoryDialog - detailed historical data for selected unit
   openDetailDialog(devId) {
     this.setState({
       detailOpen: this.state.activeRecord ? true : false,
@@ -138,6 +141,7 @@ class HistoryView extends React.Component {
       devId
     });
 
+    // Loads data from CSV if records exists
     this.state.activeRecord && ipcRenderer.send("get-history", {
       from: new Date(this.state.from).getTime(),
       to: new Date(this.state.to).getTime(),
@@ -150,6 +154,7 @@ class HistoryView extends React.Component {
     this.setState({ detailOpen: false });
   }
 
+  // Selecting CSV that is not in DB - custom load
   openCsvDialog() {
     ipcRenderer.send("open-dialog", "openFile");
 
@@ -217,8 +222,8 @@ class HistoryView extends React.Component {
           <Grid item xs={9}> <HistoryUsersDetail record={this.state.activeRecord} openDetail={this.openDetailDialog} /> </Grid>
           <Grid item xs={12}><MaterialTable
             columns={[
-              { title: 'Start', field: 'start', defaultSort: "desc", render: rowData => new Date(rowData.start).toLocaleString(), customSort: (a, b) => new Date(a.start) - new Date(b.start)},
-              { title: 'End', field: 'end', type: "datetime", render: rowData => rowData.end ? new Date(rowData.end).toLocaleString() : "Recording..." },
+              { title: 'Start', field: 'start', defaultSort: "desc", render: rowData => new Date(rowData.start).toLocaleString(), customSort: (a, b) => new Date(a.start) - new Date(b.start)}, // Sort by date - substraction
+              { title: 'End', field: 'end', type: "datetime", render: rowData => rowData.end ? new Date(rowData.end).toLocaleString() : "Recording..." }, // Display Recording if the recording has no end
               { title: 'Team', field: 'team.name' },
               { title: 'Note', field: 'note' },
               { title: 'Path', field: 'path' },
@@ -229,7 +234,7 @@ class HistoryView extends React.Component {
 
                     surnames.push(rowData.team.members[index].surname);
                   }
-                  return surnames.includes(value);
+                  return surnames.includes(value); // Searchable by team member names
                }, render: rowData => {
 
                   let surnames = [];
@@ -238,7 +243,7 @@ class HistoryView extends React.Component {
                     surnames.push(rowData.team.members[index].surname);
                   }
 
-                  return surnames.toString();
+                  return surnames.toString(); // Display all members' surnames
                 }
               }
 

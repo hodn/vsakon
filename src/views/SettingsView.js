@@ -34,7 +34,7 @@ export default function SettingsView(props) {
 
   const updateSettings = () => {
     const newSettings = { csvDirectory, csvComponents, optimalTemp, graphLength, eventNames, metersMax };
-    ipcRenderer.send("update-settings", newSettings);
+    ipcRenderer.send("update-settings", newSettings); // Saves to DB
   }
 
   const updateRef = React.useRef();
@@ -52,11 +52,11 @@ export default function SettingsView(props) {
       setMetersMax(arg.metersMax);
     })
     window.addEventListener('beforeunload', () => {
-      updateRef.current()
+      updateRef.current() // Calls updateSettings before close
     });
     return () => {
       ipcRenderer.removeAllListeners();
-      updateRef.current();
+      updateRef.current(); // Calls updateSettings on component unmount
     }
   }, [updateRef])
 
@@ -68,6 +68,7 @@ export default function SettingsView(props) {
     ipcRenderer.send("update-settings", { csvComponents: changedComponents });// Change immediately as the user can switch on recording from settings menu
   };
 
+  // Set meters' maximums
   const handleMax = name => (event, value) => {
     setMetersMax({ ...metersMax, [name]: value });
   };

@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Thermometer from './Thermometer';
 import { VerticalGridLines, XAxis, YAxis, HorizontalGridLines, LineSeries, FlexibleWidthXYPlot } from 'react-vis';
 
-
+// Detailed online data visualization of temperature parameters
 export default function TemperatureDetail(passedProps) {
     let props = passedProps.initProps;
 

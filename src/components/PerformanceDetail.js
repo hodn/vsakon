@@ -6,7 +6,7 @@ import NumericIndicator from '../components/basics/NumericIndicator';
 import Grid from '@material-ui/core/Grid';
 import { VerticalGridLines, XAxis, YAxis, HorizontalGridLines, LineSeries, FlexibleWidthXYPlot } from 'react-vis';
 
-
+// Display of performance data 
 export default function PerformanceDetail(passedProps) {
     const props = passedProps.initProps;
     const performanceDataAvailable = props.packet === null ? false : (props.packet.performanceData !== null)

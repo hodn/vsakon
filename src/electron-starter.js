@@ -107,7 +107,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
             for (let index = 0; index < selectedPorts.length; index++) {
                 const port = selectedPorts[index];
                 const portHandler = new PortHandler(port, event);
-                portHandlers.push(portHandler); // for further user actions with different listneres than connect-ports (alarm, sync)
+                portHandlers.push(portHandler); // for further user actions with different listneres than connect-ports (alarm, sync) - eaching connection is unique, even for the same port
 
                 // Get data from port - init parser, connect and data
                 portHandler.getParser().then(parser => {
@@ -166,7 +166,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
-    // Quit when all windows are closed.
+    // Quit and stop recording when all windows are closed 
     app.on('window-all-closed', function () {
 
         if (recordHandler.recording) recordHandler.setRecording();
@@ -174,18 +174,21 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     });
 
+    // Toggle recording state
     ipcMain.on("set-recording", (event, arg) => {
 
-        recordHandler.setRecording();
+        recordHandler.setRecording(); 
 
     })
 
+    // Get cached data and user profiles
     ipcMain.on("online-view-mounted", (event, arg) => {
 
         packetHandler.sendState();
         packetHandler.sendUserProfiles();
     })
 
+    // Get/update teams for visualization on change
     ipcMain.on("get-teams", (event, arg) => {
 
         const teams = databaseHandler.getAllTeams(false);
@@ -194,7 +197,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
         const activeTeam = databaseHandler.getSelectedTeam(true);
         const defUser = databaseHandler.getDefaultUser();
 
-        packetHandler.profiles = databaseHandler.getSelectedTeam(false).members;
+        packetHandler.profiles = databaseHandler.getSelectedTeam(false).members; // Update the profiles for online data
 
         const data = { teams, users, defTeam, defUser, activeTeam }
 
@@ -202,6 +205,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
+    // Add user or a team
     ipcMain.on("add-teams", (event, arg) => {
 
         databaseHandler.addUserOrTeam(arg.data, arg.collection)
@@ -240,13 +244,14 @@ ipcMain.on('clear-to-send', (event, arg) => {
         event.sender.send("settings-loaded", settings)
     })
 
-    // Load history
+    // Load history from a CSV file
     ipcMain.on("get-history", (event, arg) => {
 
         recordHandler.readFromCsv(arg.from, arg.to, arg.filePath, arg.devId, event)
 
     })
 
+    // Get all records
     ipcMain.on("get-records", (event, arg) => {
 
         const data = databaseHandler.getAllRecords();
@@ -255,6 +260,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
+    // Open select dialog - directory or file
     ipcMain.on("open-dialog", (event, arg) => {
 
         const { dialog } = require('electron');
@@ -264,13 +270,14 @@ ipcMain.on('clear-to-send', (event, arg) => {
             properties: [arg]
         });
         const team = databaseHandler.getDefaultTeam();
-        team.name = "Custom load";
+        team.name = "Custom load"; // if CSV record not in DB
 
         if (path) event.sender.send("csv-path-loaded", { path, team });
 
 
     })
 
+    // Event registration for CSV writing
     ipcMain.on("register-event", (event, arg) => {
 
         const devSlot = arg.devId - 1;
@@ -295,6 +302,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
         }
     })
 
+    // Sync all devices
     ipcMain.on("sync-devices", (event, arg) => {
 
         const userForcedSync = true; // not because of automatic invalid packet detection

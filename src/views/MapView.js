@@ -13,19 +13,20 @@ export default function MapView(props) {
 
   React.useEffect(() => {
 
-    ipcRenderer.send("online-view-mounted");
+    ipcRenderer.send("online-view-mounted"); // Getting cached data and user profiles
 
     return () => {
       ipcRenderer.removeAllListeners();
     }
   }, [])
 
+  // Adds marker for device with detected location
   const setMarker = (packet, user) => {
     let newMarkers = [...markers];
     const devId = packet.basicData.devId;
     const position = [packet.locationData.latMins, packet.locationData.longMins];
 
-    if (newMarkers.length < 1) setCenter(position);
+    if (newMarkers.length < 1) setCenter(position); // automatically centers on first device with location
 
     newMarkers[devId - 1] = (
     <Marker key={devId-1} position={position} icon={getIcon(devId)}>
@@ -44,6 +45,7 @@ export default function MapView(props) {
     setMarkers(newMarkers);
   }
 
+  // Loads icon according to device ID
   const getIcon = (devId) => {
 
     return new L.Icon({
@@ -59,6 +61,7 @@ export default function MapView(props) {
     setMarkers(newMarkers);
   }
 
+  // User clicks on specific unit - the map centers on its location marker
   const focusOnDevice = (packet) => {
     if (packet && packet.locationData && packet.locationData.detected) {
       const position = [packet.locationData.latMins, packet.locationData.longMins];
@@ -67,6 +70,7 @@ export default function MapView(props) {
     }
   }
 
+  // Generates MapDeviceChip for each device unit
   const getDeviceChips = () => {
 
     let chips = [];
