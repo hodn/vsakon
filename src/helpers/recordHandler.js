@@ -62,15 +62,15 @@ module.exports = class RecordHandler {
     writeToCsv(packet) {
 
 
-        if (!fs.existsSync(this.filePath)) throw {type: "writeToCsv", message:"Source CSV removed. Please restart the recording."}
+        if (!fs.existsSync(this.filePath)) throw {type: "writeToCsv", message:"Source CSV removed. Recording restarted and new record file has been made."}
         try {
             
-            if (packet.deadMan === false) packet.deadMan = ""; // Display empty instead of false
+            if (packet.deadMan === false) packet.deadMan = ""; // Display empty instead of false in the CSV
             
             this.writer.write(this.formatToCsv(packet));
 
         } catch{
-            throw {type: "writeToCsv", message:"Writing error. Please restart the recording."};
+            throw {type: "writeToCsv", message:"Writing error. Recording restarted and new record file has been made."};
         }
 
 

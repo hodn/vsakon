@@ -223,7 +223,7 @@ class HistoryView extends React.Component {
           <Grid item xs={12}><MaterialTable
             columns={[
               { title: 'Start', field: 'start', defaultSort: "desc", render: rowData => new Date(rowData.start).toLocaleString(), customSort: (a, b) => new Date(a.start) - new Date(b.start)}, // Sort by date - substraction
-              { title: 'End', field: 'end', type: "datetime", render: rowData => rowData.end ? new Date(rowData.end).toLocaleString() : "Recording..." }, // Display Recording if the recording has no end
+              { title: 'End', field: 'end', type: "datetime", render: rowData => rowData.end ? new Date(rowData.end).toLocaleString() : "Not finished" }, // Display Recording if the recording has no end
               { title: 'Team', field: 'team.name' },
               { title: 'Note', field: 'note' },
               { title: 'Path', field: 'path' },

@@ -147,8 +147,8 @@ ipcMain.on('clear-to-send', (event, arg) => {
                                 if (error.message !== "Object has been destroyed") electron.dialog.showErrorBox("Data handling error", error.message);
 
                                 if (error.type === "writeToCsv"){
-                                    recordHandler.recording = false;
-                                    event.sender.send("csv-error");
+                                    recordHandler.recording = false; // Shuts off recording if there is writing error
+                                    recordHandler.setRecording(); // Starts new recording - new file (not corrupted)
                                 } 
                             }
 
