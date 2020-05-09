@@ -54,7 +54,7 @@
     "install": "electron-rebuild",
     "pack": "electron-builder --dir",
     "postinstall": "electron-builder install-app-deps",
-    "dist": "electron-builder -l"
+    "dist": "electron-builder -w"
   },
   "build": {
     "appId": "cz.albertov.flexiguard",

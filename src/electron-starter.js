@@ -177,7 +177,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     // Toggle recording state
     ipcMain.on("set-recording", (event, arg) => {
 
-        recordHandler.setRecording(); 
+        recordHandler.setRecording();
 
     })
 
@@ -264,15 +264,19 @@ ipcMain.on('clear-to-send', (event, arg) => {
     ipcMain.on("open-dialog", (event, arg) => {
 
         const { dialog } = require('electron');
-        const path = dialog.showOpenDialog({
+        dialog.showOpenDialog({
             filters: [
                 { name: 'Records', extensions: ['csv'] }],
-            properties: [arg]
-        });
-        const team = databaseHandler.getDefaultTeam();
-        team.name = "Custom load"; // if CSV record not in DB
+            properties: [arg] // folder or file - from UI
+        }).then(chosenPath => {
+            
+            let path = chosenPath.filePaths;
+            const team = databaseHandler.getDefaultTeam();
+            team.name = "Custom load"; // if CSV record not in DB
+            
+            event.sender.send("csv-path-loaded", { path, team });
+        })
 
-        if (path) event.sender.send("csv-path-loaded", { path, team });
 
 
     })
@@ -291,6 +295,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         try {
 
+            // Send the remove alarm signal from one receiver at a time
             for (let index = 0; index < portHandlers.length; index++) {
                 const alarmOff = () => portHandlers[index].removeAlarm(arg);
                 const delay = index * 50;
