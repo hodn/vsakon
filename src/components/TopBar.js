@@ -111,6 +111,8 @@ class TopBar extends React.Component {
 
   componentWillUnmount() {
 
+    ipcRenderer.removeAllListeners();
+
   }
 
   // Returns the indication icons for the receivers

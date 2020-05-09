@@ -41,6 +41,8 @@ export class MainView extends React.Component {
 
   componentWillUnmount() {
 
+    ipcRenderer.removeAllListeners();
+
   }
 
   // What the actual component renders

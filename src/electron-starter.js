@@ -146,7 +146,10 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
                                 if (error.message !== "Object has been destroyed") electron.dialog.showErrorBox("Data handling error", error.message);
 
-                                if (error.type === "writeToCsv") recordHandler.recording = false;
+                                if (error.type === "writeToCsv"){
+                                    recordHandler.recording = false;
+                                    event.sender.send("csv-error");
+                                } 
                             }
 
                         }
