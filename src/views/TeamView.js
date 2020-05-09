@@ -194,8 +194,8 @@ export class TeamView extends React.Component {
                 { title: 'Name', field: 'name' },
                 { title: 'Surname', field: 'surname' },
                 { title: 'Note', field: 'note' },
-                { title: 'Weight', field: 'weight' },
-                { title: 'Height', field: 'height' },
+                { title: 'Weight (kg)', field: 'weight' },
+                { title: 'Height (cm)', field: 'height' },
                 { title: 'Age', field: 'age' }
 
               ]}
