@@ -20,7 +20,7 @@ export default function NodeDetail(passedProps) {
 
         for (let i = 0; i < 9; i++) {
 
-            nodes.push(<Grid key={"item" + i} item> <NodeComponent nodeId={i} key={"node" + i} nodeData={getNodeData(props.packet)} /> </Grid>);
+            nodes.push(<Grid key={"item" + i} item> <NodeComponent settings={props.settings} nodeId={i} key={"node" + i} nodeData={getNodeData(props.packet)} /> </Grid>);
         }
 
         return nodes;
@@ -35,7 +35,7 @@ export default function NodeDetail(passedProps) {
                 direction="row"
                 justify="center"
                 alignItems="center"
-                spacing={2}
+                spacing={5}
             >
 
                 {getNodes().map((component) => {

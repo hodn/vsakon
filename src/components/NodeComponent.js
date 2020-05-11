@@ -13,11 +13,11 @@ export default function NodeComponent(props) {
     
     return(
 
-        <div>
+        <div style={{width: 90}}>
             <Grid
                 container
                 direction="row"
-                justify="center"
+                justify="flex-start"
                 alignItems="center"
                 spacing={1}
             >
@@ -27,8 +27,8 @@ export default function NodeComponent(props) {
                     <NumericIndicator variant={"subtitle1"} parameter={"Env"} value={disconnected ? "--" : props.nodeData["tempCloth_" + nodeId]} unit="°C" />
                     <NumericIndicator variant={"subtitle1"} parameter={"Hum"} value={disconnected ? "--" : props.nodeData["humidity_" + nodeId]} unit="%" />
                 </Grid>
-                <Grid item> <PerformanceMeter icon activity={disconnected  ? null : props.nodeData["activity_" + nodeId]} height={50} width={10} top={5} />  </Grid>
-                <Grid item> <Thermometer showTemp temp={disconnected ? null : props.nodeData["tempSkin_" + nodeId]} height={50} width={10} top={10} />  </Grid>
+                <Grid item> <PerformanceMeter icon activity={disconnected  ? null : props.nodeData["activity_" + nodeId]} settings={props.settings} height={50} width={10} top={5} />  </Grid>
+                <Grid item> <Thermometer showTemp temp={disconnected ? null : props.nodeData["tempSkin_" + nodeId]} settings={props.settings} height={50} width={10} top={5} />  </Grid>
             </Grid>
         </div>
     );
