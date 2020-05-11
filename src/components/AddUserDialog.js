@@ -43,7 +43,7 @@ export default function AddUserDialog(props) {
         <DialogTitle id="form-dialog-title">Add new user</DialogTitle>
         <DialogContent>
           <form className={classes.container}>
-            <TextField className={classes.textField} required label="Name" name="name" value={values.name} onChange={handleChange('name')} />
+            <TextField className={classes.textField} required label="First name" name="name" value={values.name} onChange={handleChange('name')} />
             <TextField className={classes.textField} required label="Surname" name="surname" value={values.surname} onChange={handleChange('surname')} />
             <TextField className={classes.textField} required multiline label="Note" name="note" value={values.note} onChange={handleChange('note')} />
             <TextField className={classes.textField} required label="Age" name="age" type="number" value={values.age} onChange={handleChange('age')} />

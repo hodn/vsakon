@@ -25,7 +25,7 @@ export default function DeleteDialog(props) {
         <DialogTitle id="alert-dialog-title">Are you sure?</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Would you like to delete {props.item.name}?
+            Would you like to delete {props.item.name} {props.item.surname ? props.item.surname : null}?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
