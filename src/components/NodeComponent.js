@@ -10,10 +10,10 @@ export default function NodeComponent(props) {
 
     const nodeId = props.nodeId.toString();
     let disconnected = props.nodeData === null || props.nodeData["connected_" + nodeId] === false;
-    
-    return(
 
-        <div style={{width: 90}}>
+    return (
+
+        <div style={{ width: 90 }}>
             <Grid
                 container
                 direction="row"
@@ -22,13 +22,14 @@ export default function NodeComponent(props) {
                 spacing={1}
             >
 
+                <Grid item xs={12}> <Chip size="small" variant="outlined" label={props.nodeId} /> </Grid>
+                <Grid item> <PerformanceMeter icon activity={disconnected ? null : props.nodeData["activity_" + nodeId]} settings={props.settings} height={50} width={10} top={5} />  </Grid>
+                <Grid item> <Thermometer showTemp temp={disconnected ? null : props.nodeData["tempSkin_" + nodeId]} settings={props.settings} height={50} width={10} top={5} />  </Grid>
                 <Grid item>
-                    <Chip size="small" variant="outlined" label={props.nodeId} />
                     <NumericIndicator variant={"subtitle1"} parameter={"Env"} value={disconnected ? "--" : props.nodeData["tempCloth_" + nodeId]} unit="°C" />
                     <NumericIndicator variant={"subtitle1"} parameter={"Hum"} value={disconnected ? "--" : props.nodeData["humidity_" + nodeId]} unit="%" />
                 </Grid>
-                <Grid item> <PerformanceMeter icon activity={disconnected  ? null : props.nodeData["activity_" + nodeId]} settings={props.settings} height={50} width={10} top={5} />  </Grid>
-                <Grid item> <Thermometer showTemp temp={disconnected ? null : props.nodeData["tempSkin_" + nodeId]} settings={props.settings} height={50} width={10} top={5} />  </Grid>
+
             </Grid>
         </div>
     );
