@@ -6,8 +6,11 @@ const path = require('path');
 //require('electron-reload')(__dirname, { electron: require('${__dirname}/../../node_modules/electron') });
 // Module to control application life.
 const app = electron.app;
+// Detects if in development env
+const isDev = require('electron-is-dev');
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -25,7 +28,7 @@ function createWindow() {
     // and load the index.html of the app.
     //mainWindow.loadURL(`file://${path.join(__dirname, '../build/index.html')}`);
     mainWindow.setMenuBarVisibility(false)
-    mainWindow.loadURL('http://localhost:3000');
+    mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
     // Open the DevTools.
     //mainWindow.webContents.openDevTools();
 
