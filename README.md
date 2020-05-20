@@ -9,5 +9,5 @@ Follow these steps to build the installation package:
 3.	Navigate to the source code directory in the command line.
 4.	Run npm install command to install all dependencies.
 5.	Run npm run build command to build the React app.
-6.	Run electron-builder -wml   command to build a packaged installation file.
+6.	Run electron-builder -wml command to build a packaged installation file (Windows: -w, macOS: -m, GNU/Linux: -l, all:-mwl).
 7.	Run the packaged installation file in the dist directory within the app folder.
