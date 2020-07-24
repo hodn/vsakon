@@ -1,5 +1,4 @@
 import React from 'react';
-import DeviceComponent from '../components/DeviceComponent.js';
 import Grid from '@material-ui/core/Grid';
 const { ipcRenderer } = window.require('electron');
 
@@ -51,13 +50,7 @@ export class MainView extends React.Component {
     return (
 
       <div> 
-        <Grid container>
-          {this.state.indexes.map((index) => {
-            // Had to be done this way - passing the settings down to child components
-            return <Grid item xs={2} key={"comp" + index}><DeviceComponent settings={this.state.settings} devId={index} key={index} /> </Grid>
-          }, this)}
-        </Grid>
-
+        Nothing
       </div>
 
 

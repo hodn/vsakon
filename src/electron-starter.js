@@ -86,7 +86,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     const packetHandler = new PacketHandler(event, databaseHandler);
     const recordHandler = new RecordHandler(databaseHandler);
     // Listener for (re)connect receivers - on start and on demand from user
-    ipcMain.on('connect-ports', (event, arg) => {
+    /* ipcMain.on('connect-ports', (event, arg) => {
 
         // Returns all Flexiguard receivers - ports
         SerialPort.list().then(ports => {
@@ -142,6 +142,22 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         })
 
+    }) */
+
+    ipcMain.on('connect-ports', (event, arg) => {
+
+        var fs = require('fs'),
+            readline = require('readline');
+
+        var rd = readline.createInterface({
+            input: fs.createReadStream('C:/Users/Hoang/Documents/20200722145706.log'),
+            output: process.stdout,
+            console: false
+        });
+
+        rd.on('line', function (line) {
+            console.log(line);
+        });
     })
 
     // Quit and stop recording when all windows are closed 
@@ -247,11 +263,11 @@ ipcMain.on('clear-to-send', (event, arg) => {
                 { name: 'Records', extensions: ['csv'] }],
             properties: [arg] // folder or file - from UI
         }).then(chosenPath => {
-            
+
             let path = chosenPath.filePaths;
             const team = databaseHandler.getDefaultTeam();
             team.name = "Custom load"; // if CSV record not in DB
-            
+
             event.sender.send("csv-path-loaded", { path, team });
         })
 
