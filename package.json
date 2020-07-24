@@ -1,7 +1,7 @@
 {
-  "name": "flexiguard",
-  "productName": "FlexiGuard",
-  "description": "Visualization app for FlexiGuard system.",
+  "name": "Vsakon",
+  "productName": "Vsakon",
+  "description": "Water absorption visualization",
   "version": "1.0.0",
   "author": {
     "name": "Hoang Doan",
@@ -58,7 +58,7 @@
     "dist": "electron-builder"
   },
   "build": {
-    "appId": "cz.albertov.flexiguard",
+    "appId": "cz.albertov.vsakon",
     "extends": null,
     "asar": false,
     "files": [

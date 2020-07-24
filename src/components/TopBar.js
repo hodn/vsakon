@@ -7,6 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PowerIcon from '@material-ui/icons/Power';
+import OpacityIcon from '@material-ui/icons/Opacity';
 import colors from '../colors';
 import { MainView } from '../views/MainView';
 
@@ -136,6 +137,8 @@ class TopBar extends React.Component {
         <AppBar style={{ backgroundColor: colors.main, margin: 0 }} position="static">
           <Toolbar>
             <LocationOnIcon/>
+            <Typography variant="h6">Zbraslav, Praha</Typography>
+            
             <div className={classes.iconSet} >
 
               {this.getPortIndication().map((indication) => {
@@ -143,6 +146,8 @@ class TopBar extends React.Component {
                   <PowerIcon className={classes.icon} style={{ color: indication.color }} />
                 </Tooltip>)
               })}
+
+              <OpacityIcon/>
 
             </div>
 
