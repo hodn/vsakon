@@ -156,7 +156,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
         });
 
         rd.on('line', function (line) {
-            console.log(line);
+            packetHandler.readCOM(line);
         });
     })
 
