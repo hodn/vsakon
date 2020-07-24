@@ -2,26 +2,13 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
-import Fab from '@material-ui/core/Fab';
 import Tooltip from '@material-ui/core/Tooltip';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PowerIcon from '@material-ui/icons/Power';
-import SaveIcon from '@material-ui/icons/Save';
-import SettingsIcon from '@material-ui/icons/Settings';
-import ViewComfyIcon from '@material-ui/icons/ViewComfy';
-import MapIcon from '@material-ui/icons/Map';
-import TimelineIcon from '@material-ui/icons/Timeline';
-import GroupIcon from '@material-ui/icons/Group';
 import colors from '../colors';
-import ResetMenu from './ResetMenu';
 import { MainView } from '../views/MainView';
-import SettingsView from '../views/SettingsView';
-import MapView from '../views/MapView';
-import HistoryView from '../views/HistoryView';
-import { TeamView } from '../views/TeamView'
 
 // Highest component in order - mounts Views and keeps state of recording and ports
 const { ipcRenderer } = window.require('electron');
@@ -60,13 +47,10 @@ class TopBar extends React.Component {
 
     this.state = {
       ports: {},
-      recording: false,
-      tabValue: 0
+      recording: false
     }
 
     this.getPortIndication = this.getPortIndication.bind(this);
-    this.changeTab = this.changeTab.bind(this);
-    this.TabContainer = this.TabContainer.bind(this);
     this.setRecording = this.setRecording.bind(this);
 
   }
@@ -141,21 +125,6 @@ class TopBar extends React.Component {
     ipcRenderer.send("get-records");
   }
 
-  // Helper functions for tab - navigation
-  changeTab(event, tabValue) {
-
-    this.setState({ tabValue });
-  }
-
-  TabContainer(props) {
-    return (
-      <Typography component="div" style={{ padding: 10 }}>
-        {props.children}
-      </Typography>
-    );
-  }
-
-
   // What the actual component renders
   render() {
 
@@ -166,18 +135,8 @@ class TopBar extends React.Component {
       <div className={classes.root}>
         <AppBar style={{ backgroundColor: colors.main, margin: 0 }} position="static">
           <Toolbar>
-
-            <Tabs TabIndicatorProps={{ style: { background: colors.secondary } }} aria-label="tab" value={this.state.tabValue} onChange={this.changeTab}>
-              <Tab style={{ minWidth: 100 }}icon={<ViewComfyIcon/>} />
-              <Tab style={{ minWidth: 100 }} icon={<TimelineIcon />} />
-              <Tab style={{ minWidth: 100 }} icon={<MapIcon />} />
-              <Tab style={{ minWidth: 100 }} icon={<GroupIcon/>} />
-              <Tab style={{ minWidth: 100 }} icon={<SettingsIcon />} />
-            </Tabs>
-
+            <LocationOnIcon/>
             <div className={classes.iconSet} >
-
-              {this.state.recording && <SaveIcon className={classes.icon} style={{ color: colors.green }} />}
 
               {this.getPortIndication().map((indication) => {
                 return (<Tooltip key={indication.port} title={indication.port}>
@@ -187,21 +146,8 @@ class TopBar extends React.Component {
 
             </div>
 
-            <Fab onClick={this.setRecording} size="small" aria-label="reset" >
-              <SaveIcon />
-            </Fab>
-
-            <div className={classes.icon}> <ResetMenu /> </div>
-
           </Toolbar>
         </AppBar>
-
-        {this.state.tabValue === 0 && <this.TabContainer> <MainView/> </this.TabContainer>}
-        {this.state.tabValue === 1 && <this.TabContainer> <HistoryView/> </this.TabContainer>}
-        {this.state.tabValue === 2 && <this.TabContainer> <MapView/> </this.TabContainer>}
-        {this.state.tabValue === 3 && <this.TabContainer> <TeamView recording={this.state.recording} /> </this.TabContainer>}
-        {this.state.tabValue === 4 && <this.TabContainer> <SettingsView/> </this.TabContainer>}
-
       </div>
 
 

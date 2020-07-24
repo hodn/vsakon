@@ -80,7 +80,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
     // Init of the database
     const databaseHandler = new DatabaseHandler(app);
     databaseHandler.initDb();
-
     const portHandlers = [];
 
     // State management init
@@ -123,37 +122,10 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
                         try {
                             //Converting hex to int array
-                            const rawPacket = Uint8Array.from(data);
-
-                            // Raw packets are parsed into JSON object via FlexParser lib
-                            const parsedPacket = FlexParser.parseFlexiData(rawPacket);
-                            // Packet stored for timeseries and sent to Renderer
-                            const storedPacket = packetHandler.storeAndSendState(parsedPacket, portHandler.com);
-                            // Packet from receiver is new and stored - recording is ON
-                            if (storedPacket && recordHandler.recording) recordHandler.writeToCsv(storedPacket);
+                            console.log(data.toString());
 
                         } catch (error) {
-                            console.log(error.message)
-
-                            // Devices out of sync - sending invalid data format
-                            if (error.message === "Invalid data format") {
-
-                                try {
-                                    const delay = index * 50; // one port after another - against sync collision
-                                    const userForcedSync = false; // sync not forced by user
-                                    portHandler.sendSync(userForcedSync, delay);
-                                } catch (error) {
-                                    console.log(error);
-                                }
-                            } else {
-
-                                if (error.message !== "Object has been destroyed") electron.dialog.showErrorBox("Data handling error", error.message);
-
-                                if (error.type === "writeToCsv"){
-                                    recordHandler.recording = false; // Shuts off recording if there is writing error
-                                    recordHandler.setRecording(); // Starts new recording - new file (not corrupted)
-                                } 
-                            }
+                            console.log(error.message);
 
                         }
                     })
