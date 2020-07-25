@@ -83,7 +83,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     const portHandlers = [];
 
     // State management init
-    const packetHandler = new PacketHandler(event, databaseHandler);
+    const packetHandler = new PacketHandler(event);
     const recordHandler = new RecordHandler(databaseHandler);
     // Listener for (re)connect receivers - on start and on demand from user
     /* ipcMain.on('connect-ports', (event, arg) => {
@@ -157,6 +157,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         rd.on('line', function (line) {
             packetHandler.readCOM(line);
+            event.sender.send("soak-state", packetHandler.isSoaking);
         });
     })
 

@@ -1,5 +1,5 @@
 module.exports = class PacketHandler {
-    constructor() {
+    constructor(event) {
         this.coeffs = [],
             this.secs = [],
             this.soak = 0,
@@ -7,7 +7,8 @@ module.exports = class PacketHandler {
             this.measurementStart = null,
             this.measurementEnd = null,
             this.isSoaking = false,
-            this.onlineLocation = null
+            this.onlineLocation = null,
+            this.event = event
 
     }
 
@@ -22,15 +23,13 @@ module.exports = class PacketHandler {
         if (packet.includes("$GPGGA")) {
             this.onlineLocation = packet;
 
-            if (this.isSoaking) this.measurementLocation = packet; //also not the same as already stored
+            if (this.isSoaking) this.measurementLocation = packet;
         }
-
-        console.log(this.measurementLocation);
     }
 
     getValue(string) {
         const split = string.split(" ");
-        return split[1];
+        return parseFloat(split[1]);
     }
 
     resetMeasurement() {

@@ -49,7 +49,7 @@ class TopBar extends React.Component {
 
     this.state = {
       ports: {},
-      measuringPhase: 0
+      isSoaking: false
     }
 
     this.getPortIndication = this.getPortIndication.bind(this);
@@ -91,6 +91,14 @@ class TopBar extends React.Component {
       })
     })
 
+     // Listener for state of soaking - waiting for activation/soaking
+     ipcRenderer.on('soak-state', (event, arg) => {
+      console.log(this.state.isSoaking)
+      this.setState({
+        isSoaking: arg
+      })
+    })
+
   }
 
   componentWillUnmount() {
@@ -119,6 +127,16 @@ class TopBar extends React.Component {
 
   }
 
+  getSoakIndicationColor(){
+    
+    if (this.state.isSoaking) {
+      return colors.green;
+    }
+    else {
+      return colors.yellow;
+    }
+  }
+
   // What the actual component renders
   render() {
 
@@ -143,7 +161,7 @@ class TopBar extends React.Component {
                 </Tooltip>)
               }) */}
               <UsbIcon className={classes.indicator} style={{ color: colors.green }} />
-              <OpacityIcon className={classes.indicator} />
+              <OpacityIcon className={classes.indicator} style={{ color: this.getSoakIndicationColor() }}/>
 
             </div>
 
