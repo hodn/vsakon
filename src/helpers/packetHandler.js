@@ -7,6 +7,7 @@ module.exports = class PacketHandler {
             this.measurementStart = null,
             this.measurementEnd = null,
             this.isSoaking = false,
+            this.isOnline = false,
             this.onlineLocation = null,
             this.event = event
 
@@ -22,7 +23,7 @@ module.exports = class PacketHandler {
 
         if (packet.includes("$GPGGA")) {
             this.onlineLocation = packet;
-
+            setTimeout(this.isDataComing, 10000, packet);
             if (this.isSoaking) this.measurementLocation = packet;
         }
     }
@@ -39,6 +40,11 @@ module.exports = class PacketHandler {
             this.measurementLocation = null;
             this.measurementStart = null;
             this.measurementEnd = null;
+    }
+
+    isDataComing(previousLocation){
+
+        return this.onlineLocation !== previousLocation ? this.isOnline = true : this.isOnline = false;
     }
 
 }

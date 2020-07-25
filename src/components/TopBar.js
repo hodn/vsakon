@@ -7,6 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import SwapVertIcon from '@material-ui/icons/SwapVert';
 import UsbIcon from '@material-ui/icons/Usb';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import InputIcon from '@material-ui/icons/Input';
@@ -49,7 +50,8 @@ class TopBar extends React.Component {
 
     this.state = {
       ports: {},
-      isSoaking: false
+      isSoaking: false,
+      isOnline: false
     }
 
     this.getPortIndication = this.getPortIndication.bind(this);
@@ -93,9 +95,15 @@ class TopBar extends React.Component {
 
      // Listener for state of soaking - waiting for activation/soaking
      ipcRenderer.on('soak-state', (event, arg) => {
-      console.log(this.state.isSoaking)
       this.setState({
         isSoaking: arg
+      })
+    })
+
+    // Listener for state of soaking - waiting for activation/soaking
+    ipcRenderer.on('communication-state', (event, arg) => {
+      this.setState({
+        isOnline: arg
       })
     })
 
@@ -137,6 +145,16 @@ class TopBar extends React.Component {
     }
   }
 
+  getCommunicationIndicationColor(){
+    
+    if (this.state.isOnline) {
+      return colors.green;
+    }
+    else {
+      return colors.red;
+    }
+  }
+
   // What the actual component renders
   render() {
 
@@ -161,6 +179,7 @@ class TopBar extends React.Component {
                 </Tooltip>)
               }) */}
               <UsbIcon className={classes.indicator} style={{ color: colors.green }} />
+              <SwapVertIcon className={classes.indicator} style={{ color: this.getCommunicationIndicationColor() }} />
               <OpacityIcon className={classes.indicator} style={{ color: this.getSoakIndicationColor() }}/>
 
             </div>

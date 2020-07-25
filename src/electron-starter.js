@@ -158,6 +158,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
         rd.on('line', function (line) {
             packetHandler.readCOM(line);
             event.sender.send("soak-state", packetHandler.isSoaking);
+            event.sender.send("communication-state", packetHandler.isOnline);
         });
     })
 
