@@ -175,85 +175,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     })
 
-    // Get cached data and user profiles
-    ipcMain.on("online-view-mounted", (event, arg) => {
-
-        packetHandler.sendState();
-        packetHandler.sendUserProfiles();
-    })
-
-    // Get/update teams for visualization on change
-    ipcMain.on("get-teams", (event, arg) => {
-
-        const teams = databaseHandler.getAllTeams(false);
-        const users = databaseHandler.getAllUsers();
-        const defTeam = databaseHandler.getDefaultTeam(false);
-        const activeTeam = databaseHandler.getSelectedTeam(true);
-        const defUser = databaseHandler.getDefaultUser();
-
-        packetHandler.profiles = databaseHandler.getSelectedTeam(false).members; // Update the profiles for online data
-
-        const data = { teams, users, defTeam, defUser, activeTeam }
-
-        event.sender.send("teams-loaded", data)
-
-    })
-
-    // Add user or a team
-    ipcMain.on("add-teams", (event, arg) => {
-
-        databaseHandler.addUserOrTeam(arg.data, arg.collection)
-
-    })
-
-    ipcMain.on("update-item", (event, arg) => {
-
-        if (arg.data.tableData !== undefined) {
-            let data = arg.data;
-            delete data.tableData;
-            databaseHandler.updateItem(arg.data.id, data, arg.collection)
-        }
-        else databaseHandler.updateItem(arg.data.id, arg.data, arg.collection)
-
-    })
-
-    ipcMain.on("delete-item", (event, arg) => {
-
-        databaseHandler.deleteItem(arg.id, arg.collection);
-
-    })
-
-    ipcMain.on("update-settings", (event, arg) => {
-        databaseHandler.updateSettings(arg);
-        if (arg.selectedTeam) packetHandler.profiles = databaseHandler.getSelectedTeam(false).members;
-        if (arg.graphLength) packetHandler.graphLength = databaseHandler.getSettings().graphLength;
-        if (arg.csvDirectory) recordHandler.directory = databaseHandler.getSettings().csvDirectory;
-        if (arg.csvComponents) recordHandler.components = databaseHandler.getSettings().csvComponents;
-
-    })
-
-    ipcMain.on("get-settings", (event, arg) => {
-
-        const settings = databaseHandler.getSettings();
-        event.sender.send("settings-loaded", settings)
-    })
-
-    // Load history from a CSV file
-    ipcMain.on("get-history", (event, arg) => {
-
-        recordHandler.readFromCsv(arg.from, arg.to, arg.filePath, arg.devId, event)
-
-    })
-
-    // Get all records
-    ipcMain.on("get-records", (event, arg) => {
-
-        const data = databaseHandler.getAllRecords();
-
-        event.sender.send("records-loaded", data)
-
-    })
-
     // Open select dialog - directory or file
     ipcMain.on("open-dialog", (event, arg) => {
 
@@ -270,47 +191,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
             event.sender.send("csv-path-loaded", { path, team });
         })
-
-
-
-    })
-
-    // Event registration for CSV writing
-    ipcMain.on("register-event", (event, arg) => {
-
-        const devSlot = arg.devId - 1;
-        const eventName = arg.event;
-
-        packetHandler.events[devSlot] = eventName;
-    })
-
-    // User turns off the alarm (arg = deviceId)
-    ipcMain.on("remove-alarm", (event, arg) => {
-
-        try {
-
-            // Send the remove alarm signal from one receiver at a time
-            for (let index = 0; index < portHandlers.length; index++) {
-                const alarmOff = () => portHandlers[index].removeAlarm(arg);
-                const delay = index * 50;
-                setTimeout(alarmOff, delay);
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
-    })
-
-    // Sync all devices
-    ipcMain.on("sync-devices", (event, arg) => {
-
-        const userForcedSync = true; // not because of automatic invalid packet detection
-
-        for (let index = 0; index < portHandlers.length; index++) {
-            const delay = index * 50; // avoiding collision of broadcast
-            portHandlers[index].sendSync(userForcedSync, delay);
-
-        }
 
     })
 

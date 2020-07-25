@@ -130,7 +130,7 @@ class TopBar extends React.Component {
         <AppBar style={{ backgroundColor: colors.main, margin: 0 }} position="static">
           <Toolbar>
             <LocationOnIcon className={classes.indicator} />
-            <Typography variant="h6">Zbraslav, Praha</Typography>
+            <Typography variant="h5">Mariánské Hory, Ostrava</Typography>
             <IconButton className={classes.button}>
               <InputIcon fontSize="large"/>
             </IconButton>
