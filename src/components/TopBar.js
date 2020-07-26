@@ -140,8 +140,10 @@ class TopBar extends React.Component {
     if (this.state.isSoaking) {
       return colors.green;
     }
-    else {
+    else if (this.state.isOnline) {
       return colors.yellow;
+    } else {
+      return colors.red;
     }
   }
 

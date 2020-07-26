@@ -10,8 +10,11 @@ export class MainView extends React.Component {
     this._isMounted = false;
 
     this.state = {
-      indexes: [],
-      settings: null
+      coeffs: [],
+      soak: 0,
+      location: null,
+      start: null,
+      end: null
 
     }
   }
@@ -19,6 +22,17 @@ export class MainView extends React.Component {
   componentDidMount() {
 
     this._isMounted = true;
+
+    ipcRenderer.on('online-data', (event, arg) => {
+      this.setState({
+        coeffs: arg.coeffs,
+        soak: arg.soak,
+        location: arg.measurementLocation,
+        start: arg.measurementStart,
+        end: arg.measurementEnd
+      })
+      console.log(this.state);
+    })
   }
 
   componentWillUnmount() {
@@ -32,8 +46,8 @@ export class MainView extends React.Component {
 
     return (
 
-      <div> 
-        Nothing
+      <div>
+        
       </div>
 
 

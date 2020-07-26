@@ -47,4 +47,22 @@ module.exports = class PacketHandler {
         return this.onlineLocation !== previousLocation ? this.isOnline = true : this.isOnline = false;
     }
 
+    getDisplayData(){
+        const coeffs = this.coeffs;
+        const soak = this.soak;
+        const measurementLocation = this.measurementLocation;
+        const measurementStart = this.measurementStart;
+        const measurementEnd = this.measurementEnd;
+
+        const data = {
+            coeffs,
+            soak,
+            measurementLocation,
+            measurementStart,
+            measurementEnd
+        }
+
+        return data;
+    }
+
 }
