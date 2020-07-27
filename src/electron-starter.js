@@ -176,11 +176,15 @@ ipcMain.on('clear-to-send', (event, arg) => {
         });
     })
 
-    // Toggle recording state
     ipcMain.on("save-reset", (event, arg) => {
 
        packetHandler.resetMeasurement();
     })
+
+    ipcMain.on("location-set", (event, arg) => {
+
+        recordHandler.createCsvWriter(arg);
+     })
 
     // Open select dialog - directory or file
     ipcMain.on("open-dialog", (event, arg) => {

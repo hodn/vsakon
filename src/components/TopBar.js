@@ -170,6 +170,7 @@ class TopBar extends React.Component {
 
   setLocation(name){
     this.setState({ location: name });
+    ipcRenderer.send("location-set", name);
   }
 
   // What the actual component renders
