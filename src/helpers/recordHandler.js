@@ -14,7 +14,7 @@ module.exports = class RecordHandler {
     // Loads user settings file if exists or creates new one with default values - CSV write init
     createCsvWriter(location) {
 
-        const fileName = location + " " + new Date().toLocaleDateString() + ".csv";
+        const fileName = location + "_" + new Date().toLocaleDateString() + ".csv";
         this.filePath = path.join(electron.app.getPath("documents"), fileName);
         this.writer = csvWriter({
             separator: ';',
