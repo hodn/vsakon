@@ -63,7 +63,7 @@ module.exports = class PortHandler {
     }
 
     // Sends command for Vsakon unit
-    sendSync(command) {
+    sendCommand(command) {
 
         // Send sync signal and flush port
         this.port.write(command, function (err) {

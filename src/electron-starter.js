@@ -160,7 +160,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
             event.sender.send("soak-state", packetHandler.isSoaking);
             event.sender.send("communication-state", packetHandler.isOnline);
             event.sender.send("online-data", packetHandler.getDisplayData());
-        
         });
     })
 
@@ -173,10 +172,11 @@ ipcMain.on('clear-to-send', (event, arg) => {
     });
 
     // Toggle recording state
-    ipcMain.on("set-recording", (event, arg) => {
+    ipcMain.on("soak-control", (event, arg) => {
 
-        recordHandler.setRecording();
-
+        portHandlers.forEach(ph => {
+            ph.sendCommand(arg);
+        });
     })
 
     // Open select dialog - directory or file

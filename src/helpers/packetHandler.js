@@ -4,8 +4,6 @@ module.exports = class PacketHandler {
             this.secs = [],
             this.soak = 0,
             this.measurementLocation = null,
-            this.measurementStart = null,
-            this.measurementEnd = null,
             this.isSoaking = false,
             this.isOnline = false,
             this.onlineLocation = null,
@@ -14,8 +12,8 @@ module.exports = class PacketHandler {
     }
 
     readCOM(packet) {
-        if (packet === "Waiting for activation") this.isSoaking = false; // this wont be controlling the recording, just indication
-        if (packet === "Starting soaking procedure") this.isSoaking = true; // this wont be controlling the recording, just indication
+        if (packet === "Waiting for activation") this.isSoaking = false;
+        if (packet === "Starting soaking procedure") this.isSoaking = true;
 
         if (packet.includes("Soak:")) this.soak = this.getValue(packet);
         if (packet.includes("sec:")) this.secs.push(this.getValue(packet));
@@ -38,8 +36,6 @@ module.exports = class PacketHandler {
             this.secs = [];
             this.soak = 0;
             this.measurementLocation = null;
-            this.measurementStart = null;
-            this.measurementEnd = null;
     }
 
     isDataComing(previousLocation){
@@ -52,16 +48,12 @@ module.exports = class PacketHandler {
         const secs = this.secs;
         const soak = this.soak;
         const measurementLocation = this.measurementLocation;
-        const measurementStart = this.measurementStart;
-        const measurementEnd = this.measurementEnd;
 
         const data = {
             coeffs,
             secs,
             soak,
-            measurementLocation,
-            measurementStart,
-            measurementEnd
+            measurementLocation
         }
 
         return data;
