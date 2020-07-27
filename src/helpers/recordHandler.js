@@ -2,27 +2,18 @@
 const fs = require('fs');
 // Module for CSV
 const csvWriter = require('csv-write-stream');
-const csvParser = require('csv-parser');
 const path = require('path');
 const electron = require('electron');
 const ipcMain = electron.ipcMain;
-const HistoryGraphHandler = require('./historyGraphHandler');
 
 module.exports = class RecordHandler {
-    constructor(db) {
-        this.directory = db.getSettings().csvDirectory,
-            this.components = db.getSettings().csvComponents,
-            this.db = db,
+    constructor() {
             this.writer = null,
-            this.filePath = null,
-            this.recordId = null,
-            this.recording = false,
-            this.graphHandler = new HistoryGraphHandler();
-        this.test = null;
+            this.filePath = null
     }
 
     // Loads user settings file if exists or creates new one with default values - CSV write init
-    createCsvWriter(recordingStart) {
+    createCsvWriter() {
 
         const date = recordingStart.toISOString().split("T");
         const time = recordingStart.toTimeString().split(":");
@@ -40,29 +31,11 @@ module.exports = class RecordHandler {
         this.writer.pipe(fs.createWriteStream(this.filePath, { flags: 'a' }));
     }
 
-    // Change the state of recording
-    setRecording() {
-
-        this.recording = !this.recording;
-        const date = new Date();
-        this.test = Date.now();
-
-        if (this.recording === true) {
-
-            this.createCsvWriter(date);
-            this.recordId = this.db.addRecord(date.toString(), this.filePath); // Make a new DB record
-        }
-        else {
-            this.db.updateItem(this.recordId, { end: date.toString() }, "records"); // Add end time to DB record
-            this.recordId = null;
-            this.writer.end()
-        }
-    }
 
     writeToCsv(packet) {
 
 
-        if (!fs.existsSync(this.filePath)) throw {type: "writeToCsv", message:"Source CSV removed. Recording restarted and new record file has been made."}
+        if (!fs.existsSync(this.filePath)) throw {type: "writeToCsv", message:"Source CSV removed."}
         try {
             
             if (packet.deadMan === false) packet.deadMan = ""; // Display empty instead of false in the CSV
@@ -70,43 +43,7 @@ module.exports = class RecordHandler {
             this.writer.write(this.formatToCsv(packet));
 
         } catch{
-            throw {type: "writeToCsv", message:"Writing error. Recording restarted and new record file has been made."};
-        }
-
-
-    }
-    
-    // Reading the data from CSV upon request from HistoryView
-    readFromCsv(start, end, filePath, devId, event) {
-
-        if (fs.existsSync(filePath)) {
-            let readStream = fs.createReadStream(filePath)
-                .pipe(csvParser({ separator: ';' }))
-                .on('data', (data) => {
-
-                    // The data is newer than needed - stop the read and send data
-                    if (data.timestamp > end && data.devId === devId.toString()) {
-
-                        event.sender.send("history-parsed", this.graphHandler.getGraphs()); 
-                        readStream.destroy(); 
-
-                    } else if (data.timestamp <= end && data.timestamp >= start && data.devId === devId.toString()) {
-                        this.graphHandler.storeData(this.formatFromCsv(data));
-                    }
-                })
-                .on('end', () => {
-                    event.sender.send("history-parsed", this.graphHandler.getGraphs()); // Reached the file end - send data
-                });
-
-                // If user closes the device detail while reading - stop reading
-                ipcMain.on('stop-history-read', (event, arg) => {
-
-                    readStream.destroy();
-
-                });
-
-        } else {
-            throw new Error ("Invalid path or deleted CSV source file.");
+            throw {type: "writeToCsv", message:"Writing error"};
         }
 
 

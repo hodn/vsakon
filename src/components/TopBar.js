@@ -13,6 +13,7 @@ import OpacityIcon from '@material-ui/icons/Opacity';
 import InputIcon from '@material-ui/icons/Input';
 import colors from '../colors';
 import MainView from '../views/MainView';
+import SetLocation from '../components/SetLocation';
 
 // Highest component in order - mounts Views and keeps state of recording and ports
 const { ipcRenderer } = window.require('electron');
@@ -51,12 +52,16 @@ class TopBar extends React.Component {
     this.state = {
       ports: {},
       isSoaking: false,
-      isOnline: false
+      isOnline: false,
+      location: "Lokalita měření",
+      dialog: true
     }
 
     this.getPortIndication = this.getPortIndication.bind(this);
     this.getSoakIndicationColor = this.getSoakIndicationColor.bind(this);
     this.getCommunicationIndicationColor = this.getCommunicationIndicationColor.bind(this);
+    this.toggleDialog = this.toggleDialog.bind(this);
+    this.setLocation = this.setLocation.bind(this);
   }
 
   componentDidMount() {
@@ -159,6 +164,14 @@ class TopBar extends React.Component {
     }
   }
 
+  toggleDialog(){
+    this.setState({ dialog: !this.state.dialog });
+  }
+
+  setLocation(name){
+    this.setState({ location: name });
+  }
+
   // What the actual component renders
   render() {
 
@@ -170,8 +183,8 @@ class TopBar extends React.Component {
         <AppBar style={{ backgroundColor: colors.main, margin: 0 }} position="static">
           <Toolbar>
             <LocationOnIcon className={classes.indicator} />
-            <Typography variant="h5">Mariánské Hory, Ostrava</Typography>
-            <IconButton className={classes.button}>
+            <Typography variant="h5">{this.state.location}</Typography>
+            <IconButton onClick={() => this.toggleDialog()} className={classes.button}>
               <InputIcon fontSize="large"/>
             </IconButton>
 
@@ -191,6 +204,7 @@ class TopBar extends React.Component {
           </Toolbar>
         </AppBar>
         <MainView isSoaking={this.state.isSoaking} isOnline={this.state.isOnline} />
+        {this.state.dialog && <SetLocation dialog={() => this.toggleDialog()} setLocation={this.setLocation} />}
       </div>
 
 

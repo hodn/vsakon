@@ -43,6 +43,7 @@ class MainView extends React.Component {
       coeffs: [],
       secs: [],
       soak: 0,
+      locationFlags: [],
       location: null,
       start: null,
       end: null,
@@ -105,7 +106,12 @@ class MainView extends React.Component {
 
   saveAndReset(){
 
+    ipcRenderer.send("save-reset", {start: this.state.start, end: this.state.end})
+
+    const locationFlag = {name: this.state.locationName, location: this.state.location}
+
     this.setState({
+      locationFlags:[...this.state.locationFlags, locationFlag],
       coeffs: [],
       secs: [],
       soak: 0,
@@ -113,7 +119,7 @@ class MainView extends React.Component {
       start: null,
       end: null,
       locationName: ""
-    })
+    });
 
   }
 
@@ -242,7 +248,7 @@ render() {
         <Grid item xs={4}>
           <Paper className={classes.card}>
             <Typography>
-              Start
+              Začátek
             </Typography>
             <Typography variant="h5">
               {this.state.start ? this.state.start : "XX:XX"}
@@ -274,7 +280,7 @@ render() {
           <Button className={classes.button} style={{ backgroundColor: colors.green, color: "white" }} variant="contained" size="large" onClick={() => this.controlSoaker("start")}>Start</Button>
           <Button className={classes.button} style={{ backgroundColor: colors.red, color: "white" }} variant="contained" size="large" onClick={() => this.controlSoaker("stop")}>Stop</Button>
           <Button className={classes.button} variant="contained" color="secondary" size="large">Mapa</Button>
-          <Button className={classes.button} variant="contained" color="primary" size="large" disabled={this.props.isSoaking} onClick={() => this.saveAndReset()}>Uložit a pokračovat</Button>
+          <Button className={classes.button} variant="contained" color="primary" size="large" onClick={() => this.saveAndReset()}>Uložit a pokračovat</Button>
         </Grid>
 
       </Grid>

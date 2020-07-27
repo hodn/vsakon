@@ -57,9 +57,11 @@ app.on('activate', function () {
 process.on('unhandledRejection', error => {
     // Will print "unhandledRejection err is not defined"
     electron.dialog.showErrorBox("Error", error.message);
+    console.log(error);
 })
 process.on('uncaughtException', error => {
     electron.dialog.showErrorBox("Error", error.message);
+    console.log(error);
 })
 
 //////////////////////////////////////// Parsing data from COM port ////////////////////////////////////////
@@ -70,21 +72,16 @@ const ipcMain = electron.ipcMain;
 ipcMain.on('clear-to-send', (event, arg) => {
 
     // Helpers init
-    const FlexParser = require('./helpers/flexParser');
     const SerialPort = require('serialport');
     const PacketHandler = require('./helpers/packetHandler');
     const PortHandler = require('./helpers/portHandler');
     const RecordHandler = require('./helpers/recordHandler');
-    const DatabaseHandler = require('./helpers/databaseHandler');
 
-    // Init of the database
-    const databaseHandler = new DatabaseHandler(app);
-    databaseHandler.initDb();
     const portHandlers = [];
 
     // State management init
     const packetHandler = new PacketHandler(event);
-    const recordHandler = new RecordHandler(databaseHandler);
+    const recordHandler = new RecordHandler();
     // Listener for (re)connect receivers - on start and on demand from user
     /* ipcMain.on('connect-ports', (event, arg) => {
 
@@ -177,6 +174,12 @@ ipcMain.on('clear-to-send', (event, arg) => {
         portHandlers.forEach(ph => {
             ph.sendCommand(arg);
         });
+    })
+
+    // Toggle recording state
+    ipcMain.on("save-reset", (event, arg) => {
+
+       packetHandler.resetMeasurement();
     })
 
     // Open select dialog - directory or file
