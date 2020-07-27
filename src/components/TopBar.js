@@ -190,7 +190,7 @@ class TopBar extends React.Component {
 
           </Toolbar>
         </AppBar>
-        <MainView/>
+        <MainView isSoaking={this.state.isSoaking} isOnline={this.state.isOnline} />
       </div>
 
 
