@@ -65,8 +65,12 @@ class MainView extends React.Component {
         coeffs: arg.coeffs,
         secs: arg.secs,
         soak: arg.soak,
-        location: arg.measurementLocation
+        location: {lat: arg.measurementLocationLat, lon: arg.measurementLocationLon}
       })
+
+      console.log(
+        this.state.location
+      );
     })
   }
 
