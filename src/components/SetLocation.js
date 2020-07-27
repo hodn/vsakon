@@ -45,7 +45,7 @@ export default function SetLocation(props) {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.handleDialog}>
+          <Button onClick={props.dialog}>
             Zrušit
           </Button>
           <Button variant="outlined" onClick={submitForm} color="primary">

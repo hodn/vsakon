@@ -47,7 +47,7 @@ class MainView extends React.Component {
       location: null,
       start: null,
       end: null,
-      locationName: ""
+      measurementLocation: ""
 
     }
 
@@ -108,7 +108,7 @@ class MainView extends React.Component {
 
     ipcRenderer.send("save-reset", {start: this.state.start, end: this.state.end})
 
-    const locationFlag = {name: this.state.locationName, location: this.state.location}
+    const locationFlag = {name: this.state.measurementLocation, location: this.state.location}
 
     this.setState({
       locationFlags:[...this.state.locationFlags, locationFlag],
@@ -118,7 +118,7 @@ class MainView extends React.Component {
       location: null,
       start: null,
       end: null,
-      locationName: ""
+      measurementLocation: ""
     });
 
   }
@@ -265,10 +265,10 @@ render() {
               id="outlined-required"
               label="Místo měření"
               variant="outlined"
-              value={this.state.locationName} 
+              value={this.state.measurementLocation} 
               onChange={event => {
                 const { value } = event.target;
-                this.setState({ locationName: value });
+                this.setState({ measurementLocation: value });
               }}
               style={{ marginTop: 20, width: "90%" }}
             />
