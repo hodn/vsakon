@@ -83,7 +83,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     const packetHandler = new PacketHandler(event);
     const recordHandler = new RecordHandler();
     // Listener for (re)connect receivers - on start and on demand from user
-    /* ipcMain.on('connect-ports', (event, arg) => {
+    ipcMain.on('connect-ports', (event, arg) => {
 
         // Returns all Flexiguard receivers - ports
         SerialPort.list().then(ports => {
@@ -119,7 +119,10 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
                         try {
                             //Converting hex to int array
-                            console.log(data.toString());
+                            packetHandler.readCOM(data.toString());
+                            event.sender.send("soak-state", packetHandler.isSoaking);
+                            event.sender.send("communication-state", packetHandler.isOnline);
+                            event.sender.send("online-data", packetHandler.getDisplayData());
 
                         } catch (error) {
                             console.log(error.message);
@@ -139,9 +142,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         })
 
-    }) */
+    })
 
-    ipcMain.on('connect-ports', (event, arg) => {
+    /* ipcMain.on('connect-ports', (event, arg) => {
 
         var fs = require('fs'),
             readline = require('readline');
@@ -158,7 +161,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
             event.sender.send("communication-state", packetHandler.isOnline);
             event.sender.send("online-data", packetHandler.getDisplayData());
         });
-    })
+    }) */
 
     // Quit and stop recording when all windows are closed 
     app.on('window-all-closed', function () {
@@ -178,23 +181,23 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     ipcMain.on("save-reset", (event, arg) => {
 
-       let csvData = {
-           name: arg.name,
-           start: arg.start,
-           end: arg.end,
-           soaks: packetHandler.soak,
-           coeff: packetHandler.coeffs[packetHandler.coeffs.length-1].y,
-           location: packetHandler.measurementLocation
-       }
+        let csvData = {
+            name: arg.name,
+            start: arg.start,
+            end: arg.end,
+            soaks: packetHandler.soak,
+            coeff: packetHandler.coeffs[packetHandler.coeffs.length - 1].y,
+            location: packetHandler.measurementLocation
+        }
 
-       recordHandler.writeToCsv(csvData);
-       packetHandler.resetMeasurement();
+        recordHandler.writeToCsv(csvData);
+        packetHandler.resetMeasurement();
     })
 
     ipcMain.on("location-set", (event, arg) => {
 
         recordHandler.createCsvWriter(arg);
-     })
+    })
 
     // Open select dialog - directory or file
     ipcMain.on("open-dialog", (event, arg) => {

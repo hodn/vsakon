@@ -191,12 +191,11 @@ class TopBar extends React.Component {
 
             <div className={classes.indicatorSet} >
 
-              {/* this.getPortIndication().map((indication) => {
+              {this.getPortIndication().map((indication) => {
                 return (<Tooltip key={indication.port} title={indication.port}>
                   <UsbIcon className={classes.indicator} style={{ color: indication.color }} />
                 </Tooltip>)
-              }) */}
-              <UsbIcon className={classes.indicator} style={{ color: colors.green }} />
+              })}
               <SwapVertIcon className={classes.indicator} style={{ color: this.getCommunicationIndicationColor() }} />
               <OpacityIcon className={classes.indicator} style={{ color: this.getSoakIndicationColor() }}/>
 

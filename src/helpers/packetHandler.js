@@ -21,6 +21,7 @@ module.exports = class PacketHandler {
 
         if (packet.includes("$GPGGA")) {
             this.onlineLocation = packet;
+            this.convertGPS(packet);
             setTimeout(this.isDataComing, 10000, packet);
             if (this.isSoaking) this.measurementLocation = packet;
         }
@@ -56,6 +57,26 @@ module.exports = class PacketHandler {
             measurementLocation
         }
 
+        return data;
+    }
+
+    convertGPS(packet){
+        let locData = packet.split(",");
+
+        let lat = locData[2];
+        let latDir = locData[3];
+        let long = locData[4];
+        let longDir = locData[5];
+        let fix = locData[6];
+
+        const data = {
+            lat,
+            latDir,
+            long,
+            longDir,
+            fix
+        }
+        console.log(data);
         return data;
     }
 
