@@ -83,7 +83,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     const packetHandler = new PacketHandler(event);
     const recordHandler = new RecordHandler();
     // Listener for (re)connect receivers - on start and on demand from user
-    ipcMain.on('connect-ports', (event, arg) => {
+    /*ipcMain.on('connect-ports', (event, arg) => {
 
         // Returns all Flexiguard receivers - ports
         SerialPort.list().then(ports => {
@@ -142,9 +142,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         })
 
-    })
+    }) */
 
-    /* ipcMain.on('connect-ports', (event, arg) => {
+    ipcMain.on('connect-ports', (event, arg) => {
 
         var fs = require('fs'),
             readline = require('readline');
@@ -161,7 +161,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
             event.sender.send("communication-state", packetHandler.isOnline);
             event.sender.send("online-data", packetHandler.getDisplayData());
         });
-    }) */
+    }) 
 
     // Quit and stop recording when all windows are closed 
     app.on('window-all-closed', function () {
@@ -187,7 +187,8 @@ ipcMain.on('clear-to-send', (event, arg) => {
             end: arg.end,
             soaks: packetHandler.soak,
             coeff: packetHandler.coeffs[packetHandler.coeffs.length - 1].y,
-            location: packetHandler.measurementLocation
+            lat: packetHandler.measurementLocation.lat,
+            lon: packetHandler.measurementLocation.lon
         }
 
         recordHandler.writeToCsv(csvData);

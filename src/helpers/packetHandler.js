@@ -20,10 +20,23 @@ module.exports = class PacketHandler {
         if (packet.includes("kv:")) this.coeffs.push({ x: Date.now(), y: this.getValue(packet) });
 
         if (packet.includes("$GPGGA")) {
-            this.onlineLocation = packet;
-            this.convertGPS(packet);
-            setTimeout(this.isDataComing, 10000, packet);
-            if (this.isSoaking) this.measurementLocation = packet;
+
+            const parsedLocation = this.convertGPS(packet);
+
+            if (parsedLocation) {
+                if (parsedLocation.quality === "fix") {
+                    const lat = parsedLocation.lat;
+                    const lon = parsedLocation.lon;
+                    const raw = parsedLocation.raw;
+
+                    const location = { lat, lon, raw }
+
+                    this.onlineLocation = location;
+                    setTimeout(this.isDataComing, 10000, this.onlineLocation);
+                    if (this.isSoaking) this.measurementLocation = location;
+                }
+            }
+
         }
     }
 
@@ -34,17 +47,17 @@ module.exports = class PacketHandler {
 
     resetMeasurement() {
         this.coeffs = [];
-            this.secs = [];
-            this.soak = 0;
-            this.measurementLocation = null;
+        this.secs = [];
+        this.soak = 0;
+        this.measurementLocation = null;
     }
 
-    isDataComing(previousLocation){
+    isDataComing(previousLocation) {
 
         return this.onlineLocation !== previousLocation ? this.isOnline = true : this.isOnline = false;
     }
 
-    getDisplayData(){
+    getDisplayData() {
         const coeffs = this.coeffs;
         const secs = this.secs;
         const soak = this.soak;
@@ -60,24 +73,17 @@ module.exports = class PacketHandler {
         return data;
     }
 
-    convertGPS(packet){
-        let locData = packet.split(",");
+    convertGPS(packet) {
+        var GPS = require('gps');
 
-        let lat = locData[2];
-        let latDir = locData[3];
-        let long = locData[4];
-        let longDir = locData[5];
-        let fix = locData[6];
-
-        const data = {
-            lat,
-            latDir,
-            long,
-            longDir,
-            fix
+        try {
+            const location = GPS.Parse(packet);
+            return location;
+        } catch (err) {
+            console.log(err.message);
         }
-        console.log(data);
-        return data;
+
+
     }
 
 }
