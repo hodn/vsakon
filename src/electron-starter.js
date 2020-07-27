@@ -178,6 +178,16 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     ipcMain.on("save-reset", (event, arg) => {
 
+       let csvData = {
+           name: arg.name,
+           start: arg.start,
+           end: arg.end,
+           soaks: packetHandler.soak,
+           coeff: packetHandler.coeffs[packetHandler.coeffs.length-1].y,
+           location: packetHandler.measurementLocation
+       }
+
+       recordHandler.writeToCsv(csvData);
        packetHandler.resetMeasurement();
     })
 

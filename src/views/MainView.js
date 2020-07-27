@@ -106,7 +106,7 @@ class MainView extends React.Component {
 
   saveAndReset(){
 
-    ipcRenderer.send("save-reset", {start: this.state.start, end: this.state.end})
+    ipcRenderer.send("save-reset", {start: this.state.start, end: this.state.end, name: measurementLocation})
 
     const locationFlag = {name: this.state.measurementLocation, location: this.state.location}
 

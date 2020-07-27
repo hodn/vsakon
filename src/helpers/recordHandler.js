@@ -4,7 +4,6 @@ const fs = require('fs');
 const csvWriter = require('csv-write-stream');
 const path = require('path');
 const electron = require('electron');
-const ipcMain = electron.ipcMain;
 
 module.exports = class RecordHandler {
     constructor() {
@@ -15,9 +14,7 @@ module.exports = class RecordHandler {
     // Loads user settings file if exists or creates new one with default values - CSV write init
     createCsvWriter(location) {
 
-        const date = new Date().toISOString().split("T");
-
-        const fileName = location + "_" + date[0]+ ".csv";
+        const fileName = location + " " + new Date().toLocaleDateString() + ".csv";
         this.filePath = path.join(electron.app.getPath("documents"), fileName);
         this.writer = csvWriter({
             separator: ';',
