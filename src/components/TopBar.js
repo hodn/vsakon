@@ -12,7 +12,7 @@ import UsbIcon from '@material-ui/icons/Usb';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import InputIcon from '@material-ui/icons/Input';
 import colors from '../colors';
-import { MainView } from '../views/MainView';
+import MainView from '../views/MainView';
 
 // Highest component in order - mounts Views and keeps state of recording and ports
 const { ipcRenderer } = window.require('electron');
@@ -55,6 +55,8 @@ class TopBar extends React.Component {
     }
 
     this.getPortIndication = this.getPortIndication.bind(this);
+    this.getSoakIndicationColor = this.getSoakIndicationColor.bind(this);
+    this.getCommunicationIndicationColor = this.getCommunicationIndicationColor.bind(this);
   }
 
   componentDidMount() {

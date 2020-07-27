@@ -49,6 +49,7 @@ module.exports = class PacketHandler {
 
     getDisplayData(){
         const coeffs = this.coeffs;
+        const secs = this.secs;
         const soak = this.soak;
         const measurementLocation = this.measurementLocation;
         const measurementStart = this.measurementStart;
@@ -56,6 +57,7 @@ module.exports = class PacketHandler {
 
         const data = {
             coeffs,
+            secs,
             soak,
             measurementLocation,
             measurementStart,
