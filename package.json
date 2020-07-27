@@ -1,7 +1,7 @@
 {
-  "name": "Vsakon",
+  "name": "vsakon",
   "productName": "Vsakon",
-  "description": "Water absorption visualization",
+  "description": "Chemcomex custom app",
   "version": "1.0.0",
   "author": {
     "name": "Hoang Doan",
@@ -23,9 +23,7 @@
     "@material-ui/core": "^4.9.12",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.51",
-    "@material-ui/pickers": "^3.2.10",
     "csv": "^5.3.2",
-    "csv-parser": "^2.3.2",
     "csv-write-stream": "^2.0.0",
     "date-fns": "^2.12.0",
     "electron-is-dev": "^1.2.0",
@@ -34,16 +32,11 @@
     "electron-store": "^4.0.0",
     "gps": "^0.5.3",
     "leaflet": "^1.6.0",
-    "lowdb": "^1.0.0",
-    "material-table": "^1.57.2",
     "react-dom": "^16.13.1",
     "react-leaflet": "^2.6.3",
     "react-router-dom": "^5.1.2",
-    "react-svg-gauge": "^1.0.10",
     "react-vis": "^1.11.7",
     "serialport": "8.0.7",
-    "shortid": "^2.2.15",
-    "simplify-js": "^1.2.4",
     "typeface-roboto": "0.0.75"
   },
   "main": "src/electron-starter.js",
@@ -69,16 +62,10 @@
       "./src/helpers/*.js",
       "./src/markerIcons/*"
     ],
-    "linux": {
-      "target": "deb"
-    },
+    
     "win": {
       "requestedExecutionLevel": "highestAvailable",
       "target": "nsis"
-    },
-    "mac": {
-      "identity": null,
-      "target": "pkg"
     }
   },
   "browserslist": [
