@@ -83,7 +83,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     const packetHandler = new PacketHandler(event);
     const recordHandler = new RecordHandler();
     // Listener for (re)connect receivers - on start and on demand from user
-    ipcMain.on('connect-ports', (event, arg) => {
+    /* ipcMain.on('connect-ports', (event, arg) => {
 
         // Returns all Flexiguard receivers - ports
         SerialPort.list().then(ports => {
@@ -142,9 +142,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         })
 
-    })
+    }) */
 
-    /*ipcMain.on('connect-ports', (event, arg) => {
+    ipcMain.on('connect-ports', (event, arg) => {
 
         var fs = require('fs'),
             readline = require('readline');
@@ -161,7 +161,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
             event.sender.send("communication-state", packetHandler.isOnline);
             event.sender.send("online-data", packetHandler.getDisplayData());
         });
-    }) */
+    }) 
 
     // Toggle recording state
     ipcMain.on("soak-control", (event, arg) => {
@@ -173,23 +173,43 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
     ipcMain.on("save-reset", (event, arg) => {
 
-        let csvData = {
+        let initialCSVData = {
             name: arg.name,
             start: arg.start,
             end: arg.end,
             soaks: packetHandler.soak,
-            coeff: packetHandler.coeffs[packetHandler.coeffs.length - 1].y,
+            timestamp: packetHandler.coeffs[0].x.toString(),
+            coeff: packetHandler.coeffs[0].y,
             lat: packetHandler.measurementLocation.lat,
             lon: packetHandler.measurementLocation.lon
         }
+        
+        recordHandler.createCsvWriter(initialCSVData.name, packetHandler.locationName);
+        recordHandler.writeToCsv(initialCSVData);
 
-        recordHandler.writeToCsv(csvData);
-        packetHandler.resetMeasurement();
+        for (let index = 1; index < packetHandler.coeffs.length; index++) {
+           
+            let csvData = {
+                name: null,
+                start: null,
+                end: null,
+                soaks: null,
+                timestamp: packetHandler.coeffs[index].x,
+                coeff: packetHandler.coeffs[index].y,
+                lat: null,
+                lon: null
+            }
+            console.log(csvData);
+            recordHandler.writeToCsv(csvData);
+            
+        }
+
+        //packetHandler.resetMeasurement();
     })
 
     ipcMain.on("location-set", (event, arg) => {
 
-        recordHandler.createCsvWriter(arg);
+        packetHandler.locationName = arg;
     })
 
     // Open select dialog - directory or file

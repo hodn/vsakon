@@ -36,7 +36,7 @@
     "react-leaflet": "^2.6.3",
     "react-router-dom": "^5.1.2",
     "react-vis": "^1.11.7",
-    "serialport": "8.0.7",
+    "serialport": "^8.0.7",
     "typeface-roboto": "0.0.75"
   },
   "main": "src/electron-starter.js",
@@ -62,7 +62,6 @@
       "./src/helpers/*.js",
       "./src/markerIcons/*"
     ],
-    
     "win": {
       "requestedExecutionLevel": "highestAvailable",
       "target": [

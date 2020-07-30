@@ -4,6 +4,7 @@ module.exports = class PacketHandler {
             this.secs = [],
             this.soak = 0,
             this.measurementLocation = null,
+            this.locationName = "",
             this.isSoaking = false,
             this.isOnline = false,
             this.onlineLocation = null,
@@ -50,6 +51,7 @@ module.exports = class PacketHandler {
         this.secs = [];
         this.soak = 0;
         this.measurementLocation = null;
+        this.locationName = "";
     }
 
     isDataComing(previousLocation) {
