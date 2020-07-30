@@ -178,7 +178,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
             start: arg.start,
             end: arg.end,
             soaks: packetHandler.soak,
-            timestamp: packetHandler.coeffs[0].x.toString(),
+            timestamp: new Date(packetHandler.coeffs[0].x).toLocaleTimeString(),
             coeff: packetHandler.coeffs[0].y,
             lat: packetHandler.measurementLocation.lat,
             lon: packetHandler.measurementLocation.lon
@@ -190,16 +190,9 @@ ipcMain.on('clear-to-send', (event, arg) => {
         for (let index = 1; index < packetHandler.coeffs.length; index++) {
            
             let csvData = {
-                name: null,
-                start: null,
-                end: null,
-                soaks: null,
-                timestamp: packetHandler.coeffs[index].x,
-                coeff: packetHandler.coeffs[index].y,
-                lat: null,
-                lon: null
+                timestamp: new Date(packetHandler.coeffs[index].x).toLocaleTimeString(),
+                coeff: packetHandler.coeffs[index].y
             }
-            console.log(csvData);
             recordHandler.writeToCsv(csvData);
             
         }

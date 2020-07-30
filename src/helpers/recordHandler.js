@@ -35,7 +35,8 @@ module.exports = class RecordHandler {
                         
             this.writer.write(this.formatToCsv(packet));
 
-        } catch{
+        } catch (err){
+            console.log(err);
             throw {type: "writeToCsv", message:"Writing error"};
         }
 
