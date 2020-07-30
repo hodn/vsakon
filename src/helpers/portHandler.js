@@ -68,7 +68,7 @@ module.exports = class PortHandler {
         const givenPort = this.port;
 
         // Send sync signal and flush port
-        givenPort.port.write(command, function (err) {
+        givenPort.write(command, function (err) {
 
             if (err) {
 

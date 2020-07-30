@@ -197,7 +197,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
             
         }
 
-        //packetHandler.resetMeasurement();
+        packetHandler.resetMeasurement();
     })
 
     ipcMain.on("location-set", (event, arg) => {
