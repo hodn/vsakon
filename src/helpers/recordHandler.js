@@ -38,6 +38,7 @@ module.exports = class RecordHandler {
         } catch (err){
             console.log(err);
             throw {type: "writeToCsv", message:"Writing error"};
+
         }
 
 
@@ -49,7 +50,7 @@ module.exports = class RecordHandler {
         const convert = (value) => this.dotToComma(value);
 
         Object.keys(packet).forEach(function (key) {
-            packet[key] = convert(packet[key]);
+            if(packet[key]) packet[key] = convert(packet[key]);
         })
 
         return packet;

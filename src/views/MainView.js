@@ -281,7 +281,7 @@ render() {
           <Button className={classes.button} style={{ backgroundColor: colors.green, color: "white" }} variant="contained" size="large" onClick={() => this.controlSoaker("start")}>Start</Button>
           <Button className={classes.button} style={{ backgroundColor: colors.red, color: "white" }} variant="contained" size="large" onClick={() => this.controlSoaker("stop")}>Stop</Button>
           <Button className={classes.button} variant="contained" color="secondary" size="large">Mapa</Button>
-          {this.state.coeffs.length > 0 && this.state.end !== null && this.state.measurementLocation !== "" && <Button className={classes.button} variant="contained" color="primary" size="large" onClick={() => this.saveAndReset()}>Uložit a pokračovat</Button>}
+          {this.state.coeffs.length > 0 && this.state.end !== null && this.state.measurementLocation !== "" && <Button className={classes.button} variant="contained" color="primary" size="large" onClick={() => this.saveAndReset()}>Uložit měření a vynulovat</Button>}
         </Grid>
 
       </Grid>
