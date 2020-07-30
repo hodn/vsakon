@@ -65,19 +65,21 @@ module.exports = class PortHandler {
     // Sends command for Vsakon unit
     sendCommand(command) {
 
+        const givenPort = this.port;
+
         // Send sync signal and flush port
-        this.port.write(command, function (err) {
+        givenPort.port.write(command, function (err) {
 
             if (err) {
 
-                console.error(port + " action not done: " + command)
+                console.error(givenPort + " action not done: " + command)
 
             } else {
                 // Sync packet written
-                port.flush(function (err) {
+                givenPort.flush(function (err) {
                     if (err) {
 
-                        console.error(port + " not flushed")
+                        console.error(givenPort + " not flushed")
 
                     }
                 })

@@ -49,7 +49,7 @@
     "install": "electron-rebuild",
     "pack": "electron-builder --dir",
     "postinstall": "electron-builder install-app-deps",
-    "dist": "electron-builder"
+    "dist": "electron-builder --win --ia32 --x64"
   },
   "build": {
     "appId": "cz.albertov.vsakon",
@@ -65,7 +65,15 @@
     
     "win": {
       "requestedExecutionLevel": "highestAvailable",
-      "target": "nsis"
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     }
   },
   "browserslist": [
