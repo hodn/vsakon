@@ -296,7 +296,7 @@ class MainView extends React.Component {
         <MapDialog
           open={this.state.mapDialogOpen}
           handleClose={this.toggleMapDialog}
-          flags={this.state.locationFlags}
+          flags={this.state.locationFlags ? this.state.locationFlags : null}
         />
 
       </div>

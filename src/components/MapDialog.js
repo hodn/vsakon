@@ -30,7 +30,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function MapDialog(props) {
     const classes = useStyles();
     const [center, setCenter] = React.useState([50.06986, 14.42462]);
-    const [markers, setMarkers] = React.useState([]);
 
     const getCurrentLocationTag = () => {
         if (props.location) {
@@ -40,22 +39,25 @@ export default function MapDialog(props) {
     }
 
     const getMarkers = (flags) => {
+        if (flags) {
+            const newMarkers = [];
 
-        const markers = [];
+            for (let index = 0; index < flags.length; index++) {
 
-        for (let index = 0; index < flags.length; index++) {
-            
-            newMarkers.push(
-            <Marker key={index} position={flags[index].location.lat, flags[index].location.lon} icon={getIcon(index + 1)}>
-                <Popup>
-                    <h3>{flags[index].name}</h3>
-                </Popup>
-            </Marker>
-            )
+                newMarkers.push(
+                    <Marker key={index} position={[flags[index].location.lat, flags[index].location.lon]} icon={getIcon(index + 1)}>
+                        <Popup>
+                            <h3>{flags[index].name}</h3>
+                        </Popup>
+                    </Marker>
+                )
 
+            }
+            console.log(newMarkers);
+            console.log(flags);
+            return newMarkers;
         }
 
-        setMarkers(newMarkers);
     }
 
     const getIcon = (number) => {
@@ -88,7 +90,10 @@ export default function MapDialog(props) {
                             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
                         />
                         {getCurrentLocationTag()}
-                        {getMarkers(props.flags)}
+                        {getMarkers(props.flags).map((component) => {
+                            return component;
+                        })}
+
                     </Map>
                 </DialogContent>
             </Dialog>
