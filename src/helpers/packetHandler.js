@@ -63,6 +63,7 @@ module.exports = class PacketHandler {
         const coeffs = this.coeffs;
         const secs = this.secs;
         const soak = this.soak;
+        const onlineLocation = this.onlineLocation;
         const measurementLocationLat = this.measurementLocation? this.measurementLocation.lat : null;
         const measurementLocationLon = this.measurementLocation? this.measurementLocation.lon : null;
 
@@ -71,9 +72,10 @@ module.exports = class PacketHandler {
             secs,
             soak,
             measurementLocationLat,
-            measurementLocationLon
+            measurementLocationLon,
+            onlineLocation
         }
-
+        
         return data;
     }
 

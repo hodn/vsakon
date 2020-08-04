@@ -46,6 +46,7 @@ class MainView extends React.Component {
       soak: 0,
       locationFlags: [],
       location: null,
+      carLocation: null,
       start: null,
       end: null,
       measurementLocation: "",
@@ -68,7 +69,8 @@ class MainView extends React.Component {
         coeffs: arg.coeffs,
         secs: arg.secs,
         soak: arg.soak,
-        location: { lat: arg.measurementLocationLat, lon: arg.measurementLocationLon }
+        location: { lat: arg.measurementLocationLat, lon: arg.measurementLocationLon },
+        carLocation: arg.onlineLocation
       })
 
     })
@@ -296,7 +298,8 @@ class MainView extends React.Component {
         <MapDialog
           open={this.state.mapDialogOpen}
           handleClose={this.toggleMapDialog}
-          flags={this.state.locationFlags ? this.state.locationFlags : null}
+          flags={this.state.locationFlags}
+          location={this.state.carLocation}
         />
 
       </div>

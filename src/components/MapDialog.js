@@ -5,10 +5,11 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
+import MyLocation from '@material-ui/icons/MyLocation';
 import Slide from '@material-ui/core/Slide';
 import L from 'leaflet';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
@@ -31,10 +32,9 @@ export default function MapDialog(props) {
     const classes = useStyles();
     const [center, setCenter] = React.useState([50.06986, 14.42462]);
 
-    const getCurrentLocationTag = () => {
-        if (props.location) {
-            setCenter([props.location.lat, props.location.lon]);
-            return (<Marker key={"0A"} position={center} icon={getIcon(0)}> </Marker>)
+    const getCurrentLocationTag = (location) => {
+        if (location) {
+            return (<Marker key={"0A"} position={[location.lat, location.lon]} icon={getIcon(0)}> </Marker>);
         }
     }
 
@@ -53,8 +53,7 @@ export default function MapDialog(props) {
                 )
 
             }
-            console.log(newMarkers);
-            console.log(flags);
+
             return newMarkers;
         }
 
@@ -69,6 +68,12 @@ export default function MapDialog(props) {
         })
     }
 
+    const centerMap = (location) => {
+        if (location) {
+            setCenter([location.lat, location.lon]);
+        }
+    }
+
     return (
         <div>
             <Dialog fullScreen open={props.open} onClose={props.handleClose} TransitionComponent={Transition}>
@@ -77,6 +82,15 @@ export default function MapDialog(props) {
                         <Typography variant="h6" className={classes.title}>
                             Mapa
             </Typography>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            style={{marginRight: 10}}
+                            onClick={() => centerMap(props.location)}
+                            startIcon={<MyLocation />}
+                        >
+                            Vycentrovat
+                        </Button>
                         <IconButton edge="start" color="inherit" onClick={props.handleClose} aria-label="close">
                             <CloseIcon />
                         </IconButton>
@@ -89,7 +103,7 @@ export default function MapDialog(props) {
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
                         />
-                        {getCurrentLocationTag()}
+                        {getCurrentLocationTag(props.location)}
                         {getMarkers(props.flags).map((component) => {
                             return component;
                         })}

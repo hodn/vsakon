@@ -150,7 +150,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
             readline = require('readline');
 
         var rd = readline.createInterface({
-            input: fs.createReadStream('C:/Users/Hoang/Documents/20200722145706.log'),
+            input: fs.createReadStream('C:/Users/Hoang/Documents/a.txt'),
             output: process.stdout,
             console: false
         });
