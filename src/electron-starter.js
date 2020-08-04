@@ -83,7 +83,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
     const packetHandler = new PacketHandler(event);
     const recordHandler = new RecordHandler();
     // Listener for (re)connect receivers - on start and on demand from user
-    /* ipcMain.on('connect-ports', (event, arg) => {
+    ipcMain.on('connect-ports', (event, arg) => {
 
         // Returns all Flexiguard receivers - ports
         SerialPort.list().then(ports => {
@@ -118,7 +118,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
                     parser.on('data', function (data) {
 
                         try {
-                            //Converting hex to int array
+                            
                             packetHandler.readCOM(data.toString());
                             event.sender.send("soak-state", packetHandler.isSoaking);
                             event.sender.send("communication-state", packetHandler.isOnline);
@@ -142,15 +142,15 @@ ipcMain.on('clear-to-send', (event, arg) => {
 
         })
 
-    }) */
+    }) 
 
-    ipcMain.on('connect-ports', (event, arg) => {
+    /*ipcMain.on('connect-ports', (event, arg) => {
 
         var fs = require('fs'),
             readline = require('readline');
 
         var rd = readline.createInterface({
-            input: fs.createReadStream('C:/Users/Hoang/Documents/a.txt'),
+            input: fs.createReadStream('C:/Users/Hoang/Documents/20200722145706.log'),
             output: process.stdout,
             console: false
         });
@@ -161,7 +161,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
             event.sender.send("communication-state", packetHandler.isOnline);
             event.sender.send("online-data", packetHandler.getDisplayData());
         });
-    }) 
+    }) */
 
     // Toggle recording state
     ipcMain.on("soak-control", (event, arg) => {

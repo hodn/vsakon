@@ -33,7 +33,7 @@ module.exports = class PacketHandler {
                     const location = { lat, lon, raw }
 
                     this.onlineLocation = location;
-                    setTimeout(this.isDataComing, 10000, this.onlineLocation);
+                    setTimeout(this.isDataComing, 10000, location);
                     if (this.isSoaking) this.measurementLocation = location;
                 }
             }
