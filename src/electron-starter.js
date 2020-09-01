@@ -177,11 +177,11 @@ ipcMain.on('clear-to-send', (event, arg) => {
             name: arg.name,
             start: arg.start,
             end: arg.end,
-            soaks: packetHandler.soak,
-            timestamp: new Date(packetHandler.coeffs[0].x).toLocaleTimeString(),
-            coeff: packetHandler.coeffs[0].y,
-            lat: packetHandler.measurementLocation.lat,
-            lon: packetHandler.measurementLocation.lon
+            soaks: packetHandler.soak ? packetHandler.soak : "NO DATA",
+            timestamp: packetHandler.coeffs[0] ? new Date(packetHandler.coeffs[0].x).toLocaleTimeString() : "NO DATA",
+            coeff: packetHandler.coeffs[0] ? packetHandler.coeffs[0].y : "No measurement",
+            lat: packetHandler.onlineLocation ? packetHandler.onlineLocation.lat : "No GPS",
+            lon: packetHandler.onlineLocation ? packetHandler.onlineLocation.lon : "No GPS",
         }
         
         recordHandler.createCsvWriter(initialCSVData.name, packetHandler.locationName);
@@ -191,7 +191,7 @@ ipcMain.on('clear-to-send', (event, arg) => {
            
             let csvData = {
                 timestamp: new Date(packetHandler.coeffs[index].x).toLocaleTimeString(),
-                coeff: packetHandler.coeffs[index].y
+                coeff: packetHandler.coeffs[index] ? packetHandler.coeffs[index].y : "No measurement"
             }
             recordHandler.writeToCsv(csvData);
             
@@ -203,25 +203,6 @@ ipcMain.on('clear-to-send', (event, arg) => {
     ipcMain.on("location-set", (event, arg) => {
 
         packetHandler.locationName = arg;
-    })
-
-    // Open select dialog - directory or file
-    ipcMain.on("open-dialog", (event, arg) => {
-
-        const { dialog } = require('electron');
-        dialog.showOpenDialog({
-            filters: [
-                { name: 'Records', extensions: ['csv'] }],
-            properties: [arg] // folder or file - from UI
-        }).then(chosenPath => {
-
-            let path = chosenPath.filePaths;
-            const team = databaseHandler.getDefaultTeam();
-            team.name = "Custom load"; // if CSV record not in DB
-
-            event.sender.send("csv-path-loaded", { path, team });
-        })
-
     })
 
 })

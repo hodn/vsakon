@@ -45,11 +45,10 @@ class MainView extends React.Component {
       secs: [],
       soak: 0,
       locationFlags: [],
-      location: null,
       carLocation: null,
       start: null,
       end: null,
-      measurementLocation: "",
+      measurementPointName: "",
       mapDialogOpen: false
 
     }
@@ -69,7 +68,6 @@ class MainView extends React.Component {
         coeffs: arg.coeffs,
         secs: arg.secs,
         soak: arg.soak,
-        location: { lat: arg.measurementLocationLat, lon: arg.measurementLocationLon },
         carLocation: arg.onlineLocation
       })
 
@@ -117,19 +115,18 @@ class MainView extends React.Component {
 
   saveAndReset() {
 
-    ipcRenderer.send("save-reset", { start: this.state.start, end: this.state.end, name: this.state.measurementLocation })
+    ipcRenderer.send("save-reset", { start: this.state.start, end: this.state.end, name: this.state.measurementPointName })
 
-    const locationFlag = { name: this.state.measurementLocation, location: this.state.location }
+    const locationFlag = { name: this.state.measurementPointName, location: this.state.carLocation }
 
     this.setState({
       locationFlags: [...this.state.locationFlags, locationFlag],
       coeffs: [],
       secs: [],
       soak: 0,
-      location: null,
       start: null,
       end: null,
-      measurementLocation: ""
+      measurementPointName: ""
     });
 
   }
@@ -276,10 +273,10 @@ class MainView extends React.Component {
                 id="outlined-required"
                 label="Označení místa měření"
                 variant="outlined"
-                value={this.state.measurementLocation}
+                value={this.state.measurementPointName}
                 onChange={event => {
                   const { value } = event.target;
-                  this.setState({ measurementLocation: value });
+                  this.setState({ measurementPointName: value });
                 }}
                 style={{ marginTop: 20, width: "90%" }}
               />
@@ -291,7 +288,7 @@ class MainView extends React.Component {
             <Button className={classes.button} style={{ backgroundColor: colors.green, color: "white" }} variant="contained" size="large" onClick={() => this.controlSoaker("start")}>Start</Button>
             <Button className={classes.button} style={{ backgroundColor: colors.red, color: "white" }} variant="contained" size="large" onClick={() => this.controlSoaker("stop")}>Stop</Button>
             <Button className={classes.button} variant="contained" color="secondary" size="large" onClick={this.toggleMapDialog}>Mapa</Button>
-            {this.state.coeffs.length > 0 && this.state.end !== null && this.state.measurementLocation !== "" && <Button className={classes.button} variant="contained" color="primary" size="large" onClick={() => this.saveAndReset()}>Uložit měření a vynulovat</Button>}
+            {this.state.coeffs.length > 0 && this.state.end !== null && this.state.measurementPointName !== "" && <Button className={classes.button} variant="contained" color="primary" size="large" onClick={() => this.saveAndReset()}>Uložit měření a vynulovat</Button>}
           </Grid>
 
         </Grid>

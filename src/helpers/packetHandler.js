@@ -3,7 +3,6 @@ module.exports = class PacketHandler {
         this.coeffs = [],
             this.secs = [],
             this.soak = 0,
-            this.measurementLocation = null,
             this.locationName = "",
             this.isSoaking = false,
             this.isOnline = false,
@@ -34,7 +33,6 @@ module.exports = class PacketHandler {
 
                     this.onlineLocation = location;
                     setTimeout(this.isDataComing, 10000, location);
-                    if (this.isSoaking) this.measurementLocation = location;
                 }
             }
 
@@ -50,13 +48,16 @@ module.exports = class PacketHandler {
         this.coeffs = [];
         this.secs = [];
         this.soak = 0;
-        this.measurementLocation = null;
         this.locationName = "";
     }
 
     isDataComing(previousLocation) {
 
-        return this.onlineLocation !== previousLocation ? this.isOnline = true : this.isOnline = false;
+        if (this.onlineLocation !== previousLocation) {
+            this.isOnline = true;
+        } 
+        else this.isOnline = false;
+
     }
 
     getDisplayData() {
@@ -64,15 +65,11 @@ module.exports = class PacketHandler {
         const secs = this.secs;
         const soak = this.soak;
         const onlineLocation = this.onlineLocation;
-        const measurementLocationLat = this.measurementLocation? this.measurementLocation.lat : null;
-        const measurementLocationLon = this.measurementLocation? this.measurementLocation.lon : null;
 
         const data = {
             coeffs,
             secs,
             soak,
-            measurementLocationLat,
-            measurementLocationLon,
             onlineLocation
         }
         
