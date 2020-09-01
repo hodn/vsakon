@@ -59,7 +59,6 @@ class TopBar extends React.Component {
 
     this.getPortIndication = this.getPortIndication.bind(this);
     this.getSoakIndicationColor = this.getSoakIndicationColor.bind(this);
-    this.getCommunicationIndicationColor = this.getCommunicationIndicationColor.bind(this);
     this.toggleDialog = this.toggleDialog.bind(this);
     this.setLocation = this.setLocation.bind(this);
   }
@@ -107,13 +106,6 @@ class TopBar extends React.Component {
       })
     })
 
-    // Listener for state of soaking - waiting for activation/soaking
-    ipcRenderer.on('communication-state', (event, arg) => {
-      this.setState({
-        isOnline: arg
-      })
-    })
-
   }
 
   componentWillUnmount() {
@@ -154,16 +146,6 @@ class TopBar extends React.Component {
     }
   }
 
-  getCommunicationIndicationColor(){
-    
-    if (this.state.isOnline) {
-      return colors.green;
-    }
-    else {
-      return colors.red;
-    }
-  }
-
   toggleDialog(){
     this.setState({ dialog: !this.state.dialog });
   }
@@ -196,7 +178,6 @@ class TopBar extends React.Component {
                   <UsbIcon className={classes.indicator} style={{ color: indication.color }} />
                 </Tooltip>)
               })}
-              <SwapVertIcon className={classes.indicator} style={{ color: this.getCommunicationIndicationColor() }} />
               <OpacityIcon className={classes.indicator} style={{ color: this.getSoakIndicationColor() }}/>
 
             </div>

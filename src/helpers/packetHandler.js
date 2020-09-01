@@ -5,15 +5,14 @@ module.exports = class PacketHandler {
             this.soak = 0,
             this.locationName = "",
             this.isSoaking = false,
-            this.isOnline = false,
             this.onlineLocation = null,
             this.event = event
 
     }
 
     readCOM(packet) {
-        if (packet === "Waiting for activation") this.isSoaking = false;
-        if (packet === "Starting soaking procedure") this.isSoaking = true;
+        if (packet.includes("Waiting for activation")) this.isSoaking = false;
+        if (packet.includes("Starting soaking procedure")) this.isSoaking = true;
 
         if (packet.includes("Soak:")) this.soak = this.getValue(packet);
         if (packet.includes("sec:")) this.secs.push(this.getValue(packet));
@@ -47,17 +46,7 @@ module.exports = class PacketHandler {
     resetMeasurement() {
         this.coeffs = [];
         this.secs = [];
-        this.soak = 0;
-        this.locationName = "";
-    }
-
-    isDataComing(previousLocation) {
-
-        if (this.onlineLocation !== previousLocation) {
-            this.isOnline = true;
-        } 
-        else this.isOnline = false;
-
+        this.soak = 0
     }
 
     getDisplayData() {

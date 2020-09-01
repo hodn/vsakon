@@ -29,8 +29,6 @@ module.exports = class RecordHandler {
 
     writeToCsv(packet) {
 
-
-        if (!fs.existsSync(this.filePath)) throw {type: "writeToCsv", message:"Source CSV removed."}
         try {
                         
             this.writer.write(this.formatToCsv(packet));

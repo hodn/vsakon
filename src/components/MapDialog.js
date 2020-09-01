@@ -44,6 +44,8 @@ export default function MapDialog(props) {
 
             for (let index = 0; index < flags.length; index++) {
 
+                if (flags[index].location)
+                
                 newMarkers.push(
                     <Marker key={index} position={[flags[index].location.lat, flags[index].location.lon]} icon={getIcon(index + 1)}>
                         <Popup>
