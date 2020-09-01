@@ -2,7 +2,7 @@
   "name": "vsakon",
   "productName": "Vsakon",
   "description": "Chemcomex custom app",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "author": {
     "name": "Hoang Doan",
     "email": "hoang.doan@rocketmail.com",
@@ -81,3 +81,4 @@
     "not op_mini all"
   ]
 }
+   

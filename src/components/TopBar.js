@@ -7,7 +7,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import SwapVertIcon from '@material-ui/icons/SwapVert';
 import UsbIcon from '@material-ui/icons/Usb';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import InputIcon from '@material-ui/icons/Input';
